@@ -1,14 +1,15 @@
-import Head from 'next/head'
-import Image from 'next/image'
+import { NextPage } from "next";
+import Layout from "../components/Layout";
 
-// import { Inter } from '@next/font/google'
+const Home: NextPage = () => {
 
-// const inter = Inter({ subsets: ['latin'] })
 
-export default function Home() {
   return (
-    <>
-    
-    </>
-  )
-}
+    <Layout canGoBack hasTabBar>
+
+
+    </Layout>
+  );
+};
+
+export default Home;
