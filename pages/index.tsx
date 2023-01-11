@@ -1,11 +1,12 @@
 import { NextPage } from "next";
-import FloatingButton from "../components/FloatingButton";
+import FloatingButton from "../components/floatingButton";
 import Item from "../components/item";
-import Layout from "../components/Layout";
+import Layout from "../components/layout";
+
 
 const Home: NextPage = () => {
   return (
-    <Layout hasTabBar title="Sprout">
+    <Layout hasTabBar title="B-Together">
 
       {/* 작성된 게시글 리스트 */}
       <div className="flex flex-col space-y-2 divide-y py-2">
