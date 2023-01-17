@@ -1,7 +1,7 @@
 import { NextPage } from "next";
 import { useState } from "react";
 import Button from "../components/button";
-import Input from "../components/Input";
+import Input from "../components/input";
 import { cls } from "../lib/utils";
 
 const Enter: NextPage = () => {
@@ -11,12 +11,12 @@ const Enter: NextPage = () => {
 
   return (
     <div className="mt-16 px-4">
-      <h3 className="text-center text-3xl font-bold">Enter to B-Together</h3>
-
+      <h3 className="text-center text-3xl font-bold">B - Together</h3>
+      
       <div className="mt-12">
         {/* 로그인 타입 선택 버튼*/}
         <div className="flex flex-col items-center">
-          <h5 className="text-sm font-medium text-gray-500">Enter using:</h5>
+
           <div className="mt-8 grid w-full grid-cols-2 border-b">
             <button
               className={cls(
@@ -27,7 +27,7 @@ const Enter: NextPage = () => {
               )}
               onClick={onEmailClick}
             >
-              Email
+              이메일 로그인
             </button>
             <button
               className={cls(
@@ -38,7 +38,7 @@ const Enter: NextPage = () => {
               )}
               onClick={onPhoneClick}
             >
-              Phone
+              번호 로그인
             </button>
           </div>
         </div>
@@ -47,7 +47,7 @@ const Enter: NextPage = () => {
           {method === "email" ? (
             <Input
               name="email"
-              label="Email Address"
+              label="이메일 주소"
               type="email"
               kind="text"
               required
@@ -56,14 +56,14 @@ const Enter: NextPage = () => {
           {method === "phone" ? (
             <Input
               name="phone"
-              label="Phone Number"
+              label="휴대전화 번호"
               type="number"
               kind="phone"
               required
             />
           ) : null}
-          {method === "email" ? <Button text="Get Login Link" /> : null}
-          {method === "phone" ? <Button text="Get one-time password" /> : null}
+          {method === "email" ? <Button text="로그인 주소 받기" /> : null}
+          {method === "phone" ? <Button text="일회용 비밀번호 받기" /> : null}
         </form>
       </div>
     </div>

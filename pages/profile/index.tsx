@@ -4,7 +4,7 @@ import Layout from "../../components/layout";
 
 const Profile: NextPage = () => {
   return (
-    <Layout canGoBack title="마이페이지">
+    <Layout canGoBack title="마이페이지" hasTabBar>
       <div className="px-4">
         {/* 내 프로필 */}
         <div className="mt-4 flex items-center space-x-3">
@@ -66,13 +66,13 @@ const Profile: NextPage = () => {
                 </svg>
               </div>
               <span className="text-gray-70 mt-2 text-sm font-medium">
-                판매내역
+                구매내역
               </span>
             </div>
           </Link>
 
           {/* 관심목록 */}
-          <Link href="/profile/sold">
+          <Link href="/profile/loved">
             <div className="flex flex-col items-center">
               <div className="flex h-14 w-14 items-center justify-center rounded-full bg-blue-400 text-white">
                 <svg
@@ -102,7 +102,7 @@ const Profile: NextPage = () => {
           <div className="flex items-center space-x-4">
             <div className="h-12 w-12 rounded-full bg-slate-500" />
             <div>
-              <h4 className="text-sm font-bold text-gray-800">스프</h4>
+              <h4 className="text-sm font-bold text-gray-800">공구의신</h4>
               <div className="flex items-center">
                 {[1, 1, 1, 1, 1].map((_, i) => (
                   <svg
