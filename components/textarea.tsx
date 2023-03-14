@@ -1,10 +1,18 @@
+import { UseFormRegisterReturn } from "react-hook-form";
+
 interface TextAreaProps {
   label?: string;
   name?: string;
+  register: UseFormRegisterReturn;
   [key: string]: any;
 }
 
-export default function TextArea({ label, name, ...rest }: TextAreaProps) {
+export default function TextArea({
+  label,
+  name,
+  register,
+  ...rest
+}: TextAreaProps) {
   return (
     <div>
       {label ? (
@@ -18,8 +26,8 @@ export default function TextArea({ label, name, ...rest }: TextAreaProps) {
 
       <textarea
         id={name}
-        className="mt-1 p-1 w-full rounded-md border border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 resize-none focus:placeholder-transparent"
-
+        {...register}
+        className="mt-1 w-full resize-none rounded-md border border-gray-300 p-1 shadow-sm focus:border-blue-500 focus:placeholder-transparent focus:ring-blue-500"
         rows={4}
         {...rest}
       />

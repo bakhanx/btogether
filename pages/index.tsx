@@ -1,29 +1,45 @@
 import { NextPage } from "next";
-import FloatingButton from "../components/floatingButton";
-import Item from "../components/item";
-import Layout from "../components/layout";
+import FloatingButton from "@components/floatingButton";
+import Item from "@components/item";
+import Layout from "@components/layout";
+import useUser from "@libs/client/useUser";
+import Head from "next/head";
+import useSWR from "swr";
+import { Product } from "@prisma/client";
 
+interface ProductsResponse {
+  ok: boolean;
+  products: Product[];
+}
 
 const Home: NextPage = () => {
+  const { user, isLoading } = useUser();
+  const { data } = useSWR<ProductsResponse>("api/products");
+
+  console.log(data);
+
   return (
     <Layout hasTabBar title="B-Together">
+      <Head>
+        <title>Home</title>
+      </Head>
 
       {/* 작성된 게시글 리스트 */}
       <div className="flex flex-col space-y-2 divide-y py-2">
-        {[1, 1, 1, 1, 1, 1].map((_, i) => (
+        {data?.products?.map((product) => (
           <Item
-            id={i}
-            key={i}
-            title="Title"
-            price={1000}
-            comments={i}
-            hearts={i}
+            id={product.id}
+            key={product.id}
+            title={product.name}
+            price={product.price}
+            comments={1}
+            hearts={1}
           ></Item>
         ))}
       </div>
 
       {/* 게시글 작성 버튼 */}
-      <FloatingButton href="/items/upload">
+      <FloatingButton href="/products/upload">
         <svg
           className="h-6 w-6"
           xmlns="http://www.w3.org/2000/svg"
