@@ -1,41 +1,41 @@
 import { NextPage, NextPageContext } from "next";
 import Layout from "@components/layout";
 import { SWRConfig } from "swr";
-import { Sale } from "@prisma/client";
+import { Purchase, Sale } from "@prisma/client";
 import ProductList from "@components/product-list";
 import { withSsrSession } from "@libs/server/withSession";
 import client from "@libs/server/client";
 
-const Sold: NextPage = () => {
+const Purchased: NextPage = () => {
   return (
-    <Layout title="판매 내역" seoTitle="내 판매내역" canGoBack hasTabBar>
+    <Layout title="구매 내역" seoTitle="내 구매내역" canGoBack hasTabBar>
       <div className=" flex flex-col space-y-2 divide-y py-2">
-        {<ProductList kind="sales" />}
+        {<ProductList kind="purchases" />}
       </div>
     </Layout>
   );
 };
 
-const Page: NextPage<{ sales: Sale }> = ({ sales }) => {
+const Page: NextPage<{ purchases: Purchase }> = ({ purchases }) => {
   return (
     <SWRConfig
       value={{
         fallback: {
-          "/api/users/me/sales": {
+          "/api/users/me/purchases": {
             ok: true,
-            sales,
+            purchases,
           },
         },
       }}
     >
-      <Sold />
+      <Purchased />
     </SWRConfig>
   );
 };
 
 export const getServerSideProps = withSsrSession(
   async ({ req }: NextPageContext) => {
-    const sales = await client.sale.findMany({
+    const purchases = await client.purchase.findMany({
       where: {
         userId: req?.session?.user?.id,
       },
@@ -54,7 +54,7 @@ export const getServerSideProps = withSsrSession(
 
     return {
       props: {
-        sales: JSON.parse(JSON.stringify(sales)),
+        purchases: JSON.parse(JSON.stringify(purchases)),
       },
     };
   }

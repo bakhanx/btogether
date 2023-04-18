@@ -1,11 +1,13 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { cls } from "../libs/client/utils";
+import Head from "next/head";
 
 interface LayoutProps {
   title?: string;
   canGoBack?: boolean;
   hasTabBar?: boolean;
+  seoTitle?: string;
   children: React.ReactNode; // 왜 필요한가
 }
 
@@ -13,6 +15,7 @@ export default function Layout({
   title,
   canGoBack,
   hasTabBar,
+  seoTitle,
   children,
 }: LayoutProps) {
   const router = useRouter();
@@ -21,9 +24,12 @@ export default function Layout({
   };
   return (
     <div>
+      <Head>
+        <title>{`${seoTitle} # 비투게더`}</title>
+      </Head>
 
       {/* 상단 탭 */}
-      <div className="max-w-x1 fixed top-0 flex h-12 w-full items-center justify-center border-b bg-blue-400 px-10 text-lg font-medium text-white">
+      <div className="fixed top-0 z-50 flex h-12 w-full max-w-screen-xl  items-center justify-center  bg-blue-400 px-10 text-lg font-medium text-white ">
         {/* 뒤로가기 */}
         {canGoBack ? (
           <button onClick={onClick} className="absolute left-4">
@@ -54,7 +60,7 @@ export default function Layout({
 
       {/* 하단 탭 */}
       {hasTabBar ? (
-        <nav className="max-w-x1 fixed bottom-0 flex w-full justify-between border-t bg-gray-50 px-10 pb-5 pt-3 text-xs text-gray-600">
+        <nav className="fixed bottom-0 flex w-full  max-w-screen-xl justify-between border-t bg-gray-50 px-10 pb-5 pt-3 text-xs text-gray-600">
           {/* Link 하위에 a태그 사용시 Link에 legacyBehavior 추가 */}
 
           {/* 홈 */}
@@ -84,7 +90,7 @@ export default function Layout({
               <span>홈</span>
             </div>
           </Link>
-          {/* 이웃소식 */}
+          {/* 스토리 */}
           <Link href="/community">
             <div
               className={cls(
@@ -108,7 +114,7 @@ export default function Layout({
                   d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"
                 ></path>
               </svg>
-              <span>이웃소식</span>
+              <span>스토리</span>
             </div>
           </Link>
 

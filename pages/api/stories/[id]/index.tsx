@@ -11,7 +11,9 @@ async function handler(
     query: { id },
     session: { user },
   } = req;
-  const product = await client.product.findUnique({
+
+  
+  const story = await client.story.findUnique({
     where: {
       id: Number(id),
     },
@@ -23,34 +25,34 @@ async function handler(
           avatar: true,
         },
       },
-    },
-  });
 
-  const terms = product?.name.split(" ").map((word) => ({
-    name: {
-      contains: word,
-    },
-  }));
+      _count: {
+        select: {
+          likes: true,
+          comments: true,
+        },
+      },
 
-  const relatedProducts = await client.product.findMany({
-    where: {
-      OR: terms,
-      AND: {
-        id: {
-          not: Number(id),
+      comments: {
+        include: {
+          user: {
+            select: {
+              id: true,
+              name: true,
+              avatar: true,
+            },
+          },
         },
       },
     },
-    orderBy: {
-      createdAt: "desc",
-    },
-    take: 6,
   });
 
-  const isFavorite = Boolean(
-    await client.favorite.findFirst({
+  
+
+  const isLike = Boolean(
+    await client.like.findFirst({
       where: {
-        productId: product?.id,
+        storyId: Number(id),
         userId: user?.id,
       },
       select: {
@@ -61,9 +63,8 @@ async function handler(
 
   res.json({
     ok: true,
-    product,
-    relatedProducts,
-    isFavorite,
+    story,
+    isLike,
   });
 }
 

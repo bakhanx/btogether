@@ -4,7 +4,7 @@ import Message from "@components/message";
 
 const ChatDetail: NextPage = () => {
   return (
-    <Layout title="판매왕김스프" canGoBack>
+    <Layout title="판매왕김스프" seoTitle={`판매왕김스프님과의 대화`} canGoBack>
       <div className="space-y-4 py-10 px-4 pb-16">
         
         {/* 메시지 */}

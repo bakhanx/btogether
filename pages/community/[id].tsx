@@ -1,36 +1,161 @@
-import { NextPage } from "next";
+import { GetStaticPaths, GetStaticProps, NextPage } from "next";
 import Layout from "@components/layout";
 import TextArea from "@components/textarea";
+import useSWR from "swr";
+import { useRouter } from "next/router";
+import { useForm } from "react-hook-form";
+import { Comment, Story, User } from "@prisma/client";
+import Link from "next/link";
+import useMutation from "@libs/client/useMutation";
+import { cls } from "@libs/client/utils";
+import { useEffect } from "react";
+import client from "@libs/server/client";
+import Image from "next/image";
 
-const CommunityDetail: NextPage = () => {
+interface CommentsWithUser extends Comment {
+  user: User;
+}
+interface StorySSGResponse extends Story {
+  ok: boolean;
+  user: {
+    id: number;
+    name: string;
+    avatar: string;
+  };
+  _count: {
+    comments: number;
+    likes: number;
+  };
+  comments: CommentsWithUser[];
+}
+interface StorySWRResponse extends Story {
+  story: {
+    _count: {
+      likes: number;
+    };
+    comments: CommentsWithUser[];
+  };
+  isLike: boolean;
+}
+interface CommentForm {
+  comment: string;
+}
+interface CommentFormError {
+  comment?: {
+    type?: string;
+    message?: string;
+  };
+}
+interface CommentResponse {
+  ok: boolean;
+  comment: Comment;
+}
+
+const CommunityDetail: NextPage<{ story: StorySSGResponse }> = ({ story }) => {
+  const router = useRouter();
+  const { register, handleSubmit, reset } = useForm<CommentForm>();
+
+  const { data, mutate } = useSWR<StorySWRResponse>(
+    router.query.id ? `/api/stories/${router.query.id}` : null
+  );
+
+  const [storyMutation, { loading: likeLoading }] = useMutation(
+    `/api/stories/${router.query.id}/like`
+  );
+  const [comment, { data: commentData, loading: commentLoading }] =
+    useMutation<CommentResponse>(`/api/stories/${router.query.id}/comment`);
+
+  const onValid = (form: CommentForm) => {
+    if (commentLoading) return;
+    comment(form);
+  };
+  const onInvalid = (form: CommentFormError) => {
+    if (commentLoading) return;
+    console.log(form);
+  };
+
+  const onLikeClick = () => {
+    if (!data || likeLoading) return;
+    mutate(
+      {
+        ...data,
+
+        story: {
+          ...data.story,
+
+          _count: {
+            ...data.story._count,
+
+            likes: data.isLike
+              ? data.story._count.likes - 1
+              : data.story._count.likes + 1,
+          },
+        },
+        isLike: !data.isLike,
+      },
+      false
+    );
+    if (!likeLoading) {
+      storyMutation({});
+    }
+  };
+
+  useEffect(() => {
+    if (commentData && commentData.ok) {
+      reset();
+      mutate();
+      router.reload();
+    }
+  }, [commentData, reset, mutate, router]);
+
   return (
-    <Layout canGoBack>
+    <Layout canGoBack seoTitle={`${story?.user?.name}님의 스토리`}>
       <div className="pt-2">
         {/* Profile */}
         <span className="ml-4 items-center rounded-full bg-gray-100 px-2.5 py-0.5 text-xs font-medium text-gray-800">
-          이웃소식
+          후기
         </span>
-        <div className="mt-2 mb-3 flex cursor-pointer items-center space-x-3 border-b px-4 pb-3">
-          <div className="h-10 w-10 rounded-full bg-slate-300" />
-          <div>
-            <p className="text-sm font-medium text-gray-700">Steve Jebs</p>
-            <p className="text-xs font-medium text-gray-500">
-              View profile &rarr;
-            </p>
+        <Link href={`/users/profile/${story?.user?.id}`}>
+          <div className="mt-4 mb-3 flex cursor-pointer items-center space-x-3 border-b px-4 pb-3">
+            {story?.user?.avatar ? (
+              <div className="relative h-14 w-14">
+                <Image
+                  src={`https://imagedelivery.net/214BxOnlVKSU2amZRZmdaQ/${story?.user?.avatar}/avatar`}
+                  alt=""
+                  fill
+                  className="rounded-full"
+                />
+              </div>
+            ) : (
+              <div className="h-14 w-14 rounded-full bg-slate-500" />
+            )}
+            <div>
+              <p className="text-sm font-medium text-gray-700">
+                {story?.user?.name}
+              </p>
+              <p className="text-xs font-medium text-gray-500">
+                View profile &rarr;
+              </p>
+            </div>
           </div>
-        </div>
-
+        </Link>
         <div>
           <div className="mt-2 px-4 text-gray-700">
-            <span>공동 구매 후기입니다.</span>
+            <span>{story?.content}</span>
           </div>
 
           <div className="mt-3 flex w-full justify-start space-x-5 border-t px-4 py-2.5">
-            <span className="flex items-center space-x-2 text-sm">
+            <button
+              onClick={onLikeClick}
+              className={cls(
+                "flex items-center space-x-2 text-sm",
+                data?.isLike ? "text-green-600" : "text-black"
+              )}
+            >
               <svg
                 className="h-5 w-5"
                 fill="none"
-                stroke="limegreen"
+                stroke="currentColor"
                 viewBox="0 0 24 24"
                 xmlns="http://www.w3.org/2000/svg"
               >
@@ -41,8 +166,10 @@ const CommunityDetail: NextPage = () => {
                   d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
                 ></path>
               </svg>
-              <span>추천 1</span>
-            </span>
+              <span>
+                좋아요 {data?.story?._count?.likes || story?._count?.likes}
+              </span>
+            </button>
 
             <span className="flex items-center space-x-2 text-sm">
               <svg
@@ -59,39 +186,101 @@ const CommunityDetail: NextPage = () => {
                   d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
                 ></path>
               </svg>
-              <span>댓글 2</span>
+              <span>댓글 {story?._count?.comments || 0}</span>
             </span>
           </div>
         </div>
-
         {/* 댓글 리스트 */}
-        <div className="my-5 space-y-5 px-4">
-          <div className="flex items-start space-x-3">
-            <div className="h-8 w-8 rounded-full bg-slate-200" />
-            <div>
-              <span className="block text-sm font-medium text-gray-700">
-                아뇽
-              </span>
-              <span className="block text-xs text-gray-500 ">2시간 전</span>
-              <p className="mt-2 text-gray-700">
-                잘봤습니다^^
-              </p>
+        <div className="py-3">
+          {story?.comments.map((comment) => (
+            <div key={comment.id} className="flex space-x-3 my-3 py-3 px-3 bg-gray-50">
+              {comment?.user?.avatar ? (
+                <div className="relative h-14 w-14">
+                  <Image
+                    src={`https://imagedelivery.net/214BxOnlVKSU2amZRZmdaQ/${comment?.user?.avatar}/avatar`}
+                    alt=""
+                    fill
+                    className="rounded-full"
+                  />
+                </div>
+              ) : (
+                <div className="h-14 w-14 rounded-full  bg-slate-500" />
+              )}
+              <div className="flex space-x-5">
+                <div>
+                  <span className="block text-sm font-medium text-gray-700">
+                    {comment.user.name}
+                  </span>
+                  <span className="block text-xs text-gray-500 ">
+                    {String(comment.updatedAt)}
+                  </span>
+                  <p className="mt-2 text-gray-700">{comment.comment}</p>
+                </div>
+                <div className="cursor-pointer text-xs">❌</div>
+              </div>
+              
             </div>
-          </div>
+            
+          ))}
         </div>
+        {/* 댓글 입력칸 */}
         <div className="px-4">
-          <TextArea
-            name="description"
-            placeholder="댓글을 입력해주세요."
-            required
-          />
-          <button className="mt-2 w-full rounded-md border border-transparent bg-blue-400 py-2 px-4 text-sm font-medium  text-white shadow-sm hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
-            댓글달기
-          </button>
+          <form onSubmit={handleSubmit(onValid, onInvalid)}>
+            <TextArea
+              register={register("comment", {
+                required: true,
+              })}
+              name="comment"
+              placeholder="댓글을 입력해주세요."
+              required
+            />
+            <button className="mt-2 w-full rounded-md border border-transparent bg-blue-400 py-3 my-7 px-4 text-sm font-medium  text-white shadow-sm hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+              {commentLoading ? "댓글 등록중..." : "댓글 달기"}
+            </button>
+          </form>
         </div>
       </div>
     </Layout>
   );
+};
+
+export const getStaticPaths: GetStaticPaths = () => {
+  return {
+    paths: [],
+    fallback: true,
+  };
+};
+
+export const getStaticProps: GetStaticProps = async (context) => {
+  const story = await client?.story.findFirst({
+    where: {
+      id: Number(context?.params?.id),
+    },
+    include: {
+      user: {
+        select: {
+          avatar: true,
+          name: true,
+        },
+      },
+      _count: {
+        select: {
+          comments: true,
+          likes: true,
+        },
+      },
+      comments: {
+        include: {
+          user: true,
+        },
+      },
+    },
+  });
+  return {
+    props: {
+      story: JSON.parse(JSON.stringify(story)),
+    },
+  };
 };
 
 export default CommunityDetail;

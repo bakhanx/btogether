@@ -12,7 +12,7 @@ async function handler(
     session: { user },
   } = req;
 
-  const product = client.product.findUnique({
+  const story = client.story.findUnique({
     where:{
         id:Number(id),
     },
@@ -21,31 +21,35 @@ async function handler(
     }            
   })
 
-  if(!product) {
+  if(!story) {
     return res.status(404).end();
   }
 
-  const alreadyExists = await client.favorite.findFirst({
+  const alreadyExists = await client.like.findFirst({
     where: {
-      productId: Number(id),
       userId: user?.id,
+      storyId: Number(id),
+    },
+    select: {
+      id: true,
     },
   });
+
   if (alreadyExists) {
-    await client.favorite.delete({
+    await client.like.delete({
       where: {
         id: alreadyExists.id,
       },
     });
   } else {
-    await client.favorite.create({
+    await client.like.create({
       data: {
         user: {
           connect: {
             id: user?.id,
           },
         },
-        product: {
+        story: {
           connect: {
             id: Number(id),
           },
@@ -56,7 +60,6 @@ async function handler(
 
   res.json({
     ok: true,
-    id,
   });
 }
 

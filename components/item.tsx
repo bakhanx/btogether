@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 
 interface ItemProps {
@@ -6,6 +7,7 @@ interface ItemProps {
   price: number;
   comments: number;
   hearts: number;
+  image: string;
 }
 
 export default function Item({
@@ -14,22 +16,27 @@ export default function Item({
   price,
   comments,
   hearts,
+  image,
 }: ItemProps) {
   return (
     <Link href={`/products/${id}`}>
       <div className="flex cursor-pointer justify-between px-4 py-2">
-
         {/* title,price */}
         <div className="flex space-x-4">
-          <div className="h-20 w-20 rounded-md bg-gray-400" />
+          {image ? (
+            <Image className="h-20 w-20" alt={title} src={`https://imagedelivery.net/214BxOnlVKSU2amZRZmdaQ/${image}/public`} width={128} height={128}  />
+          ) : (
+            <div className="h-20 w-20 rounded-md bg-gray-400" />
+          )}
+
           <div className="flex flex-col pt-2">
             <span className="text-lg">{title}</span>
-            <span>{price}</span>
+            <span>\{price}</span>
           </div>
         </div>
 
         {/* comments,hearts */}
-        <div className="flex space-x-2 items-end justify-end">
+        <div className="flex items-end justify-end space-x-2">
           <div className="flex items-center space-x-0.5 text-sm text-gray-600">
             <svg
               className="h-4 w-4"

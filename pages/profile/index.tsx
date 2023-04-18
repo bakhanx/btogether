@@ -1,16 +1,38 @@
-import { NextPage } from "next";
+import { NextPage, NextPageContext } from "next";
 import Link from "next/link";
 import Layout from "@components/layout";
+import useUser from "@libs/client/useUser";
+import Image from "next/image";
+import { SWRConfig } from "swr";
+import { User } from "@prisma/client";
+import { withSsrSession } from "@libs/server/withSession";
+import client from "@libs/server/client";
 
 const Profile: NextPage = () => {
+  const { user } = useUser();
+
   return (
-    <Layout canGoBack title="마이페이지" hasTabBar>
+    <Layout canGoBack title="마이페이지" seoTitle="내 프로필" hasTabBar>
       <div className="px-4">
         {/* 내 프로필 */}
         <div className="mt-4 flex items-center space-x-3">
-          <div className="h-16 w-16 rounded-full bg-slate-500" />
+          {user?.avatar ? (
+            <div className="relative h-16 w-16">
+              <Image
+                src={`https://imagedelivery.net/214BxOnlVKSU2amZRZmdaQ/${user?.avatar}/avatar`}
+                alt=""
+                fill
+                className="rounded-full"
+              />
+            </div>
+          ) : (
+            <div className="h-16 w-16 rounded-full bg-slate-500" />
+          )}
+
           <div className="flex flex-col">
-            <span className="font-medium text-gray-900">Steve Jebs</span>
+            <span className="font-bold text-gray-900">
+              {user?.name || "　"}
+            </span>
             <Link href="/profile/edit">
               <div className="text-sm font-medium text-gray-700">
                 View profile &rarr;
@@ -47,7 +69,7 @@ const Profile: NextPage = () => {
           </Link>
 
           {/* 구매내역 */}
-          <Link href="/profile/bought">
+          <Link href="/profile/purchased">
             <div className="flex flex-col items-center">
               <div className="flex h-14 w-14 items-center justify-center rounded-full bg-blue-400 text-white">
                 <svg
@@ -72,7 +94,7 @@ const Profile: NextPage = () => {
           </Link>
 
           {/* 관심목록 */}
-          <Link href="/profile/loved">
+          <Link href="/profile/favorited">
             <div className="flex flex-col items-center">
               <div className="flex h-14 w-14 items-center justify-center rounded-full bg-blue-400 text-white">
                 <svg
@@ -120,8 +142,20 @@ const Profile: NextPage = () => {
             </div>
           </div>
           <div className="mt-4 text-sm text-gray-600">
+            {/* dummy data */}
             <p>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolore quod tenetur nihil illum! Voluptatem doloribus numquam voluptates sed, sint eum quos tempore eius similique ipsa earum aspernatur nihil labore sapiente culpa odit doloremque tenetur in voluptate quae recusandae vitae! Quos fugiat alias perspiciatis nihil modi consequuntur illum temporibus distinctio sint nesciunt autem, impedit, inventore beatae sapiente tenetur eveniet illo hic soluta cumque quam odit blanditiis deleniti adipisci magni. Corporis ratione porro asperiores voluptatem. Deleniti animi ullam unde laborum, aspernatur doloribus! Maiores, natus assumenda! Id atque repudiandae tenetur cupiditate, eum vel in eligendi beatae totam delectus error dicta nisi numquam adipisci.
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolore
+              quod tenetur nihil illum! Voluptatem doloribus numquam voluptates
+              sed, sint eum quos tempore eius similique ipsa earum aspernatur
+              nihil labore sapiente culpa odit doloremque tenetur in voluptate
+              quae recusandae vitae! Quos fugiat alias perspiciatis nihil modi
+              consequuntur illum temporibus distinctio sint nesciunt autem,
+              impedit, inventore beatae sapiente tenetur eveniet illo hic soluta
+              cumque quam odit blanditiis deleniti adipisci magni. Corporis
+              ratione porro asperiores voluptatem. Deleniti animi ullam unde
+              laborum, aspernatur doloribus! Maiores, natus assumenda! Id atque
+              repudiandae tenetur cupiditate, eum vel in eligendi beatae totam
+              delectus error dicta nisi numquam adipisci.
             </p>
           </div>
         </div>
@@ -130,5 +164,37 @@ const Profile: NextPage = () => {
   );
 };
 
-export default Profile;
+const Page: NextPage<{ profile: User }> = ({ profile }) => {
+  return (
+    <SWRConfig
+      value={{
+        fallback: {
+          "/api/users/me": {
+            ok: true,
+            profile,
+          },
+        },
+      }}
+    >
+      <Profile />
+    </SWRConfig>
+  );
+};
 
+
+export const getServerSideProps = withSsrSession(async function ({
+  req,
+}: NextPageContext) {
+  const profile = await client?.user.findUnique({
+    where: {
+      id: req?.session?.user?.id,
+    },
+  });
+  return {
+    props: {
+      profile: JSON.parse(JSON.stringify(profile)),
+    },
+  };
+});
+
+export default Page;

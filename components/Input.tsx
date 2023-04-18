@@ -8,6 +8,7 @@ interface InputProps {
   register: UseFormRegisterReturn;
   type: React.HTMLInputTypeAttribute;
   required:boolean,
+  value?:string,
   [key: string]: any;
 
 }
@@ -19,6 +20,7 @@ export default function Input({
   register,
   required,
   type,
+  value,
   ...rest
 }: InputProps) {
   return (
@@ -32,6 +34,7 @@ export default function Input({
       {kind === "text" ? (
         <div className="relative flex items-center  rounded-md shadow-sm">
           <input
+            defaultValue={value}
             id={name}
             {...register}
             required={required}
@@ -70,7 +73,7 @@ export default function Input({
             required={required}
             {...register}
             {...rest}
-            className="w-full appearance-none rounded-md rounded-l-none border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-blue-500 focus:placeholder-transparent focus:outline-none focus:ring-blue-500"
+            className="w-full rounded-md rounded-l-none border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-blue-500 focus:placeholder-transparent focus:outline-none focus:ring-blue-500"
           />
         </div>
       ) : null}

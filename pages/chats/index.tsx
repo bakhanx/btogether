@@ -2,9 +2,15 @@ import { NextPage } from "next";
 import Link from "next/link";
 import Layout from "@components/layout";
 
+
+
+// 상대 user 의 아바타, 아이디, 채팅내용.
+
+
+
 const Chats: NextPage = () => {
   return (
-    <Layout title="채팅" hasTabBar>
+    <Layout title="채팅" hasTabBar seoTitle="채팅">
       <div className="divide-y-2">
         {[1, 1, 1, 1, 1, 1].map((_, i) => (
           <Link href={`/chats/${i}`} key={i} className="block">
