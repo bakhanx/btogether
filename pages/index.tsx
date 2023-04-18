@@ -67,6 +67,9 @@ export async function getStaticProps() {
           // chats:true,
         }
       }
+    },
+    orderBy:{
+      updatedAt:"desc"
     }
   });
   return {

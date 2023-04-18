@@ -33,8 +33,8 @@ const Community: NextPage<{ stories: StoryWithUserAndCount[] }> = ({
                 <span className="ml-3.5 flex items-center rounded-full bg-violet-500 px-2.5 py-0.5 text-xs font-bold text-white">
                   후기
                 </span>
-                <div className="text-gray-7100 mt-2 px-4 font-medium">
-                  <span>{story.content}</span>
+                <div className="text-gray-7100 mt-2 px-4 font-medium h-16">
+                  <span className="line-clamp-2">{story.content}</span>
                 </div>
                 <div className=" mt-5 flex w-full items-center justify-between px-4 text-sm font-medium text-gray-500">
                   <span>{story.user?.name}</span>
@@ -120,6 +120,9 @@ export async function getStaticProps() {
         },
       },
     },
+    orderBy:{
+      updatedAt:"desc"
+    }
   });
   return {
     props: {
@@ -127,5 +130,6 @@ export async function getStaticProps() {
     },
   };
 }
+
 
 export default Community;

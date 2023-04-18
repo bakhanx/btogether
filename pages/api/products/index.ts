@@ -16,6 +16,9 @@ async function handler(
           },
         },
       },
+      orderBy:{
+        updatedAt:"desc"
+      }
     });
     res.json({
       ok: true,
