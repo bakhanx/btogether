@@ -1,6 +1,6 @@
+import Layout from "@components/layout";
 import { NextPage } from "next";
 import Link from "next/link";
-import Layout from "@components/layout";
 
 
 
