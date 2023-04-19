@@ -31,7 +31,7 @@ const Community: NextPage<{ stories: StoryWithUserAndCount[] }> = ({
             <Link href={`/community/${story.id}`}>
               <div className="flex cursor-pointer flex-col items-start pt-4">
                 <span className="ml-3.5 flex items-center rounded-full bg-violet-500 px-2.5 py-0.5 text-xs font-bold text-white">
-                  후기
+                  일상
                 </span>
                 <div className="text-gray-7100 mt-2 h-16 px-4 font-medium">
                   <span className="line-clamp-2">{story.content}</span>
