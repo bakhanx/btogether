@@ -9,12 +9,12 @@ import { useRouter } from "next/router";
 import useUser from "@libs/client/useUser";
 import dynamic from "next/dynamic";
 
-const Alert = lazy(
-  (): any =>
-    new Promise((resolve) =>
-      setTimeout(() => resolve(import("@components/alert")), 3000)
-    )
-);
+// const Alert = lazy(
+//   (): any =>
+//     new Promise((resolve) =>
+//       setTimeout(() => resolve(import("@components/alert")), 3000)
+//     )
+// );
 
 // const Alert = dynamic(
 //   () : any =>
@@ -160,9 +160,9 @@ const Enter: NextPage = () => {
                   <Button
                     text={loading ? "요청중..." : "일회용 비밀번호 받기"}
                   />
-                  <Suspense fallback={<span>로딩중입니다...</span>}>
+                  {/* <Suspense fallback={<span>로딩중입니다...</span>}>
                     <Alert />
-                  </Suspense>
+                  </Suspense> */}
                 </div>
               ) : null}
             </form>
