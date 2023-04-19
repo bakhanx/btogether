@@ -12,6 +12,7 @@ const Chats: NextPage = () => {
   return (
     <Layout title="채팅" hasTabBar seoTitle="채팅">
       <div className="divide-y-2">
+        <div className="text-center text-red-500 text-2xl p-5">구현중</div>
         {[1, 1, 1, 1, 1, 1].map((_, i) => (
           <Link href={`/chats/${i}`} key={i} className="block">
             <div className="flex cursor-pointer items-center space-x-3 px-4 py-3">
