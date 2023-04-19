@@ -5,10 +5,6 @@ import useUser from "@libs/client/useUser";
 import { useRouter } from "next/router";
 
 function App({ Component, pageProps }: AppProps) {
-  // Login Check ,, '/enter'
-  // const router = useRouter();
-  // useUser(router.pathname);
-
   return (
     <SWRConfig
       value={{

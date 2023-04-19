@@ -1,9 +1,9 @@
 import { NextPage } from "next";
 import Link from "next/link";
 import FloatingButton from "@components/floatingButton";
-import Layout from "@components/layout";
 import { Story } from "@prisma/client";
 import client from "@libs/server/client";
+import Layout from "@components/layout";
 
 // interface StroyResponse {
 //   stories: StoryWithUserAndCount[];
@@ -33,7 +33,7 @@ const Community: NextPage<{ stories: StoryWithUserAndCount[] }> = ({
                 <span className="ml-3.5 flex items-center rounded-full bg-violet-500 px-2.5 py-0.5 text-xs font-bold text-white">
                   후기
                 </span>
-                <div className="text-gray-7100 mt-2 px-4 font-medium h-16">
+                <div className="text-gray-7100 mt-2 h-16 px-4 font-medium">
                   <span className="line-clamp-2">{story.content}</span>
                 </div>
                 <div className=" mt-5 flex w-full items-center justify-between px-4 text-sm font-medium text-gray-500">
@@ -120,9 +120,9 @@ export async function getStaticProps() {
         },
       },
     },
-    orderBy:{
-      updatedAt:"desc"
-    }
+    orderBy: {
+      updatedAt: "desc",
+    },
   });
   return {
     props: {
@@ -130,6 +130,5 @@ export async function getStaticProps() {
     },
   };
 }
-
 
 export default Community;

@@ -7,12 +7,12 @@ import { SWRConfig } from "swr";
 import { User } from "@prisma/client";
 import { withSsrSession } from "@libs/server/withSession";
 import client from "@libs/server/client";
+import { Suspense } from "react";
 
-const Profile: NextPage = () => {
+const UserInfo = () => {
   const { user } = useUser();
-
   return (
-    <Layout canGoBack title="마이페이지" seoTitle="내 프로필" hasTabBar>
+    <>
       <div className="px-4">
         {/* 내 프로필 */}
         <div className="mt-4 flex items-center space-x-3">
@@ -160,6 +160,14 @@ const Profile: NextPage = () => {
           </div>
         </div>
       </div>
+    </>
+  );
+};
+
+const Profile: NextPage = () => {
+  return (
+    <Layout canGoBack title="마이페이지" seoTitle="내 프로필" hasTabBar>
+      <UserInfo />
     </Layout>
   );
 };
@@ -180,7 +188,6 @@ const Page: NextPage<{ profile: User }> = ({ profile }) => {
     </SWRConfig>
   );
 };
-
 
 export const getServerSideProps = withSsrSession(async function ({
   req,

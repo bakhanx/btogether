@@ -74,8 +74,6 @@ const Enter: NextPage = () => {
     }
   }, [router, tokenData]);
 
-  useUser();
-
   return (
     
     <div className="mt-16 px-4">

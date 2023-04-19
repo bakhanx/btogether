@@ -1,6 +1,5 @@
 import type { GetStaticPaths, GetStaticProps, NextPage } from "next";
 import Button from "@components/button";
-import Layout from "@components/layout";
 import { useRouter } from "next/router";
 import useSWR, { useSWRConfig } from "swr";
 import { Product } from "@prisma/client";
@@ -10,6 +9,7 @@ import { cls } from "@libs/client/utils";
 import useUser from "@libs/client/useUser";
 import Image from "next/image";
 import client from "@libs/server/client";
+import Layout from "@components/layout";
 
 interface ProductWithUser extends Product {
   user: {
