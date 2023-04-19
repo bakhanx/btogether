@@ -29,7 +29,7 @@ export default function Layout({
       </Head>
 
       {/* 상단 탭 */}
-      <div className="fixed top-0 z-50 flex h-12 w-full max-w-screen-lg  items-center justify-center  bg-blue-400 px-10 text-lg font-medium text-white ">
+      <div className="fixed top-0 z-50 flex h-12 w-full max-w-screen-lg  items-center justify-center  bg-blue-500 px-10 text-lg font-medium text-white ">
         {/* 뒤로가기 */}
         {canGoBack ? (
           <button onClick={onClick} className="absolute left-4">
@@ -69,7 +69,7 @@ export default function Layout({
               className={cls(
                 "flex flex-col items-center space-y-2",
                 router.pathname === "/"
-                  ? "text-blue-400"
+                  ? "text-blue-500"
                   : "transition-colors hover:text-gray-500"
               )}
             >
@@ -96,7 +96,7 @@ export default function Layout({
               className={cls(
                 "flex flex-col items-center space-y-2",
                 router.pathname === "/community"
-                  ? "text-blue-400"
+                  ? "text-blue-500"
                   : "transition-colors hover:text-gray-500"
               )}
             >
@@ -124,7 +124,7 @@ export default function Layout({
               className={cls(
                 "flex flex-col items-center space-y-2",
                 router.pathname === "/chats"
-                  ? "text-blue-400"
+                  ? "text-blue-500"
                   : "transition-colors hover:text-gray-500"
               )}
             >
@@ -151,7 +151,7 @@ export default function Layout({
               className={cls(
                 "flex flex-col items-center space-y-2",
                 router.pathname === "/profile"
-                  ? "text-blue-400"
+                  ? "text-blue-500"
                   : "transition-colors hover:text-gray-500"
               )}
             >
