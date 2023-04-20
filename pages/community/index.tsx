@@ -4,6 +4,7 @@ import FloatingButton from "@components/floatingButton";
 import { Story } from "@prisma/client";
 import client from "@libs/server/client";
 import Layout from "@components/layout";
+import useSWR from 'swr'
 
 // interface StroyResponse {
 //   stories: StoryWithUserAndCount[];
@@ -23,6 +24,8 @@ interface StoryWithUserAndCount extends Story {
 const Community: NextPage<{ stories: StoryWithUserAndCount[] }> = ({
   stories,
 }) => {
+
+
   return (
     <Layout hasTabBar canGoBack title="이웃 스토리" seoTitle="이웃 소식">
       <div className="divide space-y-2 divide-y-4 divide-blue-100">
@@ -57,7 +60,7 @@ const Community: NextPage<{ stories: StoryWithUserAndCount[] }> = ({
                       />
                     </svg>
 
-                    <span>좋아요 {story?._count?.likes || 0}</span>
+                    <span>좋아요 {story?._count?.likes}</span>
                   </span>
 
                   <span className="flex items-center space-x-2 text-sm">
@@ -75,7 +78,7 @@ const Community: NextPage<{ stories: StoryWithUserAndCount[] }> = ({
                         d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
                       ></path>
                     </svg>
-                    <span>댓글 {story?._count?.comments || 0}</span>
+                    <span>댓글 {story?._count?.comments}</span>
                   </span>
                 </div>
               </div>

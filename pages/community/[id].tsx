@@ -32,6 +32,7 @@ interface StorySWRResponse extends Story {
   story: {
     _count: {
       likes: number;
+      comments:number;
     };
     comments: CommentsWithUser[];
   };
@@ -167,7 +168,7 @@ const CommunityDetail: NextPage<{ story: StorySSGResponse }> = ({ story }) => {
                 ></path>
               </svg>
               <span>
-                좋아요 {data?.story?._count?.likes || story?._count?.likes}
+                좋아요 {data?.story?._count?.likes}
               </span>
             </button>
 
@@ -186,14 +187,17 @@ const CommunityDetail: NextPage<{ story: StorySSGResponse }> = ({ story }) => {
                   d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
                 ></path>
               </svg>
-              <span>댓글 {story?._count?.comments || 0}</span>
+              <span>댓글 {story?._count?.comments}</span>
             </span>
           </div>
         </div>
         {/* 댓글 리스트 */}
         <div className="py-3">
           {story?.comments.map((comment) => (
-            <div key={comment.id} className="flex space-x-3 my-3 py-3 px-3 bg-gray-50">
+            <div
+              key={comment.id}
+              className="my-3 flex space-x-3 bg-gray-50 py-3 px-3"
+            >
               {comment?.user?.avatar ? (
                 <div className="relative h-14 w-14">
                   <Image
@@ -218,9 +222,7 @@ const CommunityDetail: NextPage<{ story: StorySSGResponse }> = ({ story }) => {
                 </div>
                 <div className="cursor-pointer text-xs">❌</div>
               </div>
-              
             </div>
-            
           ))}
         </div>
         {/* 댓글 입력칸 */}
@@ -234,7 +236,7 @@ const CommunityDetail: NextPage<{ story: StorySSGResponse }> = ({ story }) => {
               placeholder="댓글을 입력해주세요."
               required
             />
-            <button className="mt-2 w-full rounded-md border border-transparent bg-blue-400 py-3 my-7 px-4 text-sm font-medium  text-white shadow-sm hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+            <button className="my-7 mt-2 w-full rounded-md border border-transparent bg-blue-400 py-3 px-4 text-sm font-medium  text-white shadow-sm hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
               {commentLoading ? "댓글 등록중..." : "댓글 달기"}
             </button>
           </form>
