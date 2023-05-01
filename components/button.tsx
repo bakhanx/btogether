@@ -6,12 +6,7 @@ interface ButtonProps {
   [key: string]: any;
 }
 
-export default function Button({
-  large = false,
-  onClick,
-  text,
-  ...rest
-}: ButtonProps) {
+export default function Button({ large = false, text, ...rest }: ButtonProps) {
   return (
     <button
       {...rest}

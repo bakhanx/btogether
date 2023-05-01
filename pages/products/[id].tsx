@@ -2,7 +2,7 @@ import type { GetStaticPaths, GetStaticProps, NextPage } from "next";
 import Button from "@components/button";
 import { useRouter } from "next/router";
 import useSWR, { useSWRConfig } from "swr";
-import { Product } from "@prisma/client";
+import { ChatRoom, Product } from "@prisma/client";
 import Link from "next/link";
 import useMutation from "@libs/client/useMutation";
 import { cls } from "@libs/client/utils";
@@ -10,6 +10,7 @@ import useUser from "@libs/client/useUser";
 import Image from "next/image";
 import client from "@libs/server/client";
 import Layout from "@components/layout";
+import { useState } from "react";
 
 interface ProductWithUser extends Product {
   user: {
@@ -25,20 +26,26 @@ interface ProductResponse {
   isFavorite: Boolean;
 }
 
-const Product: NextPage<ProductResponse> = ({
-  product,
-  relatedProducts,
-}) => {
+interface ChatResponse{
+  ok:boolean;
+  chats:ChatRoom
+}
+
+const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
   const router = useRouter();
   const { user, isLoading } = useUser();
   const { data, mutate: boundMutate } = useSWR<ProductResponse>(
     router.query.id ? `/api/products/${router.query.id} ` : null
   );
-  const { mutate: unboundMutate } = useSWRConfig(); // unbound mutate
 
+  const { mutate: unboundMutate } = useSWRConfig(); // unbound mutate
+  const [isShow, setIsShow] = useState(false);
   const [toggleFavorite] = useMutation(
     `/api/products/${router.query.id}/favorite`
   );
+
+  const [chat, {data:chatData, loading}] = useMutation<ChatResponse>(`api/chats`);
+
   const onFavoriteClick = () => {
     toggleFavorite({});
     if (!data) return;
@@ -47,6 +54,29 @@ const Product: NextPage<ProductResponse> = ({
       false
     );
     // unboundMutate("/api/users/me", (prev:any)=> prev && {ok:!prev.ok}, false);
+  };
+
+  const OnCreateChatRoom = () => {
+    if(loading) return;
+    chat({ id: router.query.id });
+
+    // 1. chatroom으로 이동시켜 (임시방)
+    // 2. chatroom에서 대화가 없었을때, 대화를 보내면 db를 create 시작.
+  };
+
+  const onMoveChatList = ()=>{
+    router.push(`/chats`)
+  }
+  const onClickChat = () => {
+    // 이미 만들어진 채팅방이 있는지 체크
+    if(!chatData?.ok){ // 안됨
+      console.log(chatData?.ok)
+      // router.push(`/chats/${router.query.id}/?user=${user?.name}`)
+    }
+    setIsShow(true);
+  };
+  const onCancle = () => {
+    setIsShow(false);
   };
 
   if (router.isFallback) {
@@ -116,8 +146,81 @@ const Product: NextPage<ProductResponse> = ({
                 \{product.price}
               </span>
               <p className=" my-6 text-gray-700">{product.description}</p>
+
               <div className="flex items-center justify-between space-x-2">
-                <Button large text="거래하기 (채팅)" />
+                {data?.product.user.id === user?.id ? (
+                  <Button onClick={onMoveChatList} large text="채팅 목록"/>
+                ) : (
+                  <Button onClick={onClickChat} large text="거래하기 (채팅)" />
+                )}
+
+                {/* 거래하기 PopUp */}
+                <div
+                  className={cls("relative z-10", isShow ? "show" : "hidden")}
+                  aria-labelledby="modal-title"
+                  role="dialog"
+                  aria-modal="true"
+                >
+                  <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"></div>
+
+                  <div className="fixed inset-0 z-10 overflow-y-auto">
+                    <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+                      <div className="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg">
+                        <div className="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
+                          <div className="sm:flex sm:items-start">
+                            <div className="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-blue-100 sm:mx-0 sm:h-10 sm:w-10">
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                strokeWidth={1.5}
+                                stroke="currentColor"
+                                className="h-6 w-6"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9"
+                                />
+                              </svg>
+                            </div>
+                            <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
+                              <h3
+                                className="text-base font-semibold leading-6 text-gray-900"
+                                id="modal-title"
+                              >
+                                거래 진행하기
+                              </h3>
+                              <div className="mt-2">
+                                <p className="text-sm text-gray-500">
+                                  대화창을 생성하시겠습니까?
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
+                          <button
+                            type="button"
+                            className="inline-flex w-full justify-center rounded-md bg-blue-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-600 sm:ml-3 sm:w-auto"
+                            onClick={OnCreateChatRoom}
+                          >
+                            생성
+                          </button>
+                          <button
+                            type="button"
+                            onClick={onCancle}
+                            className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto"
+                          >
+                            취소
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* 관심버튼 */}
                 <button
                   onClick={onFavoriteClick}
                   className={cls(

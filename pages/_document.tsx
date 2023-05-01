@@ -13,7 +13,6 @@ export default function Document() {
       <body>
         <Main />
         <NextScript />
-
         {/* <Script
           src="https://t1.kakaocdn.net/kakao_js_sdk/v2/kakao.min.js"
           strategy="lazyOnload"
