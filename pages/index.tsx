@@ -63,8 +63,8 @@ export async function getStaticProps() {
     include:{
       _count:{
         select:{
-          favorites:true,
-          // chats:true,
+          records:true,
+          
         }
       }
     },

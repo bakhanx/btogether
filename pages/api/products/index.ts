@@ -11,9 +11,9 @@ async function handler(
     const products = await client.product.findMany({
       include: {
         _count: {
-          select: {
-            favorites: true,
-          },
+         select:{
+          records:true
+         }
         },
       },
       orderBy:{
@@ -37,7 +37,8 @@ async function handler(
         price: +price,
         description,
         image: photoId ? photoId : "",
-        user: {
+        
+        seller: {
           connect: {
             id: user?.id,
           },

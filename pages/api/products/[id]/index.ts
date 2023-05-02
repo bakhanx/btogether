@@ -16,7 +16,7 @@ async function handler(
       id: Number(id),
     },
     include: {
-      user: {
+      seller: {
         select: {
           id: true,
           name: true,
@@ -48,8 +48,9 @@ async function handler(
   });
 
   const isFavorite = Boolean(
-    await client.favorite.findFirst({
+    await client.record.findFirst({
       where: {
+        kind:"Favorite",
         productId: product?.id,
         userId: user?.id,
       },

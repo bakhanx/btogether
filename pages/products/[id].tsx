@@ -13,7 +13,7 @@ import Layout from "@components/layout";
 import { useState } from "react";
 
 interface ProductWithUser extends Product {
-  user: {
+  seller: {
     id: number;
     name: string;
     avatar: string;
@@ -26,9 +26,9 @@ interface ProductResponse {
   isFavorite: Boolean;
 }
 
-interface ChatResponse{
-  ok:boolean;
-  chats:ChatRoom
+interface ChatResponse {
+  ok: boolean;
+  chats: ChatRoom;
 }
 
 const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
@@ -44,8 +44,6 @@ const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
     `/api/products/${router.query.id}/favorite`
   );
 
-  const [chat, {data:chatData, loading}] = useMutation<ChatResponse>(`api/chats`);
-
   const onFavoriteClick = () => {
     toggleFavorite({});
     if (!data) return;
@@ -56,27 +54,24 @@ const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
     // unboundMutate("/api/users/me", (prev:any)=> prev && {ok:!prev.ok}, false);
   };
 
-  const OnCreateChatRoom = () => {
-    if(loading) return;
-    chat({ id: router.query.id });
-
-    // 1. chatroom으로 이동시켜 (임시방)
-    // 2. chatroom에서 대화가 없었을때, 대화를 보내면 db를 create 시작.
-  };
-
-  const onMoveChatList = ()=>{
-    router.push(`/chats`)
-  }
+  // 거래하기/채팅
   const onClickChat = () => {
-    // 이미 만들어진 채팅방이 있는지 체크
-    if(!chatData?.ok){ // 안됨
-      console.log(chatData?.ok)
-      // router.push(`/chats/${router.query.id}/?user=${user?.name}`)
-    }
+    
     setIsShow(true);
   };
+
   const onCancle = () => {
     setIsShow(false);
+  };
+
+  // 방생성
+  const OnCreateChatRoom = () => {
+   
+  };
+
+  //본인 포스트일 경우
+  const onMoveChatList = () => {
+    router.push(`/chats`);
   };
 
   if (router.isFallback) {
@@ -112,13 +107,13 @@ const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
           >
             {/* Profile */}
             <div className="flex cursor-pointer items-center space-x-3 border-t border-b py-3">
-              {product?.user?.avatar ? (
+              {product?.seller ?  (
                 <Image
                   className="h-12 w-12 rounded-full"
                   width={48}
                   height={48}
                   alt=""
-                  src={`https://imagedelivery.net/214BxOnlVKSU2amZRZmdaQ/${product.user.avatar}/public`}
+                  src={`https://imagedelivery.net/214BxOnlVKSU2amZRZmdaQ/${product.seller.avatar}/public`}
                 />
               ) : (
                 <div className="h-12 w-12 rounded-full bg-slate-300" />
@@ -126,10 +121,10 @@ const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
 
               <div>
                 <p className="text-sm font-medium text-gray-700">
-                  {product.user.name}
+                  {product.seller.name}
                 </p>
 
-                <Link href={`/users/profile/${product.user.name}`}>
+                <Link href={`/users/profile/${product.seller.name}`}>
                   <p className="text-xs font-medium text-gray-500">
                     프로필 보기 &rarr;
                   </p>
@@ -148,8 +143,8 @@ const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
               <p className=" my-6 text-gray-700">{product.description}</p>
 
               <div className="flex items-center justify-between space-x-2">
-                {data?.product.user.id === user?.id ? (
-                  <Button onClick={onMoveChatList} large text="채팅 목록"/>
+                {data?.product?.seller?.id === user?.id ? (
+                  <Button onClick={onMoveChatList} large text="채팅 목록" />
                 ) : (
                   <Button onClick={onClickChat} large text="거래하기 (채팅)" />
                 )}
@@ -287,7 +282,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
       id: Number(context?.params?.id),
     },
     include: {
-      user: {
+      seller: {
         select: {
           id: true,
           name: true,

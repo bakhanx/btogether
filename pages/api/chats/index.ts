@@ -8,25 +8,37 @@ async function handler(
   req: NextApiRequest,
   res: NextApiResponse<ResponseType>
 ) {
-  // if (req.method === "GET") {
-  //   const chats = await client.chat.findMany({
+  if (req.method === "GET") {
+    const {
+      session: { user },
+    } = req;
+    const product = await client.product.findUnique({
+      where: {
+      },
+    });
+    const chats = await client.chatRoom.findFirst({
+        where: {
+          seller: {
+            id: product?.sellerId,
+          },
+          purchaser: {
+            id: user?.id,
+          },
+        },
+        include:{
+          purchaser:true,
+          seller:true,
 
-  //       where:{
-  //           userId:req.session?.user?.id
-  //       }
-  //   });
-  //   res.json({
-  //     ok: true,
-  //     chats,
-  //   });
-  // }
-
-  // GET 요청
-
-
+        }
+      })
+    res.json({
+      ok: true,
+      chats,
+    });
+  }
 
   if (req.method === "POST") {
-    const {
+     const {
       body: { id },
       session: { user },
     } = req;
@@ -41,7 +53,7 @@ async function handler(
       await client.chatRoom.findFirst({
         where: {
           seller: {
-            id: product?.userId,
+            id: product?.sellerId,
           },
           purchaser: {
             id: user?.id,
@@ -64,7 +76,7 @@ async function handler(
           },
           seller: {
             connect: {
-              id: product?.userId,
+              id: product?.sellerId,
             },
           },
           product: {
