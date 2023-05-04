@@ -12,25 +12,17 @@ async function handler(
     const {
       session: { user },
     } = req;
-    const product = await client.product.findUnique({
+    const chats = await client.chatRoom.findMany({
       where: {
+        OR: [{ sellerId: user?.id }, { purchaserId: user?.id }],
+      },
+      include: {
+        purchaser: true,
+        seller: true,
+        messages:true,
       },
     });
-    const chats = await client.chatRoom.findFirst({
-        where: {
-          seller: {
-            id: product?.sellerId,
-          },
-          purchaser: {
-            id: user?.id,
-          },
-        },
-        include:{
-          purchaser:true,
-          seller:true,
 
-        }
-      })
     res.json({
       ok: true,
       chats,
@@ -38,7 +30,7 @@ async function handler(
   }
 
   if (req.method === "POST") {
-     const {
+    const {
       body: { id },
       session: { user },
     } = req;
@@ -58,6 +50,7 @@ async function handler(
           purchaser: {
             id: user?.id,
           },
+          productId: Number(id),
         },
       })
     );

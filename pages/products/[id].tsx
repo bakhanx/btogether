@@ -10,7 +10,7 @@ import useUser from "@libs/client/useUser";
 import Image from "next/image";
 import client from "@libs/server/client";
 import Layout from "@components/layout";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface ProductWithUser extends Product {
   seller: {
@@ -26,10 +26,22 @@ interface ProductResponse {
   isFavorite: Boolean;
 }
 
-interface ChatResponse {
-  ok: boolean;
-  chats: ChatRoom;
+interface ChatRoomWithUsers extends ChatRoom{
+  purchaser : {
+    id:number;
+    name:string;
+  }
+  seller : {
+    id:number;
+    name:string;
+  },
+  messages:string[];
 }
+export interface ChatRoomResponse {
+  ok:boolean;
+  chats : ChatRoomWithUsers[]
+}
+
 
 const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
   const router = useRouter();
@@ -44,6 +56,9 @@ const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
     `/api/products/${router.query.id}/favorite`
   );
 
+  const [chatMutate, { data: chatData, loading }] = useMutation(`/api/chats`);
+  const { data: chatRooms } = useSWR<ChatRoomResponse>(`/api/chats`);
+
   const onFavoriteClick = () => {
     toggleFavorite({});
     if (!data) return;
@@ -56,9 +71,11 @@ const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
 
   // 거래하기/채팅
   const onClickChat = () => {
-    
+
+
     setIsShow(true);
   };
+
 
   const onCancle = () => {
     setIsShow(false);
@@ -66,8 +83,19 @@ const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
 
   // 방생성
   const OnCreateChatRoom = () => {
-   
+    if (loading) return;
+    chatMutate({ id: router.query.id });
   };
+
+  useEffect(() => {
+    if (chatData?.ok) {
+      console.log("채팅방을 생성하였습니다.");
+    } else {
+      // 이미 생성된 채팅방으로 이동
+
+
+    }
+  }, [chatData]);
 
   //본인 포스트일 경우
   const onMoveChatList = () => {
@@ -107,7 +135,7 @@ const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
           >
             {/* Profile */}
             <div className="flex cursor-pointer items-center space-x-3 border-t border-b py-3">
-              {product?.seller ?  (
+              {product?.seller ? (
                 <Image
                   className="h-12 w-12 rounded-full"
                   width={48}
