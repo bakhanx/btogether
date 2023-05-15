@@ -9,7 +9,7 @@ async function handler(
 ) {
   const {
     session: { user },
-    query: { id },
+    query : {id},
     body,
   } = req;
 
@@ -26,6 +26,7 @@ async function handler(
             id: Number(id),
           },
         },
+        
         message: body.message,
       },
     });
@@ -34,37 +35,11 @@ async function handler(
       message,
     });
   }
-
-  if (req.method === "GET") {
-    const chatroom = await client.chatRoom.findFirst({
-      where: {
-        AND:{
-          purchaserId: user?.id,
-          productId:Number(id)
-        }
-      },
-      include: {
-        purchaser: true,
-        seller: true,
-        product:{
-          select:{
-            name:true
-          }
-        },
-        messages:true
-      },
-    });
-
-    res.json({
-      ok: true,
-      chatroom,
-    });
-  }
 }
 
 export default withApiSession(
   withHandler({
-    methods: ["GET", "POST"],
+    methods: ["POST"],
     handler,
   })
 );

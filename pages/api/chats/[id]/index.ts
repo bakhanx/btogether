@@ -8,22 +8,27 @@ async function handler(
   res: NextApiResponse<ResponseType>
 ) {
   const {
-    session: { user },
     query: { id },
   } = req;
-  const chats = await client.chatRoom.findMany({
+  const chatRoom = await client.chatRoom.findUnique({
     where: {
-        productId:Number(id),
+      id: Number(id),
     },
     include: {
       purchaser: true,
       seller: true,
+      product: {
+        select: {
+          name: true,
+        },
+      },
+      messages: true,
     },
   });
-  
+
   res.json({
     ok: true,
-    chats,
+    chatRoom,
   });
 }
 

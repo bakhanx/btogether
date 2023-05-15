@@ -12,7 +12,7 @@ async function handler(
     const {
       session: { user },
     } = req;
-    const chats = await client.chatRoom.findMany({
+    const chatRooms = await client.chatRoom.findMany({
       where: {
         OR: [{ sellerId: user?.id }, { purchaserId: user?.id }],
       },
@@ -25,7 +25,7 @@ async function handler(
 
     res.json({
       ok: true,
-      chats,
+      chatRooms,
     });
   }
 
@@ -58,6 +58,7 @@ async function handler(
     if (alreadyExistsChats) {
       res.json({
         ok: false,
+        alreadyExistsChats
       });
     } else {
       const chats = await client.chatRoom.create({

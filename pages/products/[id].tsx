@@ -24,24 +24,27 @@ interface ProductResponse {
   product: ProductWithUser;
   relatedProducts: Product[];
   isFavorite: Boolean;
+  myChatRoomId: number;
 }
 
-interface ChatRoomWithUsers extends ChatRoom{
-  purchaser : {
-    id:number;
-    name:string;
-  }
-  seller : {
-    id:number;
-    name:string;
-  },
-  messages:string[];
+interface ChatRoomWithUsers extends ChatRoom {
+  purchaser: {
+    id: number;
+    name: string;
+  };
+  seller: {
+    id: number;
+    name: string;
+  };
+  product: {
+    name: string;
+  };
+  messages: string[];
 }
 export interface ChatRoomResponse {
-  ok:boolean;
-  chats : ChatRoomWithUsers[]
+  ok: boolean;
+  chatroom: ChatRoomWithUsers;
 }
-
 
 const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
   const router = useRouter();
@@ -57,7 +60,6 @@ const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
   );
 
   const [chatMutate, { data: chatData, loading }] = useMutation(`/api/chats`);
-  const { data: chatRooms } = useSWR<ChatRoomResponse>(`/api/chats`);
 
   const onFavoriteClick = () => {
     toggleFavorite({});
@@ -69,33 +71,32 @@ const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
     // unboundMutate("/api/users/me", (prev:any)=> prev && {ok:!prev.ok}, false);
   };
 
-  // 거래하기/채팅
+  // 채팅방 이동 Modal
   const onClickChat = () => {
-
-
     setIsShow(true);
   };
-
-
   const onCancle = () => {
     setIsShow(false);
   };
-
-  // 방생성
+  // 방생성 요청
   const OnCreateChatRoom = () => {
     if (loading) return;
     chatMutate({ id: router.query.id });
   };
 
+  // 채팅방 생성
   useEffect(() => {
     if (chatData?.ok) {
-      console.log("채팅방을 생성하였습니다.");
-    } else {
-      // 이미 생성된 채팅방으로 이동
-
-
+      router.push(`/chats/${chatData?.chats?.id}`);
     }
-  }, [chatData]);
+  }, [chatData, router]);
+
+  // 채팅방 이미 존재
+  useEffect(() => {
+    if (chatData?.ok === false) {
+      router.push(`/chats/${data?.myChatRoomId}`);
+    }
+  }, [router, chatData, data]);
 
   //본인 포스트일 경우
   const onMoveChatList = () => {
@@ -216,7 +217,7 @@ const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
                               </h3>
                               <div className="mt-2">
                                 <p className="text-sm text-gray-500">
-                                  대화창을 생성하시겠습니까?
+                                  판매자와의 채팅방으로 이동합니다.
                                 </p>
                               </div>
                             </div>
@@ -228,7 +229,7 @@ const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
                             className="inline-flex w-full justify-center rounded-md bg-blue-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-600 sm:ml-3 sm:w-auto"
                             onClick={OnCreateChatRoom}
                           >
-                            생성
+                            이동
                           </button>
                           <button
                             type="button"

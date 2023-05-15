@@ -60,11 +60,20 @@ async function handler(
     })
   );
 
+  const myChatRoom = await client.chatRoom.findFirst({
+    where:{
+      productId:Number(id),
+      purchaserId:user?.id
+    }
+  })
+  const myChatRoomId = myChatRoom?.id
+
   res.json({
     ok: true,
     product,
     relatedProducts,
     isFavorite,
+    myChatRoomId,
   });
 }
 
