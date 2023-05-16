@@ -20,6 +20,9 @@ async function handler(
       product: {
         select: {
           name: true,
+          price:true,
+          image:true,
+          sellState:true,
         },
       },
       messages: true,

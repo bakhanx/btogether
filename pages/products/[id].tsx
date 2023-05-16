@@ -27,24 +27,7 @@ interface ProductResponse {
   myChatRoomId: number;
 }
 
-interface ChatRoomWithUsers extends ChatRoom {
-  purchaser: {
-    id: number;
-    name: string;
-  };
-  seller: {
-    id: number;
-    name: string;
-  };
-  product: {
-    name: string;
-  };
-  messages: string[];
-}
-export interface ChatRoomResponse {
-  ok: boolean;
-  chatroom: ChatRoomWithUsers;
-}
+
 
 const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
   const router = useRouter();

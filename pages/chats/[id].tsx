@@ -1,56 +1,88 @@
 import { NextPage } from "next";
-import Message from "@components/message";
+import Chat from "@components/message";
 import Layout from "@components/layout";
 import useMutation from "@libs/client/useMutation";
 import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
 import useSWR from "swr";
 import useUser from "@libs/client/useUser";
+import { ChatRoomWithUsers } from ".";
+import { Message } from "@prisma/client";
+import { useEffect } from "react";
+import Image from "next/image";
+
+interface ChatRoomResponse {
+  ok: boolean;
+  chatRoom: ChatRoomWithUsers;
+}
 
 const ChatDetail: NextPage = () => {
   const router = useRouter();
   const { register, reset, handleSubmit } = useForm();
-  const { data: chatData, mutate } = useSWR(`/api/chats/${router.query.id}`, {
-    refreshInterval: 1000,
-  });
-  const user = useUser();
+  const { data: chatData, mutate } = useSWR<ChatRoomResponse>(
+    router.query.id ? `/api/chats/${router.query.id}` : null,
+    {
+      refreshInterval: 1000,
+    }
+  );
+  const { user } = useUser();
   const [sendMutation, { loading, data }] = useMutation(
     `/api/chats/${router.query.id}/message`
   );
 
   const onValid = (form: any) => {
     if (loading) return;
-
     reset();
-    mutate((prev: any) => {
-      prev && {
-        ...prev,
-        chatRoom: {
-          ...prev.chatRoom,
-          messages: [
-            ...prev.chatRoom?.messages,
-            {
-              id: Date.now(),
-              createdAt: Date.now(),
-              message: form.message,
-              user: { ...user },
-            },
-          ],
-        },
-      };
+
+    mutate((prev) => {
+      return (
+        prev && {
+          ...prev,
+          chatRoom: {
+            ...prev.chatRoom,
+            messages: [
+              ...prev.chatRoom?.messages,
+              {
+                id: Date.now(),
+                createdAt: Date.now(),
+                message: form.message,
+                user: { ...user },
+              },
+            ],
+          },
+        }
+      );
     }, false);
 
     sendMutation(form);
   };
 
+  console.log(chatData);
+
+  useEffect(()=>{
+
+  },[chatData]);
+
   return (
-    <Layout title="판매왕김스프" seoTitle={`판매왕김스프님과의 대화`} canGoBack>
-      <div className="space-y-4 py-10 px-4 pb-16">
-        <Message message="안녕하세요!" />
+    <Layout title={`${chatData?.chatRoom.seller.name}님과의 대화`} seoTitle={chatData?.chatRoom.product.name} canGoBack>
+      <div className="bg-slate-100 px-4 fixed w-full">
+        <div>
+          <span>{chatData?.chatRoom.product.sellstate}</span>
+          <span>{chatData?.chatRoom.product.name}</span>
+        </div>
+        <div>{chatData?.chatRoom.product.price}원</div>
+        <div>{chatData?.chatRoom.product.image}</div>
+
+      </div>
+      <div className="space-y-4 py-10 px-4 pb-24 pt-24">
         {/* 메시지 */}
-        {chatData?.chatRoom?.messages?.map((message: any) => (
+        {chatData?.chatRoom?.messages?.map((message: Message) => (
           <div key={message.id}>
-            <Message reversed message={message.message} />
+            {message?.userId === user?.id ? (
+              <Chat reversed message={message.message} />
+            ) : (
+              <Chat message={message.message} avatar={chatData?.chatRoom?.seller?.avatar} />
+            )}
           </div>
         ))}
 
