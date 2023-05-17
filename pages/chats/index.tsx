@@ -12,6 +12,7 @@ export interface ChatRoomWithUsers extends ChatRoom {
   purchaser: {
     id: number;
     name: string;
+    avatar: string;
   };
   seller: {
     id: number;
@@ -34,6 +35,7 @@ interface ChatRoomsResponse {
 const Chats: NextPage = () => {
   const { data } = useSWR<ChatRoomsResponse>("/api/chats");
   const { user } = useUser();
+
   return (
     <Layout title="채팅" hasTabBar seoTitle="채팅">
       <div className="divide-y-2">
@@ -46,9 +48,20 @@ const Chats: NextPage = () => {
           >
             <div className="flex cursor-pointer items-center space-x-3 px-4 py-3">
               <div className="relative h-10 w-10">
-                {chatRoom.seller.avatar ? (
+                {user?.id === chatRoom.purchaserId ? (
+                  chatRoom.seller.avatar ? (
+                    <Image
+                      src={`https://imagedelivery.net/214BxOnlVKSU2amZRZmdaQ/${chatRoom.seller.avatar}/avatar`}
+                      alt=""
+                      fill
+                      className="rounded-full"
+                    />
+                  ) : (
+                    <div className="h-10 w-10 rounded-full bg-slate-500" />
+                  )
+                ) : chatRoom.purchaser.avatar ? (
                   <Image
-                    src={`https://imagedelivery.net/214BxOnlVKSU2amZRZmdaQ/${chatRoom.seller.avatar}/avatar`}
+                    src={`https://imagedelivery.net/214BxOnlVKSU2amZRZmdaQ/${chatRoom.purchaser.avatar}/avatar`}
                     alt=""
                     fill
                     className="rounded-full"

@@ -8,7 +8,7 @@ import useSWR from "swr";
 import useUser from "@libs/client/useUser";
 import { ChatRoomWithUsers } from ".";
 import { Message } from "@prisma/client";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import Image from "next/image";
 
 interface ChatRoomResponse {
@@ -26,9 +26,14 @@ const ChatDetail: NextPage = () => {
     }
   );
   const { user } = useUser();
+  const scrollRef = useRef<HTMLDivElement | null>(null);
   const [sendMutation, { loading, data }] = useMutation(
     `/api/chats/${router.query.id}/message`
   );
+
+  useEffect(() => {
+    scrollRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [chatData]);
 
   const onValid = (form: any) => {
     if (loading) return;
@@ -59,32 +64,62 @@ const ChatDetail: NextPage = () => {
 
   console.log(chatData);
 
-  useEffect(()=>{
-
-  },[chatData]);
+  useEffect(() => {}, [chatData]);
 
   return (
-    <Layout title={`${chatData?.chatRoom.seller.name}님과의 대화`} seoTitle={chatData?.chatRoom.product.name} canGoBack>
-      <div className="bg-slate-100 px-4 fixed w-full">
-        <div>
-          <span>{chatData?.chatRoom.product.sellstate}</span>
-          <span>{chatData?.chatRoom.product.name}</span>
-        </div>
-        <div>{chatData?.chatRoom.product.price}원</div>
-        <div>{chatData?.chatRoom.product.image}</div>
+    <Layout
+      title={`${chatData?.chatRoom.seller.name}님과의 대화`}
+      seoTitle={chatData?.chatRoom.product.name}
+      canGoBack
+    >
+      <div className="fixed z-50 w-full border-b-2 border-b-blue-200 bg-white px-4">
+        <div className="flex items-center  p-2">
+          <div className="relative h-16 w-16">
+            <Image
+              src={`https://imagedelivery.net/214BxOnlVKSU2amZRZmdaQ/${chatData?.chatRoom.product.image}/avatar`}
+              alt=""
+              fill
+              className=""
+            />
+          </div>
 
+          <div className="px-4">
+            <div>
+              <span>{chatData?.chatRoom.product.sellstate}</span>
+              <span className="bold text-blue-500">[거래중] </span>
+              <span>{chatData?.chatRoom.product.name}</span>
+            </div>
+            <div>{chatData?.chatRoom.product.price}원</div>
+          </div>
+        </div>
       </div>
-      <div className="space-y-4 py-10 px-4 pb-24 pt-24">
+      <div className="mx-auto w-full max-w-lg space-y-4 py-10 px-4 pb-24 pt-24">
         {/* 메시지 */}
         {chatData?.chatRoom?.messages?.map((message: Message) => (
           <div key={message.id}>
             {message?.userId === user?.id ? (
-              <Chat reversed message={message.message} />
+              <Chat
+                reversed
+                message={message.message}
+                avatar={
+                  user?.id === chatData?.chatRoom?.purchaserId
+                    ? chatData?.chatRoom?.purchaser?.avatar
+                    : chatData?.chatRoom?.seller?.avatar
+                }
+              />
             ) : (
-              <Chat message={message.message} avatar={chatData?.chatRoom?.seller?.avatar} />
+              <Chat
+                message={message.message}
+                avatar={
+                  user?.id === chatData?.chatRoom?.purchaserId
+                    ? chatData?.chatRoom?.seller?.avatar
+                    : chatData?.chatRoom?.purchaser?.avatar
+                }
+              />
             )}
           </div>
         ))}
+        <div className="inline" ref={scrollRef}></div>
 
         {/* 메시지 입력 칸 */}
         <form
