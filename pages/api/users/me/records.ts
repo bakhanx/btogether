@@ -2,6 +2,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import withHandler, { ResponseType } from "@libs/server/withHandler";
 import client from "@libs/server/client";
 import { withApiSession } from "@libs/server/withSession";
+import { Kind } from "@prisma/client";
 
 async function handler(
   req: NextApiRequest,
@@ -9,18 +10,21 @@ async function handler(
 ) {
   const {
     session: { user },
+    query: { kind },
   } = req;
 
-  const favorites = await client.favorite.findMany({
+  const records = await client.record.findMany({
     where: {
-      userId: Number(user?.id),
+      userId: user?.id,
+      kind: kind as Kind,
     },
-    select: {
+    include: {
       product: {
         include: {
           _count: {
             select: {
-              favorites: true,
+              records: true,
+              chatRooms: true,
             },
           },
         },
@@ -30,7 +34,7 @@ async function handler(
 
   res.json({
     ok: true,
-    favorites,
+    records,
   });
 }
 

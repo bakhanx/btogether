@@ -15,25 +15,25 @@ interface Record {
 }
 interface ProductWithCount extends Product {
   _count: {
-    favorites: number;
-    comments: number;
+    records:number;
+    chatRooms:number;
   };
 }
 
-const ProductList = ({ kind }: ProductProps) => {
-  const { data, isLoading } = useSWR<ProductResponse>(`/api/users/me/${kind}`);
+const ProductList = () => {
+  const { data, isLoading } = useSWR<ProductResponse>(`/api/users/me/records`);
   console.log(data ? data.ok : null);
   return data ? (
     <>
-      {data?.[kind].map((record: Record) => (
+      {data?.records?.map((record: Record) => (
         <Item
           key={record?.product.id}
           id={record?.product.id}
           title={record?.product.name}
           price={record?.product.price}
           image={record?.product.image}
-          hearts={record?.product._count.favorites}
-          comments={1}
+          hearts={record?.product._count.records}
+          comments={record?.product._count.chatRooms}
         />
       ))}
     </>

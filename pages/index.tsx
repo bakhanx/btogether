@@ -6,10 +6,10 @@ import { Product } from "@prisma/client";
 import client from "@libs/server/client";
 
 export interface ProductWithCount extends Product {
-  records: {
-    kind: string;
-  }[];
-  chatRooms: number[];
+  _count: {
+    records: number;
+    chatRooms: number;
+  };
 }
 interface ProductsResponse {
   ok: boolean;
@@ -29,8 +29,8 @@ const Home: NextPage<ProductsResponse> = ({ products }) => {
             key={product?.id}
             title={product?.name}
             price={product?.price}
-            hearts={product?.records?.length || 0}
-            comments={product?.chatRooms?.length || 0}
+            hearts={product?._count?.records || 0}
+            comments={product?._count?.chatRooms || 0}
           ></Item>
         ))}
       </div>
@@ -60,19 +60,14 @@ const Home: NextPage<ProductsResponse> = ({ products }) => {
 export async function getStaticProps() {
   const products = await client?.product.findMany({
     include: {
-      chatRooms: {
+      _count: {
         select: {
-          _count: true,
-        },
-      },
-      records: {
-        where: {
-          kind: {
-            equals: "Favorite",
+          chatRooms: true,
+          records: {
+            where: {
+              kind: { equals: "Favorite" },
+            },
           },
-        },
-        select: {
-          kind: true,
         },
       },
     },
@@ -80,6 +75,7 @@ export async function getStaticProps() {
       updatedAt: "desc",
     },
   });
+  console.log(products);
   return {
     props: {
       products: JSON.parse(JSON.stringify(products)),
