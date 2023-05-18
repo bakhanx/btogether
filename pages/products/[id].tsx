@@ -267,7 +267,7 @@ const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
                       <div className="mb-4 h-56 w-full bg-slate-300" />
                       <h3 className="-mb-1 text-gray-700">{product.name}</h3>
                       <span className="text-sm font-medium text-gray-900">
-                        \{product.price}
+                        {product.price}원
                       </span>
                     </Link>
                   </div>

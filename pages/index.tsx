@@ -6,17 +6,18 @@ import { Product } from "@prisma/client";
 import client from "@libs/server/client";
 
 export interface ProductWithCount extends Product {
-  _count: {
-    favorites: number;
-    chats: number;
-  };
+  records: {
+    kind: string;
+  }[];
+  chatRooms: number[];
 }
 interface ProductsResponse {
   ok: boolean;
   products: ProductWithCount[];
 }
 
-const Home: NextPage<ProductsResponse> = ({products}) => {
+const Home: NextPage<ProductsResponse> = ({ products }) => {
+  console.log(products);
   return (
     <Layout hasTabBar title="B-Together" seoTitle="이웃과 함께하는">
       {/* 작성된 게시글 리스트 */}
@@ -28,8 +29,8 @@ const Home: NextPage<ProductsResponse> = ({products}) => {
             key={product?.id}
             title={product?.name}
             price={product?.price}
-            comments={product?._count?.chats || 0}
-            hearts={product?._count?.favorites || 0}
+            hearts={product?.records?.length || 0}
+            comments={product?.chatRooms?.length || 0}
           ></Item>
         ))}
       </div>
@@ -56,21 +57,28 @@ const Home: NextPage<ProductsResponse> = ({products}) => {
   );
 };
 
-
-
 export async function getStaticProps() {
   const products = await client?.product.findMany({
-    include:{
-      _count:{
-        select:{
-          records:true,
-          
-        }
-      }
+    include: {
+      chatRooms: {
+        select: {
+          _count: true,
+        },
+      },
+      records: {
+        where: {
+          kind: {
+            equals: "Favorite",
+          },
+        },
+        select: {
+          kind: true,
+        },
+      },
     },
-    orderBy:{
-      updatedAt:"desc"
-    }
+    orderBy: {
+      updatedAt: "desc",
+    },
   });
   return {
     props: {

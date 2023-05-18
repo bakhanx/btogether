@@ -25,6 +25,7 @@ const ChatDetail: NextPage = () => {
       refreshInterval: 1000,
     }
   );
+  console.log("a");
   const { user } = useUser();
   const scrollRef = useRef<HTMLDivElement | null>(null);
   const [sendMutation, { loading, data }] = useMutation(
@@ -62,10 +63,6 @@ const ChatDetail: NextPage = () => {
     sendMutation(form);
   };
 
-  console.log(chatData);
-
-  useEffect(() => {}, [chatData]);
-
   return (
     <Layout
       title={`${chatData?.chatRoom.seller.name}님과의 대화`}
@@ -97,7 +94,16 @@ const ChatDetail: NextPage = () => {
         {/* 메시지 */}
         {chatData?.chatRoom?.messages?.map((message: Message) => (
           <div key={message.id}>
-            {message?.userId === user?.id ? (
+            {message?.userId && message?.userId !== user?.id? (
+              <Chat
+                message={message.message}
+                avatar={
+                  user?.id === chatData?.chatRoom?.purchaserId
+                    ? chatData?.chatRoom?.seller?.avatar
+                    : chatData?.chatRoom?.purchaser?.avatar
+                }
+              />
+            ) : (
               <Chat
                 reversed
                 message={message.message}
@@ -105,15 +111,6 @@ const ChatDetail: NextPage = () => {
                   user?.id === chatData?.chatRoom?.purchaserId
                     ? chatData?.chatRoom?.purchaser?.avatar
                     : chatData?.chatRoom?.seller?.avatar
-                }
-              />
-            ) : (
-              <Chat
-                message={message.message}
-                avatar={
-                  user?.id === chatData?.chatRoom?.purchaserId
-                    ? chatData?.chatRoom?.seller?.avatar
-                    : chatData?.chatRoom?.purchaser?.avatar
                 }
               />
             )}

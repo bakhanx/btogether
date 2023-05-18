@@ -38,7 +38,7 @@ export default function Item({
 
           <div className="flex w-full flex-col truncate pt-2">
             <span className="truncate text-lg ">{title}</span>
-            <span className="">\{price}</span>
+            <span className="">{price}원</span>
 
             {/* comments,hearts */}
             <div className="flex items-end justify-end space-x-2">
