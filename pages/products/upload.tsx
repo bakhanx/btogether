@@ -24,12 +24,19 @@ interface UploadProductMutation {
 
 const Upload: NextPage = () => {
   const router = useRouter();
-  const { register, handleSubmit, watch } = useForm<UploadProductForm>();
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm<UploadProductForm>({mode:"onChange"});
   const [uploadProduct, { loading, data }] =
     useMutation<UploadProductMutation>("/api/products");
 
   const photo = watch("photo");
   const [photoPreview, setPhotoPreview] = useState("");
+
+  console.log(errors.price);
 
   useEffect(() => {
     if (photo && photo.length > 0) {
@@ -118,7 +125,10 @@ const Upload: NextPage = () => {
           placeholder="필수 입력"
         />
         <Input
-          register={register("price", { required: true })}
+          register={register("price", {
+            required: true,
+            maxLength: { value: 9, message: "고가 물품은 판매할 수 없습니다." },
+          })}
           required
           label="가격 (선택사항)"
           placeholder="0"
@@ -126,6 +136,9 @@ const Upload: NextPage = () => {
           type="text"
           kind="price"
         />
+        <div className="text-red-500">
+          {errors?.price ? errors?.price?.message : ""}
+        </div>
         <TextArea
           register={register("description", { required: true })}
           required

@@ -188,12 +188,12 @@ const EditProfile: NextPage = () => {
           </label>
         </div>
         <Input
-          register={register("name", { required: false })}
+          register={register("name", { required: true })}
           label="닉네임"
           value={profileData?.profile?.name}
           name="name"
           type="text"
-          required={false}
+          required={true}
           onChange={onChange}
         />
         {user?.email ? (

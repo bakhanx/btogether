@@ -37,7 +37,7 @@ const Chats: NextPage = () => {
   const { user } = useUser();
 
   return (
-    <Layout title="채팅" hasTabBar seoTitle="채팅">
+    <Layout title="채팅" hasTabBar canGoBack seoTitle="채팅">
       <div className="divide-y-2">
         {data?.chatRooms?.map((chatRoom) => (
           <Link

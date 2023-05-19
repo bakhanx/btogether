@@ -17,7 +17,6 @@ interface ProductsResponse {
 }
 
 const Home: NextPage<ProductsResponse> = ({ products }) => {
-  console.log(products);
   return (
     <Layout hasTabBar title="B-Together" seoTitle="이웃과 함께하는">
       {/* 작성된 게시글 리스트 */}
@@ -75,7 +74,6 @@ export async function getStaticProps() {
       updatedAt: "desc",
     },
   });
-  console.log(products);
   return {
     props: {
       products: JSON.parse(JSON.stringify(products)),
