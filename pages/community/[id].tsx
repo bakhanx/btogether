@@ -11,6 +11,7 @@ import { cls } from "@libs/client/utils";
 import { useEffect } from "react";
 import client from "@libs/server/client";
 import Image from "next/image";
+import useUser from "@libs/client/useUser";
 
 interface CommentsWithUser extends Comment {
   user: User;
@@ -32,8 +33,9 @@ interface StorySWRResponse extends Story {
   story: {
     _count: {
       likes: number;
-      comments:number;
+      comments: number;
     };
+    user: User;
     comments: CommentsWithUser[];
   };
   isLike: boolean;
@@ -54,6 +56,7 @@ interface CommentResponse {
 
 const CommunityDetail: NextPage<{ story: StorySSGResponse }> = ({ story }) => {
   const router = useRouter();
+  const { user } = useUser();
   const { register, handleSubmit, reset } = useForm<CommentForm>();
 
   const { data, mutate } = useSWR<StorySWRResponse>(
@@ -63,11 +66,35 @@ const CommunityDetail: NextPage<{ story: StorySSGResponse }> = ({ story }) => {
   const [storyMutation, { loading: likeLoading }] = useMutation(
     `/api/stories/${router.query.id}/like`
   );
+
   const [comment, { data: commentData, loading: commentLoading }] =
     useMutation<CommentResponse>(`/api/stories/${router.query.id}/comment`);
 
   const onValid = (form: CommentForm) => {
     if (commentLoading) return;
+
+    mutate((prev: any) => {
+      return (
+        prev && {
+          ...prev,
+          story: {
+            ...prev.story,
+            comments: [
+              ...prev.story.comments,
+              {
+                id: Date.now(),
+                createdAt: Date.now(),
+                updatedAt: Date.now(),
+                comment: form.comment,
+                user: { ...user },
+              },
+            ],
+          },
+        }
+      );
+    }, false);
+
+    reset();
     comment(form);
   };
   const onInvalid = (form: CommentFormError) => {
@@ -80,13 +107,10 @@ const CommunityDetail: NextPage<{ story: StorySSGResponse }> = ({ story }) => {
     mutate(
       {
         ...data,
-
         story: {
           ...data.story,
-
           _count: {
             ...data.story._count,
-
             likes: data.isLike
               ? data.story._count.likes - 1
               : data.story._count.likes + 1,
@@ -101,18 +125,10 @@ const CommunityDetail: NextPage<{ story: StorySSGResponse }> = ({ story }) => {
     }
   };
 
-  useEffect(() => {
-    if (commentData && commentData.ok) {
-      reset();
-      mutate();
-      router.reload();
-    }
-  }, [commentData, reset, mutate, router]);
-
   return (
     <Layout canGoBack seoTitle={`${story?.user?.name}님의 스토리`}>
       <div className="pt-2">
-        {/* Profile */}
+        {/* 작성자 프로필 */}
         <span className="ml-4 items-center rounded-full bg-gray-100 px-2.5 py-0.5 text-xs font-medium text-gray-800">
           후기
         </span>
@@ -123,6 +139,8 @@ const CommunityDetail: NextPage<{ story: StorySSGResponse }> = ({ story }) => {
                 <Image
                   src={`https://imagedelivery.net/214BxOnlVKSU2amZRZmdaQ/${story?.user?.avatar}/avatar`}
                   alt=""
+                  sizes="1"
+                  priority
                   fill
                   className="rounded-full"
                 />
@@ -140,12 +158,16 @@ const CommunityDetail: NextPage<{ story: StorySSGResponse }> = ({ story }) => {
             </div>
           </div>
         </Link>
+
+        {/* 내용 & 좋아요 & 댓글 */}
         <div>
+          {/* 내용 */}
           <div className="mt-2 px-4 text-gray-700">
             <span>{story?.content}</span>
           </div>
 
           <div className="mt-3 flex w-full justify-start space-x-5 border-t px-4 py-2.5">
+            {/* 좋아요 */}
             <button
               onClick={onLikeClick}
               className={cls(
@@ -167,11 +189,10 @@ const CommunityDetail: NextPage<{ story: StorySSGResponse }> = ({ story }) => {
                   d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
                 ></path>
               </svg>
-              <span>
-                좋아요 {data?.story?._count?.likes}
-              </span>
+              <span>좋아요 {data?.story?._count?.likes}</span>
             </button>
 
+            {/* 댓글 */}
             <span className="flex items-center space-x-2 text-sm">
               <svg
                 className="h-5 w-5"
@@ -191,9 +212,10 @@ const CommunityDetail: NextPage<{ story: StorySSGResponse }> = ({ story }) => {
             </span>
           </div>
         </div>
+
         {/* 댓글 리스트 */}
         <div className="py-3">
-          {story?.comments.map((comment) => (
+          {data?.story.comments.map((comment) => (
             <div
               key={comment.id}
               className="my-3 flex space-x-3 bg-gray-50 py-3 px-3"
@@ -204,6 +226,8 @@ const CommunityDetail: NextPage<{ story: StorySSGResponse }> = ({ story }) => {
                     src={`https://imagedelivery.net/214BxOnlVKSU2amZRZmdaQ/${comment?.user?.avatar}/avatar`}
                     alt=""
                     fill
+                    priority
+                    sizes="1"
                     className="rounded-full"
                   />
                 </div>
@@ -225,6 +249,7 @@ const CommunityDetail: NextPage<{ story: StorySSGResponse }> = ({ story }) => {
             </div>
           ))}
         </div>
+
         {/* 댓글 입력칸 */}
         <div className="px-4">
           <form onSubmit={handleSubmit(onValid, onInvalid)}>

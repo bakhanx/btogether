@@ -13,7 +13,7 @@ export default function Message({ message, reversed, avatar }: MessageProps) {
     <div
       className={cls(
         "flex items-start",
-        reversed ? "flex-row-reverse space-x-reverse space-x-2" : "space-x-2"
+        reversed ? "flex-row-reverse space-x-2 space-x-reverse" : "space-x-2"
       )}
     >
       <div className="relative h-10 w-10">
@@ -22,6 +22,8 @@ export default function Message({ message, reversed, avatar }: MessageProps) {
             src={`https://imagedelivery.net/214BxOnlVKSU2amZRZmdaQ/${avatar}/avatar`}
             alt=""
             fill
+            priority
+            sizes="1"
             className="rounded-full"
           />
         ) : (

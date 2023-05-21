@@ -28,6 +28,8 @@ export default function Item({
               <Image
                 className="object-cover rounded-md"
                 fill
+                sizes="1"
+                priority
                 alt={title}
                 src={`https://imagedelivery.net/214BxOnlVKSU2amZRZmdaQ/${image}/public`}
               />

@@ -53,6 +53,8 @@ const Chats: NextPage = () => {
                       src={`https://imagedelivery.net/214BxOnlVKSU2amZRZmdaQ/${chatRoom.seller.avatar}/avatar`}
                       alt=""
                       fill
+                      priority
+                      sizes="1"
                       className="rounded-full"
                     />
                   ) : (
@@ -63,6 +65,8 @@ const Chats: NextPage = () => {
                     src={`https://imagedelivery.net/214BxOnlVKSU2amZRZmdaQ/${chatRoom.purchaser.avatar}/avatar`}
                     alt=""
                     fill
+                    priority
+                    sizes="1"
                     className="rounded-full"
                   />
                 ) : (

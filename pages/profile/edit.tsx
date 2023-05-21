@@ -14,6 +14,7 @@ import client from "@libs/server/client";
 import { withSsrSession } from "@libs/server/withSession";
 import useSWR from "swr";
 import { UserResponse } from "@libs/client/useUser";
+import { profile, profileEnd } from "console";
 
 interface EditProfileForm {
   email?: string;
@@ -38,13 +39,14 @@ const EditProfile: NextPage = () => {
   } = useForm<EditProfileForm>();
 
   const { user } = useUser();
-
-  const { data: profileData } = useSWR<UserResponse>(`/api/users/me`);
+  const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
+  const { data: profileData, mutate } = useSWR<UserResponse>(`/api/users/me`);
 
   const [editProfile, { data, loading }] =
     useMutation<EditProfileResponse>(`/api/users/me`);
 
   const onValid = async ({ email, phone, name, avatar }: EditProfileForm) => {
+    console.log(avatarPreview);
     if (loading) return;
 
     if (email === "") {
@@ -78,7 +80,14 @@ const EditProfile: NextPage = () => {
         name,
         avatarId: id,
       });
-    } else {
+    } else if (!avatarPreview) {
+      editProfile({
+        email,
+        phone,
+        name,
+        avatarId: null,
+      });
+    } else if (profileData?.profile.avatar && !avatarPreview) {
       editProfile({
         email,
         phone,
@@ -108,60 +117,77 @@ const EditProfile: NextPage = () => {
     }
   };
 
-  // useEffect(() => {
-  //   if (user?.avatar)
-  //     setAvatarPreview(
-  //       `https://imagedelivery.net/214BxOnlVKSU2amZRZmdaQ/${user?.avatar}/avatar`
-  //     );
-  // }, [setValue, user]);
-
-  const avatar = watch("avatar");
-
-  const [avatarPreview, setAvatarPreview] = useState("");
+  useEffect(() => {
+    const { unsubscribe } = watch((value) => {
+      if (value.avatar && value.avatar.length > 0) {
+        const file: any = value.avatar[0];
+        setAvatarPreview(URL.createObjectURL(file));
+        console.log(file);
+      }
+    });
+    return () => unsubscribe();
+  }, [watch]);
 
   useEffect(() => {
-    if (avatar && avatar?.length > 0) {
-      const file: any = avatar[0];
-      setAvatarPreview(URL.createObjectURL(file));
-    }
-  }, [avatar]);
+    console.log(avatarPreview);
+  }, [avatarPreview]);
 
   const resetAvatar = (event: any) => {
     event.preventDefault();
-    setAvatarPreview("");
+    if (!profileData?.profile.avatar && !avatarPreview) return;
+    // if (profileData?.profile.avatar && !avatarPreview) return;
+    
+    setAvatarPreview(null);
+
+    mutate((prev) => {
+      return (
+        prev && {
+          ...prev,
+          profile: {
+            ...prev.profile,
+            avatar: null,
+          },
+        }
+      );
+    });
   };
 
   return (
     <Layout hasTabBar canGoBack title="프로필 편집" seoTitle="내 프로필 편집">
       <form onSubmit={handleSubmit(onValid)} className="space-y-4 py-10 px-4">
         <div className="flex items-center space-x-3">
-          {/* profle.user.avatar가 있으면 profile.user.avatar. 
-              없으면, 껍데기.
-              이미지 변경해서 만들면 setPrivewAvatar.
-              그래서, previewAvatar가 있으면 이걸로 변경.
-          
-          
-          */}
-          {!avatarPreview && profileData?.profile.avatar && (
-            <Image
-              src={`https://imagedelivery.net/214BxOnlVKSU2amZRZmdaQ/${profileData?.profile.avatar}/avatar`}
-              alt=""
-              width={1366}
-              height={768}
-              className="h-14 w-14 rounded-full"
-            />
+          {/* 사진이 애초에 없을 경우 */}
+          {!profileData?.profile.avatar && !avatarPreview && (
+            <div className="h-16 w-16 rounded-full bg-slate-500" />
           )}
+
+          {/* 사진을 변경했을 경우 */}
           {avatarPreview && (
-            <Image
-              src={avatarPreview}
-              alt=""
-              width={1366}
-              height={768}
-              className="h-14 w-14 rounded-full"
-            />
+            <div className="relative h-16 w-16">
+              <Image
+                src={avatarPreview}
+                alt=""
+                fill
+                priority
+                sizes="1"
+                className="rounded-full"
+              />
+            </div>
           )}
-          {!avatarPreview && !profileData?.profile.avatar && (
-            <div className="h-14 w-14 rounded-full bg-slate-500" />
+
+          {/* 기존 사진을 삭제해버릴 경우 */}
+
+          {profileData?.profile.avatar && !avatarPreview && (
+            <div className="relative h-16 w-16">
+              <Image
+                src={`https://imagedelivery.net/214BxOnlVKSU2amZRZmdaQ/${profileData?.profile.avatar}/avatar`}
+                alt=""
+                fill
+                priority
+                sizes="1"
+                className="rounded-full"
+              />
+            </div>
           )}
 
           {/* 이미지 변경 */}

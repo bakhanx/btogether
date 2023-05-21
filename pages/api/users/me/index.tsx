@@ -98,6 +98,16 @@ async function handler(
         },
       });
     }
+    if (!avatarId) {
+      await client.user.update({
+        where: {
+          id: user?.id,
+        },
+        data: {
+          avatar: null,
+        },
+      });
+    }
     res.json({ ok: true });
   }
 }

@@ -103,6 +103,7 @@ const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
               <div className="relative h-96 w-full">
                 <Image
                   className="object-cover"
+                  priority
                   fill
                   alt=""
                   src={`https://imagedelivery.net/214BxOnlVKSU2amZRZmdaQ/${product?.image}/public`}
@@ -119,7 +120,7 @@ const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
           >
             {/* Profile */}
             <div className="flex cursor-pointer items-center space-x-3 border-t border-b py-3">
-              {product?.seller ? (
+              {product?.seller.avatar ? (
                 <Image
                   className="h-12 w-12 rounded-full"
                   width={48}

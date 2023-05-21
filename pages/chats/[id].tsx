@@ -25,7 +25,6 @@ const ChatDetail: NextPage = () => {
       refreshInterval: 1000,
     }
   );
-  console.log("a");
   const { user } = useUser();
   const scrollRef = useRef<HTMLDivElement | null>(null);
   const [sendMutation, { loading, data }] = useMutation(
@@ -72,12 +71,18 @@ const ChatDetail: NextPage = () => {
       <div className="fixed z-50 w-full border-b-2 border-b-blue-200 bg-white px-4">
         <div className="flex items-center  p-2">
           <div className="relative h-16 w-16">
-            <Image
-              src={`https://imagedelivery.net/214BxOnlVKSU2amZRZmdaQ/${chatData?.chatRoom.product.image}/avatar`}
-              alt=""
-              fill
-              className=""
-            />
+            {chatData?.chatRoom?.product?.image ? (
+              <Image
+                src={`https://imagedelivery.net/214BxOnlVKSU2amZRZmdaQ/${chatData?.chatRoom.product.image}/public`}
+                alt=""
+                fill
+                priority
+                sizes="1"
+                className=""
+              />
+            ) : (
+              ""
+            )}
           </div>
 
           <div className="px-4">
@@ -94,7 +99,7 @@ const ChatDetail: NextPage = () => {
         {/* 메시지 */}
         {chatData?.chatRoom?.messages?.map((message: Message) => (
           <div key={message.id}>
-            {message?.userId && message?.userId !== user?.id? (
+            {message?.userId && message?.userId !== user?.id ? (
               <Chat
                 message={message.message}
                 avatar={

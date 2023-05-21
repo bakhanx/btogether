@@ -22,6 +22,8 @@ const UserInfo = () => {
                 src={`https://imagedelivery.net/214BxOnlVKSU2amZRZmdaQ/${user?.avatar}/avatar`}
                 alt=""
                 fill
+                priority
+                sizes="1"
                 className="rounded-full"
               />
             </div>
