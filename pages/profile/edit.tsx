@@ -40,7 +40,12 @@ const EditProfile: NextPage = () => {
 
   const { user } = useUser();
   const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
-  const { data: profileData, mutate } = useSWR<UserResponse>(`/api/users/me`);
+  const [isExistAvatar, setIsExistAvatar] = useState(false);
+  const [init, setInit] = useState(false);
+  const {
+    data: profileData,
+    mutate,
+  } = useSWR<UserResponse>(`/api/users/me`);
 
   const [editProfile, { data, loading }] =
     useMutation<EditProfileResponse>(`/api/users/me`);
@@ -59,7 +64,7 @@ const EditProfile: NextPage = () => {
       });
     }
 
-    if (avatar && avatar.length > 0) {
+    if (avatar && avatar.length > 0 && avatarPreview) {
       const { uploadURL } = await (await fetch(`/api/files`)).json();
       console.log(uploadURL);
 
@@ -87,12 +92,6 @@ const EditProfile: NextPage = () => {
         name,
         avatarId: null,
       });
-    } else if (profileData?.profile.avatar && !avatarPreview) {
-      editProfile({
-        email,
-        phone,
-        name,
-      });
     }
   };
 
@@ -117,26 +116,27 @@ const EditProfile: NextPage = () => {
     }
   };
 
+  // 프로필 사진 변경하기
   useEffect(() => {
     const { unsubscribe } = watch((value) => {
       if (value.avatar && value.avatar.length > 0) {
         const file: any = value.avatar[0];
         setAvatarPreview(URL.createObjectURL(file));
+        setIsExistAvatar(true);
         console.log(file);
       }
     });
     return () => unsubscribe();
   }, [watch]);
 
-  useEffect(() => {
-    console.log(avatarPreview);
-  }, [avatarPreview]);
-
+  // 프로필 사진 삭제하기
   const resetAvatar = (event: any) => {
-    event.preventDefault();
-    if (!profileData?.profile.avatar && !avatarPreview) return;
-    // if (profileData?.profile.avatar && !avatarPreview) return;
     
+    event.preventDefault();
+    
+    if (!isExistAvatar) return;
+    console.log('프로필 사진 제거 시작')
+    setIsExistAvatar(false);
     setAvatarPreview(null);
 
     mutate((prev) => {
@@ -150,18 +150,48 @@ const EditProfile: NextPage = () => {
         }
       );
     });
+    console.log('프로필 사진 제거 완료')
   };
+
+  useEffect(() => {
+    if (profileData?.profile.avatar && !avatarPreview && !init) {
+      setIsExistAvatar(true);
+      setInit(true);
+      console.log('프로필 사진 없음')
+    }
+  }, [profileData, avatarPreview,init]);
+  
 
   return (
     <Layout hasTabBar canGoBack title="프로필 편집" seoTitle="내 프로필 편집">
       <form onSubmit={handleSubmit(onValid)} className="space-y-4 py-10 px-4">
         <div className="flex items-center space-x-3">
-          {/* 사진이 애초에 없을 경우 */}
+          {isExistAvatar ? (
+            <div className="relative h-16 w-16">
+              <Image
+                src={
+                  profileData?.profile.avatar && !avatarPreview
+                    ? `https://imagedelivery.net/214BxOnlVKSU2amZRZmdaQ/${profileData?.profile.avatar}/avatar`
+                    : (avatarPreview as string) 
+                }
+                alt=""
+                fill
+                priority
+                sizes="1"
+                className="rounded-full"
+              />
+            </div>
+          ) : (
+            <div className="h-16 w-16 rounded-full bg-slate-500" />
+          )}
+
+          {/* 
+      
           {!profileData?.profile.avatar && !avatarPreview && (
             <div className="h-16 w-16 rounded-full bg-slate-500" />
           )}
 
-          {/* 사진을 변경했을 경우 */}
+      
           {avatarPreview && (
             <div className="relative h-16 w-16">
               <Image
@@ -175,7 +205,7 @@ const EditProfile: NextPage = () => {
             </div>
           )}
 
-          {/* 기존 사진을 삭제해버릴 경우 */}
+     
 
           {profileData?.profile.avatar && !avatarPreview && (
             <div className="relative h-16 w-16">
@@ -189,6 +219,7 @@ const EditProfile: NextPage = () => {
               />
             </div>
           )}
+ */}
 
           {/* 이미지 변경 */}
           <label
