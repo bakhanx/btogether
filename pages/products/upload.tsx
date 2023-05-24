@@ -29,14 +29,14 @@ const Upload: NextPage = () => {
     handleSubmit,
     watch,
     formState: { errors },
-  } = useForm<UploadProductForm>({mode:"onChange"});
+  } = useForm<UploadProductForm>({ mode: "onChange" });
   const [uploadProduct, { loading, data }] =
     useMutation<UploadProductMutation>("/api/products");
 
   const photo = watch("photo");
   const [photoPreview, setPhotoPreview] = useState("");
 
-  console.log(errors.price);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     if (photo && photo.length > 0) {
@@ -51,6 +51,7 @@ const Upload: NextPage = () => {
     price,
     description,
   }: UploadProductForm) => {
+    setIsLoading(true);
     if (loading) return;
     if (photo && photo.length > 0) {
       const { uploadURL } = await (await fetch("/api/files")).json();
@@ -116,6 +117,7 @@ const Upload: NextPage = () => {
             </label>
           )}
         </div>
+        {/* 제목 */}
         <Input
           register={register("name", { required: true })}
           required
@@ -124,6 +126,7 @@ const Upload: NextPage = () => {
           type="text"
           placeholder="필수 입력"
         />
+        {/* 가격 */}
         <Input
           register={register("price", {
             required: true,
@@ -136,9 +139,11 @@ const Upload: NextPage = () => {
           type="text"
           kind="price"
         />
+        {/* 1억이상 입력 시 에러 */}
         <div className="text-red-500">
           {errors?.price ? errors?.price?.message : ""}
         </div>
+        {/* 내용  */}
         <TextArea
           register={register("description", { required: true })}
           required
@@ -146,7 +151,8 @@ const Upload: NextPage = () => {
           label="내용"
           placeholder="공지사항 위반 내용 기입 시, 삭제 처리될 수 있습니다."
         />
-        <Button text={loading ? "등록중..." : "상품 등록하기"} />
+
+        <Button text={isLoading ? "등록중..." : "상품 등록하기"} />
       </form>
     </Layout>
   );

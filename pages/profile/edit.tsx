@@ -21,7 +21,8 @@ interface EditProfileForm {
   phone?: string;
   name?: string;
   formErrors?: string;
-  avatar?: string;
+  avatar?: string | null;
+  noAvatar?: string;
 }
 interface EditProfileResponse {
   ok: boolean;
@@ -35,6 +36,7 @@ const EditProfile: NextPage = () => {
     setError,
     clearErrors,
     watch,
+
     formState: { errors },
   } = useForm<EditProfileForm>();
 
@@ -42,16 +44,14 @@ const EditProfile: NextPage = () => {
   const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
   const [isExistAvatar, setIsExistAvatar] = useState(false);
   const [init, setInit] = useState(false);
-  const {
-    data: profileData,
-    mutate,
-  } = useSWR<UserResponse>(`/api/users/me`);
+  const { data: profileData, mutate } = useSWR<UserResponse>(`/api/users/me`);
 
   const [editProfile, { data, loading }] =
     useMutation<EditProfileResponse>(`/api/users/me`);
 
+  const [isLoading, setIsLoading] = useState(false);
   const onValid = async ({ email, phone, name, avatar }: EditProfileForm) => {
-    console.log(avatarPreview);
+    setIsLoading(true);
     if (loading) return;
 
     if (email === "") {
@@ -63,7 +63,8 @@ const EditProfile: NextPage = () => {
         message: "전화번호를 입력하세요.",
       });
     }
-
+    if (!isExistAvatar) avatar = null;
+    
     if (avatar && avatar.length > 0 && avatarPreview) {
       const { uploadURL } = await (await fetch(`/api/files`)).json();
       console.log(uploadURL);
@@ -85,7 +86,7 @@ const EditProfile: NextPage = () => {
         name,
         avatarId: id,
       });
-    } else if (!avatarPreview) {
+    } else {
       editProfile({
         email,
         phone,
@@ -102,6 +103,7 @@ const EditProfile: NextPage = () => {
       router.push("/profile");
     }
     if (!data?.ok && data?.error) {
+      setIsLoading(false);
       return setError("formErrors", {
         message: data?.error,
       });
@@ -119,7 +121,7 @@ const EditProfile: NextPage = () => {
   // 프로필 사진 변경하기
   useEffect(() => {
     const { unsubscribe } = watch((value) => {
-      if (value.avatar && value.avatar.length > 0) {
+      if (value?.avatar && value?.avatar?.length > 0) {
         const file: any = value.avatar[0];
         setAvatarPreview(URL.createObjectURL(file));
         setIsExistAvatar(true);
@@ -129,38 +131,44 @@ const EditProfile: NextPage = () => {
     return () => unsubscribe();
   }, [watch]);
 
+  // useEffect(() => {
+  //   const { unsubscribe } = watch((value) => {
+  //     if (!avatarPreview) {
+  //       value.avatar = null;
+  //       console.log(value.avatar);
+  //     }
+  //   });
+  //   return () => unsubscribe();
+  // }, [avatarPreview, watch]);
+
   // 프로필 사진 삭제하기
   const resetAvatar = (event: any) => {
-    
     event.preventDefault();
-    
     if (!isExistAvatar) return;
-    console.log('프로필 사진 제거 시작')
+    console.log("프로필 사진 제거 시작");
     setIsExistAvatar(false);
     setAvatarPreview(null);
 
-    mutate((prev) => {
-      return (
-        prev && {
-          ...prev,
-          profile: {
-            ...prev.profile,
-            avatar: null,
-          },
-        }
-      );
-    });
-    console.log('프로필 사진 제거 완료')
+    // mutate((prev) => {
+    //   return (
+    //     prev && {
+    //       ...prev,
+    //       profile: {
+    //         ...prev.profile,
+    //         avatar: null,
+    //       },
+    //     }
+    //   );
+    // }, false);
+    // console.log("프로필 사진 제거 완료");
   };
 
   useEffect(() => {
     if (profileData?.profile.avatar && !avatarPreview && !init) {
       setIsExistAvatar(true);
       setInit(true);
-      console.log('프로필 사진 없음')
     }
-  }, [profileData, avatarPreview,init]);
-  
+  }, [profileData, avatarPreview, init]);
 
   return (
     <Layout hasTabBar canGoBack title="프로필 편집" seoTitle="내 프로필 편집">
@@ -170,9 +178,9 @@ const EditProfile: NextPage = () => {
             <div className="relative h-16 w-16">
               <Image
                 src={
-                  profileData?.profile.avatar && !avatarPreview
-                    ? `https://imagedelivery.net/214BxOnlVKSU2amZRZmdaQ/${profileData?.profile.avatar}/avatar`
-                    : (avatarPreview as string) 
+                  profileData?.profile?.avatar && !avatarPreview
+                    ? `https://imagedelivery.net/214BxOnlVKSU2amZRZmdaQ/${profileData?.profile?.avatar}/avatar`
+                    : (avatarPreview as string)
                 }
                 alt=""
                 fill
@@ -184,42 +192,6 @@ const EditProfile: NextPage = () => {
           ) : (
             <div className="h-16 w-16 rounded-full bg-slate-500" />
           )}
-
-          {/* 
-      
-          {!profileData?.profile.avatar && !avatarPreview && (
-            <div className="h-16 w-16 rounded-full bg-slate-500" />
-          )}
-
-      
-          {avatarPreview && (
-            <div className="relative h-16 w-16">
-              <Image
-                src={avatarPreview}
-                alt=""
-                fill
-                priority
-                sizes="1"
-                className="rounded-full"
-              />
-            </div>
-          )}
-
-     
-
-          {profileData?.profile.avatar && !avatarPreview && (
-            <div className="relative h-16 w-16">
-              <Image
-                src={`https://imagedelivery.net/214BxOnlVKSU2amZRZmdaQ/${profileData?.profile.avatar}/avatar`}
-                alt=""
-                fill
-                priority
-                sizes="1"
-                className="rounded-full"
-              />
-            </div>
-          )}
- */}
 
           {/* 이미지 변경 */}
           <label
@@ -237,10 +209,7 @@ const EditProfile: NextPage = () => {
           </label>
 
           {/* 이미지 삭제 */}
-          <label
-            htmlFor=""
-            className="cursor-pointer rounded-md border border-gray-300 py-2 px-3 text-sm font-medium text-red-500 shadow-sm hover:bg-gray-50 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-          >
+          <label className="cursor-pointer rounded-md border border-gray-300 py-2 px-3 text-sm font-medium text-red-500 shadow-sm hover:bg-gray-50 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
             <button onClick={resetAvatar}>삭제</button>
           </label>
         </div>
@@ -267,7 +236,7 @@ const EditProfile: NextPage = () => {
           <Input
             register={register("phone", { required: false })}
             label="전화번호"
-            value={profileData?.profile.phone || ""}
+            value={profileData?.profile?.phone || ""}
             name="phone"
             type="phone"
             required={false}
@@ -275,9 +244,9 @@ const EditProfile: NextPage = () => {
           />
         )}
         <div className="my-2 font-bold text-red-500">
-          <span>{errors.formErrors?.message}</span>
+          <span>{errors?.formErrors?.message}</span>
         </div>
-        <Button text={loading ? "수정중..." : "프로필 수정"} />
+        <Button text={isLoading ? "수정중..." : "프로필 수정"} />
       </form>
     </Layout>
   );
