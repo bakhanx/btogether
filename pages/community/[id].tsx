@@ -215,9 +215,9 @@ const CommunityDetail: NextPage<{ story: StorySSGResponse }> = ({ story }) => {
 
         {/* 댓글 리스트 */}
         <div className="py-3">
-          {data?.story.comments.map((comment) => (
+          {data?.story?.comments.map((comment) => (
             <div
-              key={comment.id}
+              key={comment?.id}
               className="my-3 flex space-x-3 bg-gray-50 py-3 px-3"
             >
               {comment?.user?.avatar ? (
@@ -237,12 +237,12 @@ const CommunityDetail: NextPage<{ story: StorySSGResponse }> = ({ story }) => {
               <div className="flex space-x-5">
                 <div>
                   <span className="block text-sm font-medium text-gray-700">
-                    {comment.user.name}
+                    {comment?.user?.name}
                   </span>
                   <span className="block text-xs text-gray-500 ">
-                    {String(comment.updatedAt)}
+                    {String(comment?.updatedAt)}
                   </span>
-                  <p className="mt-2 text-gray-700">{comment.comment}</p>
+                  <p className="mt-2 text-gray-700">{comment?.comment}</p>
                 </div>
                 <div className="cursor-pointer text-xs">❌</div>
               </div>

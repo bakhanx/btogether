@@ -78,6 +78,7 @@ async function handler(
         },
       });
     }
+
     if (name !== currentUser?.name) {
       await client.user.update({
         where: {
@@ -98,6 +99,7 @@ async function handler(
         },
       });
     }
+
     if (!avatarId) {
       await client.user.update({
         where: {

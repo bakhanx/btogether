@@ -29,7 +29,7 @@ export default function Layout({
       </Head>
 
       {/* 상단 탭 */}
-      <div className="fixed top-0 z-50 flex h-12 w-full max-w-screen-lg  items-center justify-center  bg-blue-500 px-10 text-lg font-medium text-white ">
+      <div className="fixed top-0 z-50 flex h-12 w-full max-w-screen-xl  items-center justify-center  bg-blue-500 px-10 text-lg font-medium text-white ">
         {/* 뒤로가기 */}
         {canGoBack ? (
           <button onClick={onClick} className="absolute left-4">
@@ -60,7 +60,7 @@ export default function Layout({
 
       {/* 하단 탭 */}
       {hasTabBar ? (
-        <nav className="fixed bottom-0 flex w-full max-w-screen-lg justify-between border-t bg-gray-50 px-10 pb-5 pt-3 text-xs text-gray-600">
+        <nav className="fixed bottom-0 flex w-full max-w-screen-xl justify-between border-t bg-gray-50 px-10 pb-5 pt-3 text-xs text-gray-600">
           {/* Link 하위에 a태그 사용시 Link에 legacyBehavior 추가 */}
 
           {/* 홈 */}

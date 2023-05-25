@@ -12,7 +12,7 @@ function App({ Component, pageProps }: AppProps) {
           fetch(url).then((response) => response.json()),
       }}
     >
-      <div className="w-full max-w-screen-lg mx-auto">
+      <div className="w-full max-w-screen-xl mx-auto">
         <Component {...pageProps} />
       </div>
     </SWRConfig>
