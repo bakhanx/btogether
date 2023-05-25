@@ -78,7 +78,6 @@ async function handler(
         },
       });
     }
-
     if (name !== currentUser?.name) {
       await client.user.update({
         where: {
@@ -89,7 +88,8 @@ async function handler(
         },
       });
     }
-    if (avatarId) {
+
+    if (avatarId && avatarId !== "remove") {
       await client.user.update({
         where: {
           id: user?.id,
@@ -100,7 +100,7 @@ async function handler(
       });
     }
 
-    if (!avatarId) {
+    if (avatarId === "remove") {
       await client.user.update({
         where: {
           id: user?.id,
@@ -110,6 +110,9 @@ async function handler(
         },
       });
     }
+
+
+
     res.json({ ok: true });
   }
 }

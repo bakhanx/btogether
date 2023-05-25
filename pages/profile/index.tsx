@@ -1,39 +1,44 @@
 import { NextPage, NextPageContext } from "next";
 import Link from "next/link";
 import Layout from "@components/layout";
-import useUser from "@libs/client/useUser";
+import useUser, { UserResponse } from "@libs/client/useUser";
 import Image from "next/image";
 import { SWRConfig } from "swr";
 import { User } from "@prisma/client";
 import { withSsrSession } from "@libs/server/withSession";
 import client from "@libs/server/client";
 import { Suspense } from "react";
-
+import useSWR from "swr";
 const UserInfo = () => {
   const { user } = useUser();
+  const { data, isLoading } = useSWR<UserResponse>(`/api/users/me`);
   return (
     <>
       <div className="px-4">
         {/* 내 프로필 */}
         <div className="mt-4 flex items-center space-x-3">
-          {user?.avatar ? (
-            <div className="relative h-16 w-16">
-              <Image
-                src={`https://imagedelivery.net/214BxOnlVKSU2amZRZmdaQ/${user?.avatar}/avatar`}
-                alt=""
-                fill
-                priority
-                sizes="1"
-                className="rounded-full"
-              />
-            </div>
+          {!isLoading ? (
+            data?.profile.avatar ? (
+              <div className="relative h-16 w-16">
+                <Image
+                  src={`https://imagedelivery.net/214BxOnlVKSU2amZRZmdaQ/${data?.profile.avatar}/avatar`}
+                  alt=""
+                  fill
+                  priority
+                  sizes="1"
+                  className="rounded-full"
+                />
+              </div>
+            ) : (
+              <div className="h-16 w-16 rounded-full bg-slate-500" />
+            )
           ) : (
             <div className="h-16 w-16 rounded-full bg-slate-500" />
           )}
 
           <div className="flex flex-col">
             <span className="font-bold text-gray-900">
-              {user?.name || "　"}
+              {data?.profile.name || "　"}
             </span>
             <Link href="/profile/edit">
               <div className="text-sm font-medium text-gray-700">

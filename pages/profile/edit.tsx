@@ -63,9 +63,16 @@ const EditProfile: NextPage = () => {
         message: "전화번호를 입력하세요.",
       });
     }
+
     if (!isExistAvatar) avatar = null;
-    
-    if (avatar && avatar.length > 0 && avatarPreview) {
+
+    console.log(isExistAvatar);
+    console.log(avatar);
+    console.log(profileData?.profile.avatar);
+    console.log(avatarPreview);
+
+    // 기존상관없이 변경o
+    if (avatar && avatar.length > 0) {
       const { uploadURL } = await (await fetch(`/api/files`)).json();
       console.log(uploadURL);
 
@@ -86,13 +93,38 @@ const EditProfile: NextPage = () => {
         name,
         avatarId: id,
       });
-    } else {
-      editProfile({
-        email,
-        phone,
-        name,
-        avatarId: null,
-      });
+    }
+
+    // 기존아바타o
+    else if (profileData?.profile.avatar) {
+      if (!isExistAvatar) {
+        // 변경x 삭제 o
+        editProfile({
+          email,
+          phone,
+          name,
+          avatarId: "remove",
+        });
+      } else if (!avatarPreview) {
+        // 변경x 삭제 x
+        editProfile({
+          email,
+          phone,
+          name,
+        });
+      }
+    }
+
+    // 기존아바타x
+    else if (!profileData?.profile.avatar) {
+      if (!avatarPreview) {
+        // 변경x 삭제x
+        editProfile({
+          email,
+          phone,
+          name,
+        });
+      }
     }
   };
 
@@ -131,16 +163,6 @@ const EditProfile: NextPage = () => {
     return () => unsubscribe();
   }, [watch]);
 
-  // useEffect(() => {
-  //   const { unsubscribe } = watch((value) => {
-  //     if (!avatarPreview) {
-  //       value.avatar = null;
-  //       console.log(value.avatar);
-  //     }
-  //   });
-  //   return () => unsubscribe();
-  // }, [avatarPreview, watch]);
-
   // 프로필 사진 삭제하기
   const resetAvatar = (event: any) => {
     event.preventDefault();
@@ -148,19 +170,6 @@ const EditProfile: NextPage = () => {
     console.log("프로필 사진 제거 시작");
     setIsExistAvatar(false);
     setAvatarPreview(null);
-
-    // mutate((prev) => {
-    //   return (
-    //     prev && {
-    //       ...prev,
-    //       profile: {
-    //         ...prev.profile,
-    //         avatar: null,
-    //       },
-    //     }
-    //   );
-    // }, false);
-    // console.log("프로필 사진 제거 완료");
   };
 
   useEffect(() => {
