@@ -68,8 +68,8 @@ const ChatDetail: NextPage = () => {
       seoTitle={chatData?.chatRoom.product.name}
       canGoBack
     >
-      <div className="fixed z-50 w-full border-b-2 border-b-blue-200 bg-white px-4">
-        <div className="flex items-center  p-2">
+      <div className="fixed z-50 w-full max-w-screen-xl border-b-2 border-b-blue-200 bg-white px-4">
+        <div className="flex items-center p-2">
           <div className="relative h-16 w-16">
             {chatData?.chatRoom?.product?.image ? (
               <Image
@@ -95,7 +95,7 @@ const ChatDetail: NextPage = () => {
           </div>
         </div>
       </div>
-      <div className="mx-auto w-full max-w-lg space-y-4 py-10 px-4 pb-24 pt-24">
+      <div className="max-screen-w-xl mx-auto w-full space-y-4 py-10 px-4 pb-24 pt-24">
         {/* 메시지 */}
         {chatData?.chatRoom?.messages?.map((message: Message) => (
           <div key={message.id}>
@@ -128,15 +128,28 @@ const ChatDetail: NextPage = () => {
           onSubmit={handleSubmit(onValid)}
           className="fixed inset-x-0 bottom-0 bg-white py-5"
         >
-          <div className="relative mx-auto flex w-full max-w-md items-center">
+          <div className="relative mx-auto flex w-full max-w-screen-xl items-center px-5">
             <input
               {...register("message", { required: true })}
               type="text"
-              className="w-full rounded-full border border-gray-300 p-3  pl-3 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500"
+              className="w-full rounded-md border border-gray-300 p-3  pl-3 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500"
             />
-            <div className="absolute inset-y-0 right-2 flex py-1.5">
-              <button className="flex items-center rounded-full bg-blue-400 px-5 text-lg font-bold text-white focus:ring-2 focus:ring-blue-50 focus:ring-offset-2 ">
-                &rarr;
+            <div className="absolute inset-y-0 right-6 flex py-1.5">
+              <button className="flex items-center rounded-md bg-blue-400 px-5 text-white focus:ring-2 focus:ring-blue-50 focus:ring-offset-2 ">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={2}
+                  stroke="currentColor"
+                  className="h-5 w-5"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5"
+                  />
+                </svg>
               </button>
             </div>
           </div>

@@ -207,6 +207,7 @@ export const getServerSideProps = withSsrSession(async function ({
   return {
     props: {
       profile: JSON.parse(JSON.stringify(profile)),
+      
     },
   };
 });
