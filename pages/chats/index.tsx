@@ -97,7 +97,20 @@ const Chats: NextPage = () => {
                   </p>
                 </div>
               </div>
-              
+              <div className="relative h-14 w-14 mr-2">
+                {chatRoom?.product?.image ? (
+                  <Image
+                    src={`https://imagedelivery.net/214BxOnlVKSU2amZRZmdaQ/${chatRoom?.product?.image}/public`}
+                    alt=""
+                    fill
+                    priority
+                    sizes="1"
+                    className="rounded-md"
+                  />
+                ) : (
+                  ""
+                )}
+              </div>
             </div>
           </Link>
         ))}
