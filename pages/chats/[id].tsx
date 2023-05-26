@@ -107,6 +107,7 @@ const ChatDetail: NextPage = () => {
                     ? chatData?.chatRoom?.seller?.avatar
                     : chatData?.chatRoom?.purchaser?.avatar
                 }
+                time={message.createdAt}
               />
             ) : (
               <Chat
@@ -117,6 +118,7 @@ const ChatDetail: NextPage = () => {
                     ? chatData?.chatRoom?.purchaser?.avatar
                     : chatData?.chatRoom?.seller?.avatar
                 }
+                time={message.createdAt}
               />
             )}
           </div>

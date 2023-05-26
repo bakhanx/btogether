@@ -1,3 +1,4 @@
+import DateTime from "@components/datetime";
 import Layout from "@components/layout";
 import useUser from "@libs/client/useUser";
 import { ChatRoom, Message } from "@prisma/client";
@@ -45,7 +46,7 @@ const Chats: NextPage = () => {
             key={chatRoom?.id}
             className="block"
           >
-            <div className="flex cursor-pointer justify-between ">
+            <div className="flex cursor-pointer justify-between items-center">
               <div className="flex items-center space-x-3 px-4 py-3">
                 {/* 유저 아바타 */}
                 <div className="relative h-12 w-12">
@@ -76,23 +77,27 @@ const Chats: NextPage = () => {
                   )}
                 </div>
 
+                {/* 유저 아이디 + 시간 + 메시지 */}
                 <div>
-                  {/* 유저 아이디 */}
-                  <p className="text-gray-700 font-bold">
-                    {chatRoom?.seller.id === user?.id
-                      ? chatRoom?.purchaser.name
-                      : chatRoom?.seller.name}
-                  </p>
-                  {/* 마지막 메시지 */}
+                  <div>
+                    {/* 아이디 */}
+                    <span className="font-bold text-gray-700">
+                      {chatRoom?.seller.id === user?.id
+                        ? chatRoom?.purchaser.name
+                        : chatRoom?.seller.name}
+                    </span>
+                    {/* 시간 */}
+                    <span className="self-start py-2 px-2 text-xs text-gray-400">
+                      <DateTime date={chatRoom?.messages.at(-1)?.createdAt} />
+                    </span>
+                  </div>
+                  {/* 메시지 */}
                   <p className="text-sm text-gray-500">
                     {chatRoom?.messages.at(-1)?.message}
                   </p>
                 </div>
               </div>
-              {/* 마지막 채팅 날짜 */}
-              <div className="self-start py-2 px-2 text-sm text-gray-400">
-                {chatRoom?.messages.at(-1)?.createdAt}
-              </div>
+              
             </div>
           </Link>
         ))}

@@ -12,6 +12,7 @@ import { useEffect } from "react";
 import client from "@libs/server/client";
 import Image from "next/image";
 import useUser from "@libs/client/useUser";
+import DateTime from "@components/datetime";
 
 interface CommentsWithUser extends Comment {
   user: User;
@@ -132,6 +133,7 @@ const CommunityDetail: NextPage<{ story: StorySSGResponse }> = ({ story }) => {
         <span className="ml-4 items-center rounded-full bg-gray-100 px-2.5 py-0.5 text-xs font-medium text-gray-800">
           후기
         </span>
+
         <Link href={`/users/profile/${story?.user?.id}`}>
           <div className="mt-4 mb-3 flex cursor-pointer items-center space-x-3 border-b px-4 pb-3">
             {story?.user?.avatar ? (
@@ -162,8 +164,13 @@ const CommunityDetail: NextPage<{ story: StorySSGResponse }> = ({ story }) => {
         {/* 내용 & 좋아요 & 댓글 */}
         <div>
           {/* 내용 */}
-          <div className="mt-2 px-4 text-gray-700">
-            <span>{story?.content}</span>
+          <div className="mt-2 px-4">
+            <div className="py-5">
+              <span>{story?.content}</span>
+            </div>
+            <div className="text-xs text-gray-500 ">
+              <DateTime date={story?.updatedAt} />
+            </div>
           </div>
 
           <div className="mt-3 flex w-full justify-start space-x-5 border-t px-4 py-2.5">
@@ -240,7 +247,7 @@ const CommunityDetail: NextPage<{ story: StorySSGResponse }> = ({ story }) => {
                     {comment?.user?.name}
                   </span>
                   <span className="block text-xs text-gray-500 ">
-                    {String(comment?.updatedAt)}
+                    <DateTime date={story?.updatedAt} />
                   </span>
                   <p className="mt-2 text-gray-700">{comment?.comment}</p>
                 </div>

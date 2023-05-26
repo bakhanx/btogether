@@ -20,6 +20,11 @@ async function handler(
         purchaser: true,
         seller: true,
         messages:true,
+        product:{
+          select:{
+            image:true
+          }
+        }
       },
     });
 

@@ -6,6 +6,7 @@ import client from "@libs/server/client";
 import Layout from "@components/layout";
 import useSWR from "swr";
 import { useEffect } from "react";
+import DateTime from "@components/datetime";
 
 // interface StroyResponse {
 //   stories: StoryWithUserAndCount[];
@@ -25,10 +26,11 @@ interface StoryWithUserAndCount extends Story {
 const Community: NextPage<{ stories: StoryWithUserAndCount[] }> = ({
   stories,
 }) => {
-  const { data, isLoading } = useSWR(`/api/stories`);
+  const { data, isLoading } = useSWR<StoryWithUserAndCount>(`/api/stories`);
 
   return (
     <Layout hasTabBar canGoBack title="이웃 스토리" seoTitle="이웃 소식">
+
       <div className="divide space-y-2 divide-y-4 divide-blue-100">
         {stories?.map((story) => (
           <div key={story.id}>
@@ -42,7 +44,7 @@ const Community: NextPage<{ stories: StoryWithUserAndCount[] }> = ({
                 </div>
                 <div className=" mt-5 flex w-full items-center justify-between px-4 text-sm font-medium text-gray-500">
                   <span>{story.user?.name}</span>
-                  <span>{String(story.updatedAt)}</span>
+                  <span><DateTime date={story.createdAt}/></span>
                 </div>
                 <div className="mt-3 flex w-full justify-start space-x-5 border-t px-4 py-2.5">
                   <span className="flex items-center space-x-2 text-sm">

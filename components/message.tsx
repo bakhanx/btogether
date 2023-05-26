@@ -1,22 +1,29 @@
 import { DiffieHellmanGroup } from "crypto";
 import { cls } from "../libs/client/utils";
 import Image from "next/image";
+import DateTime from "./datetime";
 
 interface MessageProps {
   message: string;
   reversed?: boolean;
   avatar?: string;
+  time: Date;
 }
 
-export default function Message({ message, reversed, avatar }: MessageProps) {
+export default function Message({
+  message,
+  reversed,
+  avatar,
+  time,
+}: MessageProps) {
   return (
     <div
       className={cls(
         "flex items-start",
-        reversed ? "flex-row-reverse space-x-2 space-x-reverse" : "space-x-2"
+        reversed ? "flex-row-reverse space-x-reverse" : ""
       )}
     >
-      <div className="relative h-10 w-10">
+      <div className="relative h-10 w-10 mx-2">
         {avatar ? (
           <Image
             src={`https://imagedelivery.net/214BxOnlVKSU2amZRZmdaQ/${avatar}/avatar`}
@@ -33,6 +40,9 @@ export default function Message({ message, reversed, avatar }: MessageProps) {
 
       <div className="w-1/3 rounded-md border border-gray-300 p-2 text-sm text-gray-700">
         <p>{message}</p>
+      </div>
+      <div className="text-gray-400 text-xs self-end mb-1 text-end mx-1">
+        <DateTime date={time} time />
       </div>
     </div>
   );
