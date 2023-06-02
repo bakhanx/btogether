@@ -4,7 +4,7 @@ import FloatingButton from "@components/floatingButton";
 import { Story } from "@prisma/client";
 import client from "@libs/server/client";
 import Layout from "@components/layout";
-import useSWR from "swr";
+import useSWR, { useSWRConfig } from "swr";
 import { useEffect } from "react";
 import DateTime from "@components/datetime";
 
@@ -26,7 +26,7 @@ interface StoryWithUserAndCount extends Story {
 const Community: NextPage<{ stories: StoryWithUserAndCount[] }> = ({
   stories,
 }) => {
-  const { data, isLoading } = useSWR<StoryWithUserAndCount>(`/api/stories`);
+  const { data, isLoading, mutate } = useSWR<StoryWithUserAndCount>(`/api/stories`);
 
   return (
     <Layout hasTabBar canGoBack title="이웃 스토리" seoTitle="이웃 소식">

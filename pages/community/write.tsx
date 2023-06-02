@@ -7,6 +7,7 @@ import useMutation from "@libs/client/useMutation";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { Story } from "@prisma/client";
+import { useSWRConfig } from "swr";
 
 interface WriteForm {
   content: string;
@@ -24,17 +25,18 @@ const Write: NextPage = () => {
     handleSubmit,
     formState: { errors },
   } = useForm<WriteForm>({mode:"onSubmit"});
-  const [story, { loading, data }] = useMutation<WriteResponse>("/api/stories");
+  const [storyMutate, { data, loading }] = useMutation<WriteResponse>("/api/stories");
   const [isLoading, setIsLoading] = useState(false);
 
-  const onValid = (data: WriteForm) => {
+  const onValid = (form: WriteForm) => {
     setIsLoading(true);
     if (loading) return;
-    story(data);
+    storyMutate(form);
   };
 
   useEffect(() => {
     if (data && data.ok) {
+      
       router.push(`/community/${data.story.id}`);
     }
   }, [router, data]);

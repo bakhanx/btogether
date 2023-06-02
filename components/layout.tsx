@@ -29,7 +29,7 @@ export default function Layout({
       </Head>
 
       {/* 상단 탭 */}
-      <div className="fixed top-0 z-50 flex h-12 w-full max-w-screen-xl  items-center justify-center  bg-blue-500 px-10 text-lg font-medium text-white ">
+      <div className="fixed top-0 z-10 flex h-12 w-full max-w-screen-xl  items-center justify-center  bg-blue-500 px-10 text-lg font-medium text-white ">
         {/* 뒤로가기 */}
         {canGoBack ? (
           <button onClick={onClick} className="absolute left-4">
