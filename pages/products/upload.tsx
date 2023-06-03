@@ -53,24 +53,10 @@ const Upload: NextPage = () => {
   }, [photo]);
 
   useEffect(() => {
-    // let value = price;
-    // const numCheck = /^[0-9,]+$/.test(value);
-    // if(!numCheck && value) {
-    //   return;
-    // };
-
-    // if(numCheck){
-    //   const numValue = value.replaceAll(',','');
-    //   value = numValue.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-    // }
-    // setParsePrice(value);
-
     let value = price;
     const numValue = value?.replaceAll(",", "");
     value = numValue?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     setParsePrice(value);
-
-    console.log(parsePrice);
   }, [price]);
 
   const onValid = async ({
