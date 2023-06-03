@@ -9,10 +9,14 @@ import { useEffect, useState } from "react";
 import { Product } from "@prisma/client";
 import { useRouter } from "next/router";
 import Image from "next/image";
+import { error } from "console";
+
+// 판매 상품 가격 제한 1억
+const MAX_PRICE = 10;
 
 interface UploadProductForm {
   name: string;
-  price: number;
+  price: string;
   description: string;
   photo: FileList;
 }
@@ -29,13 +33,16 @@ const Upload: NextPage = () => {
     handleSubmit,
     watch,
     formState: { errors },
+    setError,
   } = useForm<UploadProductForm>({ mode: "onChange" });
   const [uploadProduct, { loading, data }] =
     useMutation<UploadProductMutation>("/api/products");
 
   const photo = watch("photo");
-  const [photoPreview, setPhotoPreview] = useState("");
+  const price = watch("price");
 
+  const [parsePrice, setParsePrice] = useState("");
+  const [photoPreview, setPhotoPreview] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
@@ -44,6 +51,27 @@ const Upload: NextPage = () => {
       setPhotoPreview(URL.createObjectURL(file));
     }
   }, [photo]);
+
+  useEffect(() => {
+    // let value = price;
+    // const numCheck = /^[0-9,]+$/.test(value);
+    // if(!numCheck && value) {
+    //   return;
+    // };
+
+    // if(numCheck){
+    //   const numValue = value.replaceAll(',','');
+    //   value = numValue.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    // }
+    // setParsePrice(value);
+
+    let value = price;
+    const numValue = value?.replaceAll(",", "");
+    value = numValue?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    setParsePrice(value);
+
+    console.log(parsePrice);
+  }, [price]);
 
   const onValid = async ({
     photo,
@@ -130,7 +158,14 @@ const Upload: NextPage = () => {
         <Input
           register={register("price", {
             required: true,
-            maxLength: { value: 9, message: "고가 물품은 판매할 수 없습니다." },
+            maxLength: {
+              value: MAX_PRICE,
+              message: "고가 물품은 판매할 수 없습니다.",
+            },
+            pattern: {
+              value: /^[0-9,]+$/,
+              message: "숫자만 입력하세요",
+            },
           })}
           required
           label="가격 (선택사항)"
@@ -138,6 +173,7 @@ const Upload: NextPage = () => {
           name="price"
           type="text"
           kind="price"
+          value={parsePrice}
         />
         {/* 1억이상 입력 시 에러 */}
         <div className="text-red-500">
@@ -154,6 +190,7 @@ const Upload: NextPage = () => {
 
         <Button text={isLoading ? "등록중..." : "상품 등록하기"} />
       </form>
+      {}
     </Layout>
   );
 };

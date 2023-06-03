@@ -10,7 +10,6 @@ interface InputProps {
   required:boolean,
   value?:string,
   [key: string]: any;
-
 }
 
 export default function Input({
@@ -34,7 +33,6 @@ export default function Input({
       {kind === "text" ? (
         <div className="relative flex items-center  rounded-md shadow-sm">
           <input
-            defaultValue={value}
             id={name}
             {...register}
             required={required}
@@ -53,6 +51,7 @@ export default function Input({
             id={name}
             {...register}
             required={required}
+            value={value}
             type={type}
             {...rest}
             className="w-full appearance-none rounded-md border border-gray-300 px-3 py-2 pl-7 placeholder-gray-400 shadow-sm focus:border-blue-500 focus:placeholder-transparent focus:outline-none focus:ring-blue-500"

@@ -189,7 +189,7 @@ const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
                   {product.name}
                 </h1>
                 <span className="mt-3 block text-2xl text-gray-900">
-                  {product.price}원
+                  {product.price.toLocaleString()}원
                 </span>
                 <p className=" my-6 text-gray-700">{product.description}</p>
 

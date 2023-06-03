@@ -34,7 +34,7 @@ async function handler(
     const product = await client.product.create({
       data: {
         name,
-        price: +price,
+        price: +(price.replaceAll(",","")),
         description,
         image: photoId ? photoId : "",
         
