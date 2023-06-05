@@ -102,7 +102,7 @@ const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
 
   return (
     <>
-      {" "}
+    {/* 이미지 확대 */}
       {isOnImage ? (
         <div className="fixed z-20 flex h-full w-full items-start bg-black">
           <button className="z-50 m-5 text-white" onClick={onClickImage}>
@@ -132,7 +132,9 @@ const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
       ) : (
         ""
       )}
-      <Layout canGoBack seoTitle={product?.name}>
+
+      {/* 메인 */}
+      <Layout canGoBack seoTitle={product?.name} menu>
         <div className="">
           {/* 판매 내용 */}
           <div className="mb-8 ">

@@ -2,12 +2,14 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { cls } from "../libs/client/utils";
 import Head from "next/head";
+import Menu from "./menu";
 
 interface LayoutProps {
   title?: string;
   canGoBack?: boolean;
   hasTabBar?: boolean;
   seoTitle?: string;
+  menu?: boolean;
   children: React.ReactNode; // 왜 필요한가
 }
 
@@ -17,11 +19,16 @@ export default function Layout({
   hasTabBar,
   seoTitle,
   children,
+  menu,
 }: LayoutProps) {
   const router = useRouter();
-  const onClick = () => {
+  const onBack = () => {
     router.back();
   };
+
+  const onMenu = () => {};
+  const onDelete = () => {};
+  const onReport = () => {};
   return (
     <div>
       <Head>
@@ -32,7 +39,7 @@ export default function Layout({
       <div className="fixed top-0 z-10 flex h-12 w-full max-w-screen-xl  items-center justify-center  bg-blue-500 px-10 text-lg font-medium text-white ">
         {/* 뒤로가기 */}
         {canGoBack ? (
-          <button onClick={onClick} className="absolute left-4">
+          <button onClick={onBack} className="absolute left-4">
             <svg
               className="h-6 w-6"
               fill="none"
@@ -53,6 +60,12 @@ export default function Layout({
         {title ? (
           <span className={cls(canGoBack ? "mx-auto" : "", "")}>{title}</span>
         ) : null}
+        {/* 메뉴 */}
+        {menu ? (
+         <Menu  />
+        ) : (
+          ""
+        )}
       </div>
 
       {/* 메인 컨텐츠 */}
