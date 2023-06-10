@@ -34,12 +34,11 @@ async function handler(
   });
   console.log("Token: ", token);
 
-  /* 테스트 기간 동안 주석
-  // 이메일 인증
-  if (email) {
+  // 임시 토큰 내 메일로
+  if (email || phone) {
     const mailOptions = {
       from: process.env.MAIL_ID,
-      to: email,
+      to: "hansol732@naver.com",
       subject: "B-Together 계정 인증 메일입니다.",
       text: `인증 코드 : ${payload}`,
       html : `<strong>인증 코드 : ${payload}</strong>`
@@ -59,7 +58,32 @@ async function handler(
     smtpTransport.close();
     console.log(result);
   }
- */
+
+  // 이메일 인증
+  // if (email) {
+  //   const mailOptions = {
+  //     from: process.env.MAIL_ID,
+  //     to: email,
+  //     subject: "B-Together 계정 인증 메일입니다.",
+  //     text: `인증 코드 : ${payload}`,
+  //     html : `<strong>인증 코드 : ${payload}</strong>`
+  //   };
+  //   const result = await smtpTransport.sendMail(
+  //     mailOptions,
+  //     (error, response) => {
+  //       if (error) {
+  //         console.log(error);
+  //         return null;
+  //       } else {
+  //         console.log(response);
+  //         return null;
+  //       }
+  //     }
+  //   );
+  //   smtpTransport.close();
+  //   console.log(result);
+  // }
+
   return res.json({
     ok: true,
   });
