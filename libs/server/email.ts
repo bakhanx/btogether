@@ -24,11 +24,10 @@ const sendMail = async (toMail: string, payload: string) => {
     text: `인증 코드 : ${payload}`,
     html: `<strong>인증 코드 : ${payload}</strong>`,
   };
-  console.log("smtpTransport : ",smtpTransport)
-  console.log("mailOptions : ", mailOptions);
 
   await new Promise((resolve,  reject) =>{
-    return smtpTransport.sendMail(
+    console.log("promise....")
+    smtpTransport.sendMail(
       mailOptions,
       (error, response) => {
         console.log("전송중");
