@@ -36,7 +36,7 @@ async function handler(
 
   // 임시 토큰 내 메일로
   if (email || phone) {
-    sendMail("hansol732@naver.com", payload)
+    await sendMail("hansol732@naver.com", payload);
   }
 
   // 이메일 인증
@@ -72,5 +72,5 @@ async function handler(
 export default withHandler({
   methods: ["POST"],
   handler,
-  isPrivate:false
+  isPrivate: false,
 });
