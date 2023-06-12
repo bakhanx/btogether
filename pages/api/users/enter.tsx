@@ -36,6 +36,8 @@ async function handler(
 
   // 임시 토큰 내 메일로
   if (email || phone) {
+    console.log("시작");
+    console.log( process.env.MAIL_ID);
     const mailOptions = {
       from: process.env.MAIL_ID,
       to: "hansol732@naver.com",
