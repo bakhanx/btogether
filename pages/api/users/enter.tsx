@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import client from "@libs/server/client";
 import withHandler, { ResponseType } from "@libs/server/withHandler";
-import smtpTransport from "@libs/server/email";
+import sendMail from "@libs/server/email";
 
 async function handler(
   req: NextApiRequest,
@@ -36,27 +36,7 @@ async function handler(
 
   // 임시 토큰 내 메일로
   if (email || phone) {
-    const mailOptions = {
-      from: process.env.MAIL_ID,
-      to: "hansol732@naver.com",
-      subject: "B-Together 계정 인증 메일입니다.",
-      text: `인증 코드 : ${payload}`,
-      html : `<strong>인증 코드 : ${payload}</strong>`
-    };
-    const result = await smtpTransport.sendMail(
-      mailOptions,
-      (error, response) => {
-        if (error) {
-          console.log("err :", error);
-          return null;
-        } else {
-          console.log("res : ", response);
-          return null;
-        }
-      }
-    );
-    smtpTransport.close();
-    console.log("rst : ", result);
+    sendMail("hansol732@naver.com", payload)
   }
 
   // 이메일 인증
