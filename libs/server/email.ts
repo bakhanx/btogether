@@ -6,6 +6,7 @@ const sendMail = async (toMail: string, payload: string) => {
     service: "Naver",
     host: "smtp.naver.com",
     port: 465,
+    secure:false,
     auth: {
       user: process.env.MAIL_ID,
       pass: process.env.MAIL_PASSWORD,
