@@ -47,7 +47,7 @@ async function handler(
       mailOptions,
       (error, response) => {
         if (error) {
-          console.log("err : ", error);
+          console.log("err :", error);
           return null;
         } else {
           console.log("res : ", response);
