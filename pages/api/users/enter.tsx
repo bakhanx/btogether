@@ -36,8 +36,6 @@ async function handler(
 
   // 임시 토큰 내 메일로
   if (email || phone) {
-    console.log("시작");
-    console.log( process.env.MAIL_ID);
     const mailOptions = {
       from: process.env.MAIL_ID,
       to: "hansol732@naver.com",
@@ -49,16 +47,16 @@ async function handler(
       mailOptions,
       (error, response) => {
         if (error) {
-          console.log(error);
+          console.log("err : ", error);
           return null;
         } else {
-          console.log(response);
+          console.log("res : ", response);
           return null;
         }
       }
     );
     smtpTransport.close();
-    console.log(result);
+    console.log("rst : ", result);
   }
 
   // 이메일 인증
