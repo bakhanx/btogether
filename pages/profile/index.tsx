@@ -7,21 +7,36 @@ import { SWRConfig } from "swr";
 import { User } from "@prisma/client";
 import { withSsrSession } from "@libs/server/withSession";
 import client from "@libs/server/client";
-import { Suspense } from "react";
 import useSWR from "swr";
+import useMutation from "@libs/client/useMutation";
+import { useRouter } from "next/router";
+
 const UserInfo = () => {
   const { user } = useUser();
+  const router = useRouter();
   const { data, isLoading } = useSWR<UserResponse>(`/api/users/me`);
+  const [logout, {data:logoutData ,loading}] = useMutation("/api/users/logout")
+
+  const onLogout = (event :any)=> {
+    event.preventDefault();
+    if(!loading){
+      logout({});
+      router.push('/enter');
+    }
+  }
+
+
+
   return (
     <>
       <div className="px-4">
         {/* 내 프로필 */}
         <div className="mt-4 flex items-center space-x-3">
           {!isLoading ? (
-            data?.profile.avatar ? (
+            data?.profile?.avatar ? (
               <div className="relative h-16 w-16">
                 <Image
-                  src={`https://imagedelivery.net/214BxOnlVKSU2amZRZmdaQ/${data?.profile.avatar}/avatar`}
+                  src={`https://imagedelivery.net/214BxOnlVKSU2amZRZmdaQ/${data?.profile?.avatar}/avatar`}
                   alt=""
                   fill
                   priority
@@ -38,8 +53,12 @@ const UserInfo = () => {
 
           <div className="flex flex-col">
             <span className="font-bold text-gray-900">
-              {data?.profile.name || "　"}
+              {data?.profile?.name || "　"}
+
+              <button onClick={onLogout} className="font-medium border text-xs ml-1 text-gray-700 hover:bg-slate-50 p-[2px]">로그아웃</button>
             </span>
+            {/* 로그아웃 */}
+            
             <Link href="/profile/edit">
               <div className="text-sm font-medium text-gray-700">
                 View profile &rarr;

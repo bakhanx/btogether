@@ -28,7 +28,7 @@ async function handler(
       session: { user },
       body: { phone, email, name, avatarId },
     } = req;
-
+    
     const currentUser = await client.user.findUnique({
       where: {
         id: user?.id,
@@ -110,8 +110,6 @@ async function handler(
         },
       });
     }
-
-
 
     res.json({ ok: true });
   }
