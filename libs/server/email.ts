@@ -7,13 +7,14 @@ const sendMail = async (toMail: string, payload: string) => {
     host: "smtp.naver.com",
     port: 465,
     secure:false,
+    requireTLS: true,
     auth: {
       user: process.env.MAIL_ID,
       pass: process.env.MAIL_PASSWORD,
     },
-    tls: {
-      rejectUnauthorized: false,
-    },
+    // tls: {
+    //   rejectUnauthorized: false,
+    // },
   });
 
   const mailOptions = {
