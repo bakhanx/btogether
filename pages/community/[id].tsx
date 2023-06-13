@@ -8,11 +8,12 @@ import { Comment, Story, User } from "@prisma/client";
 import Link from "next/link";
 import useMutation from "@libs/client/useMutation";
 import { cls } from "@libs/client/utils";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import client from "@libs/server/client";
 import Image from "next/image";
 import useUser from "@libs/client/useUser";
 import DateTime from "@components/datetime";
+import Menu from "@components/menu";
 
 interface CommentsWithUser extends Comment {
   user: User;
@@ -60,7 +61,7 @@ const CommunityDetail: NextPage<{ story: StorySSGResponse }> = ({ story }) => {
   const { user } = useUser();
   const { register, handleSubmit, reset } = useForm<CommentForm>();
 
-  const { data, mutate } = useSWR<StorySWRResponse>(
+  const { data: storyData, mutate } = useSWR<StorySWRResponse>(
     router.query.id ? `/api/stories/${router.query.id}` : null
   );
 
@@ -70,6 +71,9 @@ const CommunityDetail: NextPage<{ story: StorySSGResponse }> = ({ story }) => {
 
   const [comment, { data: commentData, loading: commentLoading }] =
     useMutation<CommentResponse>(`/api/stories/${router.query.id}/comment`);
+
+  const [deleteMutation, { data: deleteData, loading: deleteLoading }] =
+    useMutation(`/api/stories/${router.query.id}/delete`);
 
   const onValid = (form: CommentForm) => {
     if (commentLoading) return;
@@ -104,20 +108,20 @@ const CommunityDetail: NextPage<{ story: StorySSGResponse }> = ({ story }) => {
   };
 
   const onLikeClick = () => {
-    if (!data || likeLoading) return;
+    if (!storyData || likeLoading) return;
     mutate(
       {
-        ...data,
+        ...storyData,
         story: {
-          ...data.story,
+          ...storyData.story,
           _count: {
-            ...data.story._count,
-            likes: data.isLike
-              ? data.story._count.likes - 1
-              : data.story._count.likes + 1,
+            ...storyData.story._count,
+            likes: storyData.isLike
+              ? storyData.story._count.likes - 1
+              : storyData.story._count.likes + 1,
           },
         },
-        isLike: !data.isLike,
+        isLike: !storyData.isLike,
       },
       false
     );
@@ -126,9 +130,65 @@ const CommunityDetail: NextPage<{ story: StorySSGResponse }> = ({ story }) => {
     }
   };
 
+  // ===================== 삭제 / 수정 ===================
+
+  const [isWriter, setIsWriter] = useState(false);
+  useEffect(() => {
+    if (storyData?.story?.user?.id === user?.id) {
+      setIsWriter(true);
+    } else{
+      setIsWriter(false);
+    }
+  }, [setIsWriter, storyData, user]);
+
+  const onBack = () => {
+    router.push('/community');
+  };
+
+
+  const onDelete = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+    if (!deleteLoading) {
+      deleteMutation({});
+    }
+  };
+  useEffect(() => {
+    if (deleteData?.ok) {
+      alert("삭제가 완료되었습니다.");
+      router.push("/community");
+    }
+  }, [deleteData, router]);
+
+
+  const onModify = (event: React.MouseEvent<HTMLButtonElement>)=>{
+    event.preventDefault();
+  }
+
   return (
-    <Layout canGoBack seoTitle={`${story?.user?.name}님의 스토리`}>
-      <div className="pt-2">
+    <>
+      {/* 탑 레이아웃 */}
+      <div className="fixed top-0 z-10 flex h-12 w-full max-w-screen-xl  items-center justify-center bg-slate-300 px-10 text-lg font-medium text-white ">
+        {/* 뒤로가기 */}
+        <button onClick={onBack} className="absolute left-4">
+          <svg
+            className="h-6 w-6"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M15 19l-7-7 7-7"
+            ></path>
+          </svg>
+        </button>
+        {/* 메뉴 */}
+        <Menu type={"Story"} isWriter={isWriter} onDelete={onDelete} onModify={onModify} />
+      </div>
+      <div className="pt-16">
         {/* 작성자 프로필 */}
         <span className="ml-4 items-center rounded-full bg-gray-100 px-2.5 py-0.5 text-xs font-medium text-gray-800">
           후기
@@ -179,7 +239,7 @@ const CommunityDetail: NextPage<{ story: StorySSGResponse }> = ({ story }) => {
               onClick={onLikeClick}
               className={cls(
                 "flex items-center space-x-2 text-sm",
-                data?.isLike ? "text-green-600" : "text-black"
+                storyData?.isLike ? "text-green-600" : "text-black"
               )}
             >
               <svg
@@ -196,7 +256,7 @@ const CommunityDetail: NextPage<{ story: StorySSGResponse }> = ({ story }) => {
                   d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
                 ></path>
               </svg>
-              <span>좋아요 {data?.story?._count?.likes}</span>
+              <span>좋아요 {storyData?.story?._count?.likes}</span>
             </button>
 
             {/* 댓글 */}
@@ -222,7 +282,7 @@ const CommunityDetail: NextPage<{ story: StorySSGResponse }> = ({ story }) => {
 
         {/* 댓글 리스트 */}
         <div className="py-3">
-          {data?.story?.comments.map((comment) => (
+          {storyData?.story?.comments.map((comment) => (
             <div
               key={comment?.id}
               className="my-3 flex space-x-3 bg-gray-50 py-3 px-3"
@@ -274,7 +334,7 @@ const CommunityDetail: NextPage<{ story: StorySSGResponse }> = ({ story }) => {
           </form>
         </div>
       </div>
-    </Layout>
+    </>
   );
 };
 

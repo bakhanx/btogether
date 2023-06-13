@@ -46,10 +46,9 @@ const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
   const [isOnImage, setIsOnImage] = useState(false);
 
   // 메뉴
-  const [isOnMenu, setisOnMenu] = useState(false);
-  const [deleteMutation, { data:deleteData, loading: deleteLoading }] = useMutation(
-    `/api/products/${router.query.id}/delete`
-  );
+
+  const [deleteMutation, { data: deleteData, loading: deleteLoading }] =
+    useMutation(`/api/products/${router.query.id}/delete`);
 
   // 찜하기
 
@@ -100,25 +99,35 @@ const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
 
   const [isWriter, setIsWriter] = useState(false);
   useEffect(() => {
-    if (productData?.product?.sellerId === user?.id) setIsWriter(true);
+    if (productData?.product?.sellerId === user?.id) {
+      setIsWriter(true);
+    } else {
+      setIsWriter(false);
+    }
   }, [setIsWriter, productData, user]);
 
   const onBack = () => {
-    router.back();
+    router.push('/');
   };
 
   const onDelete = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
-    if(!deleteLoading){
+    if (!deleteLoading) {
       deleteMutation({});
     }
   };
-  useEffect(()=>{
-    if(deleteData?.ok){
-      alert('삭제가 완료되었습니다.')
-      router.push('/');
+  
+  useEffect(() => {
+    if (deleteData?.ok) {
+      alert("삭제가 완료되었습니다.");
+      router.push("/");
     }
-  },[deleteData,router])
+  }, [deleteData, router]);
+
+
+  const onModify = (event: React.MouseEvent<HTMLButtonElement>)=>{
+    event.preventDefault();
+  }
 
   if (router.isFallback) {
     return (
@@ -192,7 +201,7 @@ const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
           </svg>
         </button>
         {/* 메뉴 */}
-        <Menu type={"Product"} isWriter={isWriter} onDelete={onDelete} />
+        <Menu type={"Product"} isWriter={isWriter} onDelete={onDelete} onModify={onModify} />
       </div>
 
       {/* 판매 내용 */}
@@ -246,7 +255,9 @@ const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
 
           {/* Content */}
           <div className="mt-5">
-            <h1 className="text-3xl font-bold text-gray-900">{product?.name}</h1>
+            <h1 className="text-3xl font-bold text-gray-900">
+              {product?.name}
+            </h1>
             <span className="mt-3 block text-2xl text-gray-900">
               {product?.price.toLocaleString()}원
             </span>
