@@ -1,15 +1,33 @@
+import useMutation from "@libs/client/useMutation";
 import useUser from "@libs/client/useUser";
-import { User } from "@prisma/client";
 import { useRouter } from "next/router";
+import { useState } from "react";
+import useSWR from "swr";
 
-export default function Menu() {
-  const router = useRouter();
 
+export default function Menu(props:{
+  type: "Product" | "Story";
+  isWriter:boolean;
+  onDelete: (event:React.MouseEvent<HTMLButtonElement>)=>void;
+}) {
+  const [isOnMenu, setisOnMenu] = useState(false);
+
+  // const onDelete = (event: any) => {
+  //   event.preventDefault();
+  // };
+
+  const onModify = (event: any) => {
+    event.preventDefault();
+  };
+
+  const onClickMenu = ()=>{
+    setisOnMenu(!isOnMenu);
+  }
 
   return (
     <div className="absolute right-2">
       <div>
-        <button type="button">
+        <button onClick={onClickMenu} type="button">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -26,26 +44,33 @@ export default function Menu() {
           </svg>
         </button>
       </div>
-
-      <div className="absolute right-0 z-10 mt-2 w-32 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-
-        {/* 유저가 판매자일 경우 */}
-        <div className="py-1">
-          <a href="#" className="block px-4 py-2 text-sm text-gray-700">
-            수정하기
-          </a>
-          <a href="#" className="block px-4 py-2 text-sm text-red-500">
-            삭제하기
-          </a>
+      {isOnMenu ? (
+        <div className="absolute right-0 z-10 mt-2 w-32 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+          {props.isWriter ? (
+            // 판매자 UI
+            <div className="py-1">
+              <button className="block w-full py-2 pr-10 text-sm text-gray-700 hover:bg-slate-100">
+                수정하기
+              </button>
+              <button
+                onClick={props.onDelete}
+                className="block  w-full py-2 pr-10 text-sm text-red-500 hover:bg-slate-100"
+              >
+                삭제하기
+              </button>
+            </div>
+          ) : (
+            // 구매자 UI
+            <div className="py-1">
+              <button className="block w-full py-2 pr-10 text-sm text-red-500">
+                신고하기
+              </button>
+            </div>
+          )}
         </div>
-
-        {/* 유저가 구매자일 경우 */}
-        <div className="py-1">
-          <a href="#" className="block px-4 py-2 text-sm text-red-500">
-            신고하기
-          </a>
-        </div>
-      </div>
+      ) : (
+        ""
+      )}
     </div>
   );
 }
