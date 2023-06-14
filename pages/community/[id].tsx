@@ -53,7 +53,8 @@ interface CommentFormError {
 }
 interface CommentResponse {
   ok: boolean;
-  comment: Comment;
+  createComment?: Comment;
+  deleteComment?: Comment;
 }
 
 const CommunityDetail: NextPage<{ story: StorySSGResponse }> = ({ story }) => {
@@ -75,9 +76,10 @@ const CommunityDetail: NextPage<{ story: StorySSGResponse }> = ({ story }) => {
   const [deleteMutation, { data: deleteData, loading: deleteLoading }] =
     useMutation(`/api/stories/${router.query.id}/delete`);
 
+    // ==================댓글 작성======================
   const onValid = (form: CommentForm) => {
     if (commentLoading) return;
-
+    reset();
     mutate((prev: any) => {
       return (
         prev && {
@@ -98,14 +100,20 @@ const CommunityDetail: NextPage<{ story: StorySSGResponse }> = ({ story }) => {
         }
       );
     }, false);
-
-    reset();
     comment(form);
+
+    
   };
   const onInvalid = (form: CommentFormError) => {
     if (commentLoading) return;
     console.log(form);
   };
+
+  useEffect(()=>{
+    if(commentData?.ok && commentData.createComment){
+      mutate();
+    } 
+  })
 
   const onLikeClick = () => {
     if (!storyData || likeLoading) return;
@@ -130,21 +138,20 @@ const CommunityDetail: NextPage<{ story: StorySSGResponse }> = ({ story }) => {
     }
   };
 
-  // ===================== 삭제 / 수정 ===================
+  // =====================스토리 삭제 / 수정 ===================
 
   const [isWriter, setIsWriter] = useState(false);
   useEffect(() => {
     if (storyData?.story?.user?.id === user?.id) {
       setIsWriter(true);
-    } else{
+    } else {
       setIsWriter(false);
     }
   }, [setIsWriter, storyData, user]);
 
   const onBack = () => {
-    router.push('/community');
+    router.push("/community");
   };
-
 
   const onDelete = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
@@ -154,15 +161,33 @@ const CommunityDetail: NextPage<{ story: StorySSGResponse }> = ({ story }) => {
   };
   useEffect(() => {
     if (deleteData?.ok) {
-      alert("삭제가 완료되었습니다.");
+      alert("스토리 삭제가 완료되었습니다.");
       router.push("/community");
     }
   }, [deleteData, router]);
 
-
-  const onModify = (event: React.MouseEvent<HTMLButtonElement>)=>{
+  const onModify = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
-  }
+  };
+
+  // ===================스토리 댓글 삭제=====================
+
+  const onDeleteComment = (
+    commentId: number,
+    event: React.MouseEvent<HTMLButtonElement>
+  ) => {
+    event.preventDefault();
+    if (!commentLoading) {
+      comment({ commentId });
+    }
+  };
+
+  useEffect(() => {
+    if (commentData?.ok && commentData?.deleteComment) {
+      alert('댓글을 삭제하였습니다.')
+      router.reload();
+    }
+  }, [commentData, router]);
 
   return (
     <>
@@ -186,7 +211,12 @@ const CommunityDetail: NextPage<{ story: StorySSGResponse }> = ({ story }) => {
           </svg>
         </button>
         {/* 메뉴 */}
-        <Menu type={"Story"} isWriter={isWriter} onDelete={onDelete} onModify={onModify} />
+        <Menu
+          type={"Story"}
+          isWriter={isWriter}
+          onDelete={onDelete}
+          onModify={onModify}
+        />
       </div>
       <div className="pt-16">
         {/* 작성자 프로필 */}
@@ -311,7 +341,18 @@ const CommunityDetail: NextPage<{ story: StorySSGResponse }> = ({ story }) => {
                   </span>
                   <p className="mt-2 text-gray-700">{comment?.comment}</p>
                 </div>
-                <div className="cursor-pointer text-xs">❌</div>
+                {comment.user.id === user?.id ? (
+                  <button
+                    onClick={(e) => {
+                      onDeleteComment(comment.id, e);
+                    }}
+                    className="self-start text-xs"
+                  >
+                    ❌
+                  </button>
+                ) : (
+                  ""
+                )}
               </div>
             </div>
           ))}

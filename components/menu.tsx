@@ -9,16 +9,13 @@ export default function Menu(props:{
   type: "Product" | "Story";
   isWriter:boolean;
   onDelete: (event:React.MouseEvent<HTMLButtonElement>)=>void;
+  onModify:  (event:React.MouseEvent<HTMLButtonElement>)=>void;
 }) {
   const [isOnMenu, setisOnMenu] = useState(false);
 
   // const onDelete = (event: any) => {
   //   event.preventDefault();
   // };
-
-  const onModify = (event: any) => {
-    event.preventDefault();
-  };
 
   const onClickMenu = ()=>{
     setisOnMenu(!isOnMenu);
@@ -49,7 +46,7 @@ export default function Menu(props:{
           {props.isWriter ? (
             // 판매자 UI
             <div className="py-1">
-              <button className="block w-full py-2 pr-10 text-sm text-gray-700 hover:bg-slate-100">
+              <button onClick={props.onModify} className="block w-full py-2 pr-10 text-sm text-gray-700 hover:bg-slate-100">
                 수정하기
               </button>
               <button

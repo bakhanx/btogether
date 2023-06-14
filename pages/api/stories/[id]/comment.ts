@@ -10,8 +10,10 @@ async function handler(
   const {
     query: { id },
     session: { user },
-    body: { comment },
+    body: { comment, commentId },
   } = req;
+
+  console.log(req.body)
 
   const story = client.story.findUnique({
     where:{
@@ -26,30 +28,47 @@ async function handler(
     return res.status(404).end();
   }
 
-  await client.comment.create({
-    data: {
-      user: {
-        connect: {
-          id: user?.id,
-
+  if(comment){
+    const createComment = await client.comment.create({
+      data: {
+        user: {
+          connect: {
+            id: user?.id,
+  
+          },
         },
-      },
-      story: {
-        connect: {
-          id: Number(id),
+        story: {
+          connect: {
+            id: Number(id),
+          },
         },
+        comment,
       },
-      comment,
-    },
-  });
+    });
+    res.revalidate(`/community/${id}`);
+    res.revalidate(`/community`);
 
-  res.revalidate(`/community/${id}`);
-  res.revalidate(`/community`);
+    res.json({
+      ok: true,
+      createComment,
+    });
+  }
 
-  res.json({
-    ok: true,
-    comment,
-  });
+  if(commentId){
+    const deleteComment = await client.comment.delete({
+      where:{
+        id: Number(commentId)
+      }
+    })
+    res.json({
+      ok:true,
+      deleteComment
+    })
+  }
+  
+
+
+
 }
 
 export default withApiSession(
