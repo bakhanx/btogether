@@ -30,14 +30,6 @@ const Community: NextPage<{ stories: StoryWithUserAndCount[] }> = ({
   const { data, isLoading, mutate } =
     useSWR<StoryWithUserAndCount>(`/api/stories`);
 
-  const [storyMutation, { loading }] = useMutation(`/api/stories`);
-
-  useEffect(() => {
-    if (!loading) {
-      storyMutation({});
-    }
-  }, [storyMutation,loading]);
-
   return (
     <Layout hasTabBar canGoBack title="이웃 스토리" seoTitle="이웃 소식">
       <div className="divide space-y-2 divide-y-4 divide-blue-100">
