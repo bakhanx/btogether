@@ -30,11 +30,13 @@ const Community: NextPage<{ stories: StoryWithUserAndCount[] }> = ({
   const { data, isLoading, mutate } =
     useSWR<StoryWithUserAndCount>(`/api/stories`);
 
-  const [storyMutation] = useMutation(`/api/stories`);
+  const [storyMutation, { loading }] = useMutation(`/api/stories`);
 
   useEffect(() => {
-    storyMutation({});
-  }, [storyMutation]);
+    if (!loading) {
+      storyMutation({});
+    }
+  }, [storyMutation,loading]);
 
   return (
     <Layout hasTabBar canGoBack title="이웃 스토리" seoTitle="이웃 소식">
