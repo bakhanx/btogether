@@ -138,7 +138,7 @@ const CommunityDetail: NextPage<{ story: StorySSGResponse }> = ({ story }) => {
     }
   };
 
-  // =====================스토리 삭제 / 수정 ===================
+  // =====================스토리 삭제 ===================
 
   const [isWriter, setIsWriter] = useState(false);
   useEffect(() => {
@@ -159,6 +159,7 @@ const CommunityDetail: NextPage<{ story: StorySSGResponse }> = ({ story }) => {
       deleteMutation({});
     }
   };
+  
   useEffect(() => {
     if (deleteData?.ok) {
       alert("스토리 삭제가 완료되었습니다.");
@@ -166,9 +167,16 @@ const CommunityDetail: NextPage<{ story: StorySSGResponse }> = ({ story }) => {
     }
   }, [deleteData, router]);
 
+  // ======================= 스토리 수정 ====================
   const onModify = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
+    router.push(`/community/${router.query.id}/modify`)
   };
+
+
+
+
+
 
   // ===================스토리 댓글 삭제=====================
 

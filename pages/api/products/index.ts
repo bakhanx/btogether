@@ -27,31 +27,58 @@ async function handler(
   }
   if (req.method === "POST") {
     const {
-      body: { name, price, description, photoId },
+      body: { name, price, description, photoId, productId },
       session: { user },
     } = req;
 
-    const product = await client.product.create({
-      data: {
-        name,
-        price: +(price.replaceAll(",","")),
-        description,
-        image: photoId ? photoId : "",
-        
-        seller: {
-          connect: {
-            id: user?.id,
+    // modify
+    if(productId){
+      const updateProduct = await client.product.update({
+        where:{
+          id:productId,
+        },
+        data:{
+          name,
+          price: +(price.replaceAll(",","")),
+          description,
+          image: photoId ? photoId : "",
+          
+          seller: {
+            connect: {
+              id: user?.id,
+            },
+          },
+        }
+      })
+
+      res.json({
+        ok:true,
+        updateProduct,
+      })
+    }
+
+    // create
+    else {
+      const product = await client.product.create({
+        data: {
+          name,
+          price: +(price.replaceAll(",","")),
+          description,
+          image: photoId ? photoId : "",
+          
+          seller: {
+            connect: {
+              id: user?.id,
+            },
           },
         },
-      },
-    });
-
+      });
+      res.json({
+        ok: true,
+        product,
+      });
+    }
     res.revalidate(`/`);
-
-    res.json({
-      ok: true,
-      product,
-    });
   }
 }
 

@@ -10,67 +10,85 @@ async function handler(
   const {
     query: { id },
     session: { user },
+    body:{content}
   } = req;
 
   
-  const story = await client.story.findUnique({
-    where: {
-      id: Number(id),
-    },
-    include: {
-      user: {
-        select: {
-          id: true,
-          name: true,
-          avatar: true,
-        },
+  if(req.method ==="POST"){
+    const updateStory = await client.story.update({
+      where:{
+        id:Number(id)
       },
+      data:{
+        content
+      }
+    })
+    res.json({
+      ok:true,
+      updateStory
+    })
+  }
 
-      _count: {
-        select: {
-          likes: true,
-          comments: true,
-        },
+  if(req.method === "GET"){
+    const story = await client.story.findUnique({
+      where: {
+        id: Number(id),
       },
-
-      comments: {
-        include: {
-          user: {
-            select: {
-              id: true,
-              name: true,
-              avatar: true,
+      include: {
+        user: {
+          select: {
+            id: true,
+            name: true,
+            avatar: true,
+          },
+        },
+  
+        _count: {
+          select: {
+            likes: true,
+            comments: true,
+          },
+        },
+  
+        comments: {
+          include: {
+            user: {
+              select: {
+                id: true,
+                name: true,
+                avatar: true,
+              },
             },
           },
         },
       },
-    },
-  });
-
+    });
   
+    const isLike = Boolean(
+      await client.like.findFirst({
+        where: {
+          storyId: Number(id),
+          userId: user?.id,
+        },
+        select: {
+          id: true,
+        },
+      })
+    );
+  
+    res.json({
+      ok: true,
+      story,
+      isLike,
+    });
+  }
 
-  const isLike = Boolean(
-    await client.like.findFirst({
-      where: {
-        storyId: Number(id),
-        userId: user?.id,
-      },
-      select: {
-        id: true,
-      },
-    })
-  );
 
-  res.json({
-    ok: true,
-    story,
-    isLike,
-  });
 }
 
 export default withApiSession(
   withHandler({
-    methods: ["GET"],
+    methods: ["GET", "POST"],
     handler,
   })
 );

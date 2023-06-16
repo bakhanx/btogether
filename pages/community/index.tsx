@@ -48,7 +48,7 @@ const Community: NextPage<{ stories: StoryWithUserAndCount[] }> = ({
                 </div>
                 <div className=" mt-5 flex w-full items-center justify-between px-4 text-sm font-medium text-gray-500">
                   <span>{story.user?.name}</span>
-                  <span><DateTime date={story.createdAt}/></span>
+                  <span><DateTime date={story.updatedAt}/></span>
                 </div>
                 <div className="mt-3 flex w-full justify-start space-x-5 border-t px-4 py-2.5">
                   <span className="flex items-center space-x-2 text-sm">

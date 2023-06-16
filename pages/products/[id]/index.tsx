@@ -127,6 +127,7 @@ const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
 
   const onModify = (event: React.MouseEvent<HTMLButtonElement>)=>{
     event.preventDefault();
+    router.push(`/products/${router.query.id}/modify`)
   }
 
   if (router.isFallback) {
