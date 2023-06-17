@@ -9,9 +9,6 @@ import { useEffect } from "react";
 import DateTime from "@components/datetime";
 import useMutation from "@libs/client/useMutation";
 
-// interface StroyResponse {
-//   stories: StoryWithUserAndCount[];
-// }
 
 interface StoryWithUserAndCount extends Story {
   _count: {
@@ -27,8 +24,6 @@ interface StoryWithUserAndCount extends Story {
 const Community: NextPage<{ stories: StoryWithUserAndCount[] }> = ({
   stories,
 }) => {
-  const { data, isLoading, mutate } =
-    useSWR<StoryWithUserAndCount>(`/api/stories`);
 
   return (
     <Layout hasTabBar canGoBack title="이웃 스토리" seoTitle="이웃 소식">
