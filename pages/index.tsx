@@ -18,7 +18,7 @@ interface ProductsResponse {
 
 const Home: NextPage<ProductsResponse> = ({ products }) => {
   return (
-    <Layout hasTabBar title="B-Together" seoTitle="이웃과 함께하는">
+    <Layout hasTabBar mainTitle seoTitle="이웃과 함께하는">
       {/* 작성된 게시글 리스트 */}
       <div className="flex flex-col space-y-1 divide-y py-2">
         {products?.map((product) => (

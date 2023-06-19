@@ -2,12 +2,14 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { cls } from "../libs/client/utils";
 import Head from "next/head";
+import Image from "next/image";
 
 interface LayoutProps {
   title?: string;
   canGoBack?: boolean;
   hasTabBar?: boolean;
   seoTitle?: string;
+  mainTitle?: boolean;
   children: React.ReactNode; // 왜 필요한가
 }
 
@@ -17,6 +19,7 @@ export default function Layout({
   hasTabBar,
   seoTitle,
   children,
+  mainTitle,
 }: LayoutProps) {
   const router = useRouter();
   const onBack = () => {
@@ -49,9 +52,19 @@ export default function Layout({
             </svg>
           </button>
         ) : null}
+
+        {/* 메인 타이틀 */}
+        {mainTitle ? (
+          <div className="flex items-center text-xl gap-x-2">
+            <div className="relative w-[148px] h-[24px]">
+              <Image alt="" src="/logo_04.png" fill />
+            </div>
+            
+          </div>
+        ) : null}
         {/* 타이틀 */}
         {title ? (
-          <span className={cls(canGoBack ? "mx-auto" : "", "")}>{title}</span>
+          <div className={cls(canGoBack ? "mx-auto" : "", "")}>{title}</div>
         ) : null}
       </div>
 
