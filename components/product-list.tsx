@@ -30,6 +30,7 @@ const ProductList = () => {
           key={record?.product.id}
           id={record?.product.id}
           title={record?.product.name}
+          time={record?.product.updatedAt}
           price={record?.product.price}
           image={record?.product.image}
           hearts={record?.product._count.records}
