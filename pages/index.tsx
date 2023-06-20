@@ -18,24 +18,25 @@ interface ProductsResponse {
 
 const Home: NextPage<ProductsResponse> = ({ products }) => {
   return (
-    <Layout hasTabBar mainTitle seoTitle="이웃과 함께하는">
+    <Layout hasTabBar mainTitle seoTitle="이웃과 함께하는" writeBtnPath="product">
       {/* 작성된 게시글 리스트 */}
-      <div className="flex flex-col space-y-1 divide-y py-2">
+      <div className="flex flex-col space-y-1 divide-y py-1">
         {products?.map((product) => (
           <Item
             id={product?.id}
             image={product?.image}
             key={product?.id}
             title={product?.name}
+            time={product?.updatedAt}
             price={product?.price}
             hearts={product?._count?.records || 0}
             comments={product?._count?.chatRooms || 0}
           ></Item>
         ))}
       </div>
-
+     
       {/* 게시글 작성 버튼 */}
-      <FloatingButton href="/products/upload">
+      {/* <FloatingButton href="/products/upload">
         <svg
           className="h-6 w-6"
           xmlns="http://www.w3.org/2000/svg"
@@ -51,7 +52,7 @@ const Home: NextPage<ProductsResponse> = ({ products }) => {
             d="M12 6v6m0 0v6m0-6h6m-6 0H6"
           />
         </svg>
-      </FloatingButton>
+      </FloatingButton> */}
     </Layout>
   );
 };

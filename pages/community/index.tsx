@@ -1,6 +1,5 @@
 import { NextPage } from "next";
 import Link from "next/link";
-import FloatingButton from "@components/floatingButton";
 import { Story } from "@prisma/client";
 import client from "@libs/server/client";
 import Layout from "@components/layout";
@@ -26,7 +25,7 @@ const Community: NextPage<{ stories: StoryWithUserAndCount[] }> = ({
 }) => {
 
   return (
-    <Layout hasTabBar canGoBack title="이웃 스토리" seoTitle="이웃 소식">
+    <Layout hasTabBar canGoBack title="이웃 스토리" seoTitle="이웃 소식" writeBtnPath="story">
       <div className="divide space-y-2 divide-y-4 divide-blue-100">
         {stories?.map((story) => (
           <div key={story.id}>
@@ -35,7 +34,7 @@ const Community: NextPage<{ stories: StoryWithUserAndCount[] }> = ({
                 <span className="ml-3.5 flex items-center rounded-full bg-violet-500 px-2.5 py-0.5 text-xs font-bold text-white">
                   일상
                 </span>
-                <div className="text-gray-7100 mt-2 h-16 px-4 font-medium">
+                <div className="text-gray-7100 mt-2 h-16 px-4">
                   <span className="line-clamp-2">{story.content}</span>
                 </div>
                 <div className=" mt-5 flex w-full items-center justify-between px-4 text-sm font-medium text-gray-500">
@@ -86,22 +85,6 @@ const Community: NextPage<{ stories: StoryWithUserAndCount[] }> = ({
             </Link>
           </div>
         ))}
-        <FloatingButton href="/community/write">
-          <svg
-            className="h-6 w-6"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
-            ></path>
-          </svg>
-        </FloatingButton>
       </div>
     </Layout>
   );

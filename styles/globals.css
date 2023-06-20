@@ -3,6 +3,30 @@
 @tailwind utilities;
 
 
+@font-face{
+  font-family: 'NotoSansKR';
+  font-weight: 400;
+  font-style:normal;
+  src:url('/fonts/NotoSansKR-Regular.otf');
+}
+@font-face{
+  font-family: 'NotoSansKR';
+  font-weight: 500;
+  font-style:medium;
+  src:url('/fonts/NotoSansKR-Medium.otf');
+}
+
+@font-face{
+  font-family: 'NotoSansKR';
+  font-weight: 700;
+  font-style:bold;
+  src:url('/fonts/NotoSansKR-Bold.otf');
+}
+
+body{
+  font-family: 'NotoSansKR'
+}
+
 /* hide arrow in input:number */
 @layer utilities {
     input[type="number"]::-webkit-inner-spin-button,

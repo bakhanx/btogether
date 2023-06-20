@@ -183,7 +183,7 @@ const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
       {/* 메인 */}
 
       {/* 탑 레이아웃 */}
-      <div className="fixed top-0 z-10 flex h-12 w-full max-w-screen-xl  items-center justify-center bg-black bg-opacity-0 px-10 text-lg font-medium text-white ">
+      <div className="fixed top-0 z-10 flex h-12 w-full max-w-screen-xl  items-center justify-center bg-black bg-opacity-10 px-10 text-lg font-medium text-white ">
         {/* 뒤로가기 */}
         <button onClick={onBack} className="absolute left-4">
           <svg

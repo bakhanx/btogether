@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import { cls } from "../libs/client/utils";
 import Head from "next/head";
 import Image from "next/image";
+import FloatingButton from "./floatingButton";
 
 interface LayoutProps {
   title?: string;
@@ -10,7 +11,8 @@ interface LayoutProps {
   hasTabBar?: boolean;
   seoTitle?: string;
   mainTitle?: boolean;
-  children: React.ReactNode; // 왜 필요한가
+  writeBtnPath?: string;
+  children: React.ReactNode;
 }
 
 export default function Layout({
@@ -20,8 +22,11 @@ export default function Layout({
   seoTitle,
   children,
   mainTitle,
+  writeBtnPath,
 }: LayoutProps) {
   const router = useRouter();
+
+  const canPostPath = ["/", "/community"];
   const onBack = () => {
     router.back();
   };
@@ -55,11 +60,10 @@ export default function Layout({
 
         {/* 메인 타이틀 */}
         {mainTitle ? (
-          <div className="flex items-center text-xl gap-x-2">
-            <div className="relative w-[148px] h-[24px]">
+          <div className="flex items-center gap-x-2 text-xl">
+            <div className="relative h-[24px] w-[148px]">
               <Image alt="" src="/logo_04.png" fill />
             </div>
-            
           </div>
         ) : null}
         {/* 타이틀 */}
@@ -73,14 +77,14 @@ export default function Layout({
 
       {/* 하단 탭 */}
       {hasTabBar ? (
-        <nav className="fixed bottom-0 flex w-full max-w-screen-xl justify-between border-t bg-gray-50 px-10 pb-5 pt-3 text-xs text-gray-600">
+        <nav className="fixed bottom-0 z-30 flex w-full max-w-screen-xl justify-between border-t bg-gray-50 px-5 pb-5 pt-3 text-xs text-gray-600">
           {/* Link 하위에 a태그 사용시 Link에 legacyBehavior 추가 */}
 
           {/* 홈 */}
           <Link href="/">
             <div
               className={cls(
-                "flex flex-col items-center space-y-2",
+                "flex w-14 flex-col items-center space-y-2 ",
                 router.pathname === "/"
                   ? "text-blue-500"
                   : "transition-colors hover:text-gray-500"
@@ -107,7 +111,7 @@ export default function Layout({
           <Link href="/community">
             <div
               className={cls(
-                "flex flex-col items-center space-y-2",
+                "flex w-14 flex-col items-center space-y-2  ",
                 router.pathname === "/community"
                   ? "text-blue-500"
                   : "transition-colors hover:text-gray-500"
@@ -131,11 +135,23 @@ export default function Layout({
             </div>
           </Link>
 
+          {/* 글쓰기 */}
+          {writeBtnPath ? (
+            <div className="h-12 w-20">
+              <div className="relative h-full w-full">
+                <Image fill className="mt-3" alt="" src="/logo_01_small.png" />
+              </div>
+              <FloatingButton writeBtnPath={writeBtnPath} />
+            </div>
+          ) : (
+            ""
+          )}
+
           {/* 채팅 */}
           <Link href="/chats">
             <div
               className={cls(
-                "flex flex-col items-center space-y-2",
+                "flex w-14 flex-col items-center space-y-2",
                 router.pathname === "/chats"
                   ? "text-blue-500"
                   : "transition-colors hover:text-gray-500"
@@ -158,17 +174,16 @@ export default function Layout({
               <span>채팅</span>
             </div>
           </Link>
-          {/* 프로필 */}
+          {/* 마이페이지 */}
           <Link href="/profile">
             <div
               className={cls(
-                "flex flex-col items-center space-y-2",
+                "flex w-14 flex-col items-center space-y-2",
                 router.pathname === "/profile"
                   ? "text-blue-500"
                   : "transition-colors hover:text-gray-500"
               )}
             >
-              {" "}
               <svg
                 className="h-6 w-6"
                 fill="none"
@@ -183,7 +198,7 @@ export default function Layout({
                   d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
                 ></path>
               </svg>
-              <span>마이페이지</span>
+              <span>프로필</span>
             </div>
           </Link>
         </nav>
