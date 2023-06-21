@@ -35,7 +35,7 @@ export default function Item({
                 sizes="1"
                 priority
                 alt={title}
-                src={`https://imagedelivery.net/214BxOnlVKSU2amZRZmdaQ/${image}/public`}
+                src={`https://imagedelivery.net/214BxOnlVKSU2amZRZmdaQ/${image}/thumbnail`}
               />
             </div>
           ) : (

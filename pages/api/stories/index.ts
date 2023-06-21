@@ -13,16 +13,19 @@ async function handler(
         _count: {
           select: {
             likes: true,
-            comments:true,
+            comments: true,
           },
         },
-        user:{
-          select:{
-            id:true,
-            name:true
-          }
-        }
+        user: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
       },
+      orderBy:{
+        updatedAt:"desc"
+      }
     });
     res.json({
       ok: true,

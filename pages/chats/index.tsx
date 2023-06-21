@@ -49,7 +49,7 @@ const Chats: NextPage = () => {
             <div className="flex cursor-pointer justify-between items-center">
               <div className="flex items-center space-x-3 px-4 py-3">
                 {/* 유저 아바타 */}
-                <div className="relative h-12 w-12">
+                <div className="relative w-16 aspect-square">
                   {user?.id === chatRoom.purchaserId ? (
                     chatRoom.seller.avatar ? (
                       <Image
@@ -61,7 +61,7 @@ const Chats: NextPage = () => {
                         className="rounded-full"
                       />
                     ) : (
-                      <div className="h-12 w-12 rounded-full bg-slate-500" />
+                      <div className="w-14 aspect-square rounded-full bg-slate-500" />
                     )
                   ) : chatRoom.purchaser.avatar ? (
                     <Image
@@ -78,7 +78,8 @@ const Chats: NextPage = () => {
                 </div>
 
                 {/* 유저 아이디 + 시간 + 메시지 */}
-                <div>
+                <div className="space-y-2">
+
                   <div>
                     {/* 아이디 */}
                     <span className="font-bold text-gray-700">
@@ -88,19 +89,21 @@ const Chats: NextPage = () => {
                     </span>
                     {/* 시간 */}
                     <span className="self-start py-2 px-2 text-xs text-gray-400">
-                      <DateTime date={chatRoom?.messages.at(-1)?.createdAt} />
+                      <DateTime date={chatRoom?.messages.at(-1)?.createdAt} timeAgo />
                     </span>
                   </div>
+
                   {/* 메시지 */}
                   <p className="text-sm text-gray-500">
                     {chatRoom?.messages.at(-1)?.message}
                   </p>
                 </div>
               </div>
-              <div className="relative h-14 w-14 mr-2">
+
+              <div className="relative w-20 aspect-square mr-2">
                 {chatRoom?.product?.image ? (
                   <Image
-                    src={`https://imagedelivery.net/214BxOnlVKSU2amZRZmdaQ/${chatRoom?.product?.image}/public`}
+                    src={`https://imagedelivery.net/214BxOnlVKSU2amZRZmdaQ/${chatRoom?.product?.image}/thumbnail`}
                     alt=""
                     fill
                     priority

@@ -4,6 +4,9 @@ import Item from "@components/item";
 import Layout from "@components/layout";
 import { Product } from "@prisma/client";
 import client from "@libs/server/client";
+import { useRouter } from "next/router";
+import useSWR from 'swr'
+import { useEffect } from "react";
 
 export interface ProductWithCount extends Product {
   _count: {
@@ -17,6 +20,21 @@ interface ProductsResponse {
 }
 
 const Home: NextPage<ProductsResponse> = ({ products }) => {
+
+  const router= useRouter();
+
+  const {data, isLoading} = useSWR<ProductsResponse>(`/api/products`);
+
+  useEffect(()=>{
+    if(!isLoading){
+      if(data?.products[0].id !== products[0].id){
+        router.reload();
+      }
+    }
+    
+  },[router,data,products,isLoading])
+
+
   return (
     <Layout hasTabBar mainTitle seoTitle="이웃과 함께하는" writeBtnPath="product">
       {/* 작성된 게시글 리스트 */}
@@ -34,25 +52,6 @@ const Home: NextPage<ProductsResponse> = ({ products }) => {
           ></Item>
         ))}
       </div>
-     
-      {/* 게시글 작성 버튼 */}
-      {/* <FloatingButton href="/products/upload">
-        <svg
-          className="h-6 w-6"
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-          aria-hidden="true"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth="2"
-            d="M12 6v6m0 0v6m0-6h6m-6 0H6"
-          />
-        </svg>
-      </FloatingButton> */}
     </Layout>
   );
 };

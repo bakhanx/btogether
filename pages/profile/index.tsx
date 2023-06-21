@@ -15,55 +15,72 @@ const UserInfo = () => {
   const { user } = useUser();
   const router = useRouter();
   const { data, isLoading } = useSWR<UserResponse>(`/api/users/me`);
-  const [logout, {data:logoutData ,loading}] = useMutation("/api/users/logout")
+  const [logout, { data: logoutData, loading }] =
+    useMutation("/api/users/logout");
 
-  const onLogout = (event :any)=> {
+  const onLogout = (event: any) => {
     event.preventDefault();
-    if(!loading){
+    if (!loading) {
       logout({});
-      router.push('/enter');
+      router.push("/enter");
     }
-  }
-
-
+  };
 
   return (
     <>
       <div className="px-4">
         {/* 내 프로필 */}
+
         <div className="mt-4 flex items-center space-x-3">
-          {!isLoading ? (
-            data?.profile?.avatar ? (
-              <div className="relative h-16 w-16">
-                <Image
-                  src={`https://imagedelivery.net/214BxOnlVKSU2amZRZmdaQ/${data?.profile?.avatar}/avatar`}
-                  alt=""
-                  fill
-                  priority
-                  sizes="1"
-                  className="rounded-full"
-                />
-              </div>
+          <Link href="/profile/edit" className="hover:opacity-80">
+            {!isLoading ? (
+              data?.profile?.avatar ? (
+                <div className="relative h-16 w-16">
+                  <Image
+                    src={`https://imagedelivery.net/214BxOnlVKSU2amZRZmdaQ/${data?.profile?.avatar}/avatar`}
+                    alt=""
+                    fill
+                    priority
+                    sizes="1"
+                    className="rounded-full"
+                  />
+                </div>
+              ) : (
+                <div className="h-16 w-16 rounded-full bg-slate-500" />
+              )
             ) : (
               <div className="h-16 w-16 rounded-full bg-slate-500" />
-            )
-          ) : (
-            <div className="h-16 w-16 rounded-full bg-slate-500" />
-          )}
-
-          <div className="flex flex-col">
-            <span className="font-bold text-gray-900">
-              {data?.profile?.name || "　"}
-
-              <button onClick={onLogout} className="font-medium border text-xs ml-1 text-gray-700 hover:bg-slate-50 p-[2px]">로그아웃</button>
-            </span>
-            {/* 로그아웃 */}
-            
-            <Link href="/profile/edit">
-              <div className="text-sm font-medium text-gray-700">
-                View profile &rarr;
+            )}
+          </Link>
+          <div>
+            <span className="font-bold text-gray-900 space-y-1">
+              <Link href="/profile/edit" className="hover:text-gray-500">
+                {data?.profile?.name || "　"}
+              </Link>
+              {/* 로그아웃 */}
+              <div className="translate-y-1">
+              <button
+                onClick={onLogout}
+                className="rounded-md border p-[2px] text-xs font-medium text-gray-700 hover:bg-blue-200 block"
+              >
+                로그아웃
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="currentColor"
+                  className="inline h-3 w-3"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9"
+                  />
+                </svg>
+              </button>
               </div>
-            </Link>
+            </span>
           </div>
         </div>
 
@@ -151,6 +168,7 @@ const UserInfo = () => {
             <div className="h-12 w-12 rounded-full bg-slate-500" />
             <div>
               <h4 className="text-sm font-bold text-gray-800">공구의신</h4>
+              {/* 별점 */}
               <div className="flex items-center">
                 {[1, 1, 1, 1, 1].map((_, i) => (
                   <svg
@@ -168,7 +186,7 @@ const UserInfo = () => {
             </div>
           </div>
           <div className="mt-4 text-sm text-gray-600">
-            {/* dummy data */}
+            {/* 리뷰 내용*/}
             <p>
               Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolore
               quod tenetur nihil illum! Voluptatem doloribus numquam voluptates
@@ -226,7 +244,6 @@ export const getServerSideProps = withSsrSession(async function ({
   return {
     props: {
       profile: JSON.parse(JSON.stringify(profile)),
-      
     },
   };
 });

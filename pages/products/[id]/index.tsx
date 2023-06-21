@@ -107,7 +107,7 @@ const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
   }, [setIsWriter, productData, user]);
 
   const onBack = () => {
-    router.push('/');
+    router.push("/");
   };
 
   const onDelete = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -116,7 +116,7 @@ const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
       deleteMutation({});
     }
   };
-  
+
   useEffect(() => {
     if (deleteData?.ok) {
       alert("삭제가 완료되었습니다.");
@@ -124,11 +124,10 @@ const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
     }
   }, [deleteData, router]);
 
-
-  const onModify = (event: React.MouseEvent<HTMLButtonElement>)=>{
+  const onModify = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
-    router.push(`/products/${router.query.id}/modify`)
-  }
+    router.push(`/products/${router.query.id}/modify`);
+  };
 
   if (router.isFallback) {
     return (
@@ -151,7 +150,7 @@ const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
     <>
       {/* 이미지 확대 */}
       {isOnImage ? (
-        <div className="fixed z-20 flex h-full w-full items-start bg-black">
+        <div className="fixed left-0 z-20 flex h-full w-full items-start bg-black">
           <button className="z-50 m-5 text-white" onClick={onClickImage}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -180,10 +179,10 @@ const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
         ""
       )}
 
-      {/* 메인 */}
+      {/* ==================== 메인 ========================== */}
 
       {/* 탑 레이아웃 */}
-      <div className="fixed top-0 z-10 flex h-12 w-full max-w-screen-xl  items-center justify-center bg-black bg-opacity-10 px-10 text-lg font-medium text-white ">
+      <div className="fixed top-0 z-10 flex h-12 w-full max-w-screen-lg  items-center justify-center bg-black bg-opacity-10 px-10 text-lg font-medium text-white ">
         {/* 뒤로가기 */}
         <button onClick={onBack} className="absolute left-4">
           <svg
@@ -202,14 +201,19 @@ const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
           </svg>
         </button>
         {/* 메뉴 */}
-        <Menu type={"Product"} isWriter={isWriter} onDelete={onDelete} onModify={onModify} />
+        <Menu
+          type={"Product"}
+          isWriter={isWriter}
+          onDelete={onDelete}
+          onModify={onModify}
+        />
       </div>
 
       {/* 판매 내용 */}
       <div className="mb-8 ">
         <div onClick={onClickImage}>
           {product?.image ? (
-            <div className="relative h-96 w-full ">
+            <div className="relative aspect-square max-h-[512px] w-full">
               <Image
                 className="object-cover focus:cursor-pointer"
                 priority
@@ -235,7 +239,7 @@ const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
                 width={48}
                 height={48}
                 alt=""
-                src={`https://imagedelivery.net/214BxOnlVKSU2amZRZmdaQ/${product?.seller.avatar}/public`}
+                src={`https://imagedelivery.net/214BxOnlVKSU2amZRZmdaQ/${product?.seller.avatar}/avatar`}
               />
             ) : (
               <div className="h-12 w-12 rounded-full bg-slate-300" />

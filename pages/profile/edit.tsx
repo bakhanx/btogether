@@ -66,11 +66,6 @@ const EditProfile: NextPage = () => {
 
     if (!isExistAvatar) avatar = null;
 
-    console.log(isExistAvatar);
-    console.log(avatar);
-    console.log(profileData?.profile.avatar);
-    console.log(avatarPreview);
-
     // 기존상관없이 변경o
     if (avatar && avatar.length > 0) {
       const { uploadURL } = await (await fetch(`/api/files`)).json();
@@ -129,6 +124,12 @@ const EditProfile: NextPage = () => {
   };
 
   const router = useRouter();
+
+  useEffect(() => {
+    setValue("name", profileData?.profile?.name || "");
+    setValue("phone", profileData?.profile?.phone || "");
+  }, [setValue, profileData]);
+
   useEffect(() => {
     if (data?.ok) {
       alert("프로필 수정이 완료되었습니다.");
@@ -235,7 +236,6 @@ const EditProfile: NextPage = () => {
           <Input
             register={register("email", { required: false })}
             label="이메일 주소"
-            value={profileData?.profile?.email || ""}
             name="email"
             type="email"
             required={false}
@@ -245,7 +245,6 @@ const EditProfile: NextPage = () => {
           <Input
             register={register("phone", { required: false })}
             label="전화번호"
-            value={profileData?.profile?.phone || ""}
             name="phone"
             type="phone"
             required={false}

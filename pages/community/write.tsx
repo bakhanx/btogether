@@ -15,6 +15,7 @@ interface WriteForm {
 
 interface WriteResponse {
   ok: boolean;
+  revalidated?: boolean;
   story: Story;
 }
 
@@ -24,8 +25,9 @@ const Write: NextPage = () => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<WriteForm>({mode:"onSubmit"});
-  const [storyMutate, { data, loading }] = useMutation<WriteResponse>("/api/stories");
+  } = useForm<WriteForm>({ mode: "onSubmit" });
+  const [storyMutate, { data, loading }] =
+    useMutation<WriteResponse>("/api/stories");
   const [isLoading, setIsLoading] = useState(false);
 
   const onValid = (form: WriteForm) => {
@@ -36,7 +38,7 @@ const Write: NextPage = () => {
 
   useEffect(() => {
     if (data && data.ok) {
-      
+      router.prefetch(`/community`)
       router.push(`/community/${data.story.id}`);
     }
   }, [router, data]);

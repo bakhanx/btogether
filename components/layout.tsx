@@ -37,7 +37,7 @@ export default function Layout({
       </Head>
 
       {/* 상단 탭 */}
-      <div className="fixed top-0 z-10 flex h-12 w-full max-w-screen-xl  items-center justify-center  bg-blue-500 px-10 text-lg font-medium text-white ">
+      <div className="fixed top-0 z-10 flex h-12 w-full max-w-screen-lg  items-center justify-center  bg-blue-500 px-10 text-lg font-medium text-white ">
         {/* 뒤로가기 */}
         {canGoBack ? (
           <button onClick={onBack} className="absolute left-4">
@@ -62,7 +62,7 @@ export default function Layout({
         {mainTitle ? (
           <div className="flex items-center gap-x-2 text-xl">
             <div className="relative h-[24px] w-[148px]">
-              <Image alt="" src="/logo_04.png" fill />
+              <Image alt="" src="/logo_04.png" sizes="1" fill />
             </div>
           </div>
         ) : null}
@@ -77,7 +77,7 @@ export default function Layout({
 
       {/* 하단 탭 */}
       {hasTabBar ? (
-        <nav className="fixed bottom-0 z-30 flex w-full max-w-screen-xl justify-between border-t bg-gray-50 px-5 pb-5 pt-3 text-xs text-gray-600">
+        <nav className="fixed bottom-0 z-30 flex w-full max-w-screen-lg justify-between border-t bg-gray-50 px-5 pb-5 pt-3 text-xs text-gray-600">
           {/* Link 하위에 a태그 사용시 Link에 legacyBehavior 추가 */}
 
           {/* 홈 */}
@@ -139,7 +139,14 @@ export default function Layout({
           {writeBtnPath ? (
             <div className="h-12 w-20">
               <div className="relative h-full w-full">
-                <Image fill className="mt-3" alt="" src="/logo_01_small.png" />
+                <Image
+                  fill
+                  priority
+                  className="mt-3"
+                  sizes="1"
+                  alt=""
+                  src="/logo_01_small.png"
+                />
               </div>
               <FloatingButton writeBtnPath={writeBtnPath} />
             </div>

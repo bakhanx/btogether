@@ -73,12 +73,12 @@ const ChatDetail: NextPage = () => {
           <div className="relative h-16 w-16">
             {chatData?.chatRoom?.product?.image ? (
               <Image
-                src={`https://imagedelivery.net/214BxOnlVKSU2amZRZmdaQ/${chatData?.chatRoom.product.image}/public`}
+                src={`https://imagedelivery.net/214BxOnlVKSU2amZRZmdaQ/${chatData?.chatRoom.product.image}/thumbnail`}
                 alt=""
                 fill
                 priority
                 sizes="1"
-                className=""
+                className="rounded-md"
               />
             ) : (
               ""

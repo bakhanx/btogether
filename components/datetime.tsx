@@ -13,16 +13,16 @@ export default function DateTime({ date, time, timeAgo }: DateTimeProps) {
     dateTime.getMonth() + 1
   }`;
   const day = `${dateTime.getDate() + 1 < 10 ? 0 : ""}${
-    dateTime.getDate() + 1
+    dateTime.getDate()
   }`;
   const hours = `${dateTime.getHours() + 1 < 10 ? 0 : ""}${
-    dateTime.getHours() + 1
+    dateTime.getHours()
   }`;
   const minutes = `${dateTime.getMinutes() + 1 < 10 ? 0 : ""}${
-    dateTime.getMinutes() + 1
+    dateTime.getMinutes()
   }`;
   const seconds = `${dateTime.getSeconds() + 1 < 10 ? 0 : ""}${
-    dateTime.getSeconds() + 1
+    dateTime.getSeconds()
   }`;
 
   // 시간:분
@@ -31,7 +31,7 @@ export default function DateTime({ date, time, timeAgo }: DateTimeProps) {
       <>
         {dateTime && (
           <>
-            {dateTime.getHours()}:{dateTime.getMinutes()}
+            {hours}:{minutes}
           </>
         )}
       </>

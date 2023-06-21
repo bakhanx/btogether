@@ -1,14 +1,14 @@
 import { GetStaticPaths, GetStaticProps, NextPage } from "next";
 import Layout from "@components/layout";
 import TextArea from "@components/textarea";
-import useSWR from "swr";
+import useSWR, { useSWRConfig } from "swr";
 import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
 import { Comment, Story, User } from "@prisma/client";
 import Link from "next/link";
 import useMutation from "@libs/client/useMutation";
 import { cls } from "@libs/client/utils";
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import client from "@libs/server/client";
 import Image from "next/image";
 import useUser from "@libs/client/useUser";
@@ -76,7 +76,7 @@ const CommunityDetail: NextPage<{ story: StorySSGResponse }> = ({ story }) => {
   const [deleteMutation, { data: deleteData, loading: deleteLoading }] =
     useMutation(`/api/stories/${router.query.id}/delete`);
 
-    // ==================댓글 작성======================
+  // ==================댓글 작성======================
   const onValid = (form: CommentForm) => {
     if (commentLoading) return;
     reset();
@@ -96,24 +96,30 @@ const CommunityDetail: NextPage<{ story: StorySSGResponse }> = ({ story }) => {
                 user: { ...user },
               },
             ],
+            _count: {
+              ...prev.story._count,
+              comments: prev.story._count.comments + 1,
+            },
           },
         }
       );
     }, false);
-    comment(form);
 
-    
+    comment(form);
   };
+
+  // 댓글 작성 응답
+  useEffect(() => {
+    if (commentData?.ok && commentData?.createComment) {
+      // refetch
+      mutate();
+    }
+  }, [commentData, mutate]);
+
   const onInvalid = (form: CommentFormError) => {
     if (commentLoading) return;
     console.log(form);
   };
-
-  useEffect(()=>{
-    if(commentData?.ok && commentData.createComment){
-      mutate();
-    } 
-  })
 
   const onLikeClick = () => {
     if (!storyData || likeLoading) return;
@@ -159,7 +165,7 @@ const CommunityDetail: NextPage<{ story: StorySSGResponse }> = ({ story }) => {
       deleteMutation({});
     }
   };
-  
+
   useEffect(() => {
     if (deleteData?.ok) {
       alert("스토리 삭제가 완료되었습니다.");
@@ -170,13 +176,8 @@ const CommunityDetail: NextPage<{ story: StorySSGResponse }> = ({ story }) => {
   // ======================= 스토리 수정 ====================
   const onModify = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
-    router.push(`/community/${router.query.id}/modify`)
+    router.push(`/community/${router.query.id}/modify`);
   };
-
-
-
-
-
 
   // ===================스토리 댓글 삭제=====================
 
@@ -192,10 +193,10 @@ const CommunityDetail: NextPage<{ story: StorySSGResponse }> = ({ story }) => {
 
   useEffect(() => {
     if (commentData?.ok && commentData?.deleteComment) {
-      alert('댓글을 삭제하였습니다.')
-      router.reload();
+      // refetch
+      mutate();
     }
-  }, [commentData, router]);
+  }, [commentData, router, mutate]);
 
   return (
     <>
@@ -313,7 +314,7 @@ const CommunityDetail: NextPage<{ story: StorySSGResponse }> = ({ story }) => {
                   d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
                 ></path>
               </svg>
-              <span>댓글 {story?._count?.comments}</span>
+              <span>댓글 {storyData?.story._count?.comments}</span>
             </span>
           </div>
         </div>
@@ -345,7 +346,7 @@ const CommunityDetail: NextPage<{ story: StorySSGResponse }> = ({ story }) => {
                     {comment?.user?.name}
                   </span>
                   <span className="block text-xs text-gray-500 ">
-                    <DateTime date={story?.updatedAt} />
+                    <DateTime date={comment?.updatedAt} />
                   </span>
                   <p className="mt-2 text-gray-700">{comment?.comment}</p>
                 </div>
@@ -377,8 +378,13 @@ const CommunityDetail: NextPage<{ story: StorySSGResponse }> = ({ story }) => {
               placeholder="댓글을 입력해주세요."
               required
             />
-            <button className="my-7 mt-2 w-full rounded-md border border-transparent bg-blue-400 py-3 px-4 text-sm font-medium  text-white shadow-sm hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
-              {commentLoading ? "댓글 등록중..." : "댓글 달기"}
+            <button
+              className={cls(
+                commentLoading ? "hover:cursor-wait" : "hover:cusor-pointer hover:bg-blue-500",
+                "my-7 mt-2 w-full rounded-md border border-transparent bg-blue-400 py-3 px-4 text-sm font-medium  text-white shadow-sm  focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+              )}
+            >
+              {commentLoading ? "잠시만 기다려주세요..." : "댓글 달기"}
             </button>
           </form>
         </div>
