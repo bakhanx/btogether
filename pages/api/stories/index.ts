@@ -50,11 +50,22 @@ async function handler(
       },
     });
 
-    await res.revalidate("/community");
+    let revalidated = false
+    try{
+      await res.revalidate("/community");
+      revalidated = true;  
+      res.json({ok:true, revalidate:true})
+    } catch(err){
+      console.error(err);
+      res.status(500)
+    }
+
+    
 
     res.json({
       ok: true,
       story,
+      
     });
   }
 }

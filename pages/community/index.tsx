@@ -1,13 +1,12 @@
-import { NextPage } from "next";
+import { GetStaticPaths, GetStaticProps, NextPage } from "next";
 import Link from "next/link";
 import { Story } from "@prisma/client";
 import client from "@libs/server/client";
 import Layout from "@components/layout";
-import useSWR, { useSWRConfig } from "swr";
-import { use, useEffect } from "react";
 import DateTime from "@components/datetime";
-import useMutation from "@libs/client/useMutation";
 import { useRouter } from "next/router";
+import { useEffect } from "react";
+import useMutation from "@libs/client/useMutation";
 
 interface StoryWithUserAndCount extends Story {
   _count: {
@@ -19,32 +18,26 @@ interface StoryWithUserAndCount extends Story {
     id: number;
   };
 }
-interface StoryResponse{
-  ok:boolean,
-  stories:Story[]
+interface StoryResponse {
+  ok: boolean;
+  stories: Story[];
 }
 
 const Community: NextPage<{ stories: StoryWithUserAndCount[] }> = ({
   stories,
 }) => {
+  const router = useRouter();
 
-  const router= useRouter();
-
-  const {data, isLoading,mutate} = useSWR<StoryResponse>(`/api/stories`);
   // useEffect(()=>{
   //   if(!isLoading){
   //     if(data?.stories[0].id !== stories[0].id){
   //       router.reload();
   //     }
   //   }
-    
+
   // },[router,data,stories,isLoading])
-  
-  useEffect(()=>{
-    console.log('mutate!');
-    mutate()
-  },[mutate])
-  
+
+
   return (
     <Layout
       hasTabBar
@@ -118,8 +111,7 @@ const Community: NextPage<{ stories: StoryWithUserAndCount[] }> = ({
 };
 
 
-
-export async function getStaticProps() {
+export const getStaticProps: GetStaticProps = async () => {
   const stories = await client?.story.findMany({
     include: {
       user: {
@@ -144,9 +136,7 @@ export async function getStaticProps() {
     props: {
       stories: JSON.parse(JSON.stringify(stories)),
     },
-  
-    
   };
-}
+};
 
 export default Community;
