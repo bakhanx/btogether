@@ -8,8 +8,8 @@ async function handler(
 ) {
   if (req.session) {
     req.session.destroy();
-    
   }
+  
   res.json({
     ok:true,
   })

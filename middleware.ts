@@ -20,8 +20,9 @@ export function middleware(req: NextRequest, ev: NextFetchEvent) {
   // 로그인 세션 체크
   if (!req.nextUrl.pathname.startsWith("/api")) {
     if (!req.cookies.get(COOKIE_SESSION_NAME) && !req.url.includes("/enter")) {
-      console.log("미들웨어 세션체크중");
-      return NextResponse.redirect(new URL("/enter", req.url));
+      
+      console.log("세션 없음");
+      return NextResponse.redirect(new URL("/enter", req.nextUrl));
     }
   }
 

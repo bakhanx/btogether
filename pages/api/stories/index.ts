@@ -23,9 +23,9 @@ async function handler(
           },
         },
       },
-      orderBy:{
-        updatedAt:"desc"
-      }
+      orderBy: {
+        updatedAt: "desc",
+      },
     });
     res.json({
       ok: true,
@@ -50,22 +50,11 @@ async function handler(
       },
     });
 
-    let revalidated = false
-    try{
-      await res.revalidate("/community");
-      revalidated = true;  
-      res.json({ok:true, revalidate:true})
-    } catch(err){
-      console.error(err);
-      res.status(500)
-    }
-
-    
+    await res.revalidate("/community");
 
     res.json({
       ok: true,
       story,
-      
     });
   }
 }

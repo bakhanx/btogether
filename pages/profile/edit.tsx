@@ -54,18 +54,14 @@ const EditProfile: NextPage = () => {
     setIsLoading(true);
     if (loading) return;
 
-    if (email === "") {
+
+    if (email === "" && phone === "") {
       return setError("formErrors", {
-        message: "이메일 주소를 입력하세요.",
+        message: "이메일이나 주소를 입력하세요.",
       });
-    } else if (phone === "") {
-      return setError("formErrors", {
-        message: "전화번호를 입력하세요.",
-      });
-    }
+    } 
 
     if (!isExistAvatar) avatar = null;
-
     // 기존상관없이 변경o
     if (avatar && avatar.length > 0) {
       const { uploadURL } = await (await fetch(`/api/files`)).json();
@@ -128,6 +124,7 @@ const EditProfile: NextPage = () => {
   useEffect(() => {
     setValue("name", profileData?.profile?.name || "");
     setValue("phone", profileData?.profile?.phone || "");
+    setValue("email", profileData?.profile?.email || "");
   }, [setValue, profileData]);
 
   useEffect(() => {
@@ -185,7 +182,7 @@ const EditProfile: NextPage = () => {
       <form onSubmit={handleSubmit(onValid)} className="space-y-4 py-10 px-4">
         <div className="flex items-center space-x-3">
           {isExistAvatar ? (
-            <div className="relative h-16 w-16">
+            <div className="relative h-16 w-16 ">
               <Image
                 src={
                   profileData?.profile?.avatar && !avatarPreview
@@ -196,7 +193,7 @@ const EditProfile: NextPage = () => {
                 fill
                 priority
                 sizes="1"
-                className="rounded-full"
+                className="rounded-full object-cover"
               />
             </div>
           ) : (
@@ -232,25 +229,24 @@ const EditProfile: NextPage = () => {
           required={true}
           onChange={onChange}
         />
-        {user?.email ? (
-          <Input
-            register={register("email", { required: false })}
-            label="이메일 주소"
-            name="email"
-            type="email"
-            required={false}
-            onChange={onChange}
-          />
-        ) : (
-          <Input
-            register={register("phone", { required: false })}
-            label="전화번호"
-            name="phone"
-            type="phone"
-            required={false}
-            onChange={onChange}
-          />
-        )}
+
+        <Input
+          register={register("email", { required: false })}
+          label="이메일 주소"
+          name="email"
+          type="email"
+          required={false}
+          onChange={onChange}
+        />
+        <Input
+          register={register("phone", { required: false })}
+          label="전화번호"
+          name="phone"
+          type="phone"
+          required={false}
+          onChange={onChange}
+        />
+
         <div className="my-2 font-bold text-red-500">
           <span>{errors?.formErrors?.message}</span>
         </div>

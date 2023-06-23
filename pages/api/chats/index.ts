@@ -17,14 +17,29 @@ async function handler(
         OR: [{ sellerId: user?.id }, { purchaserId: user?.id }],
       },
       include: {
-        purchaser: true,
-        seller: true,
-        messages:true,
-        product:{
-          select:{
-            image:true
-          }
-        }
+        purchaser: {
+          select: {
+            id: true,
+            name: true,
+            avatar: true,
+          },
+        },
+        seller: {
+          select: {
+            id: true,
+            name: true,
+            avatar: true,
+          },
+        },
+        messages: {
+          orderBy: { createdAt: "desc" },
+          take: 1,
+        },
+        product: {
+          select: {
+            image: true,
+          },
+        },
       },
     });
 
@@ -63,7 +78,7 @@ async function handler(
     if (alreadyExistsChats) {
       res.json({
         ok: false,
-        alreadyExistsChats
+        alreadyExistsChats,
       });
     } else {
       const chats = await client.chatRoom.create({

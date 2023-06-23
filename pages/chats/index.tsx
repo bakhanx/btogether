@@ -1,11 +1,12 @@
 import DateTime from "@components/datetime";
 import Layout from "@components/layout";
 import useUser from "@libs/client/useUser";
-import { ChatRoom, Message } from "@prisma/client";
-import { NextPage } from "next";
+import { ChatRoom } from "@prisma/client";
+import { GetServerSideProps, NextPage } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import useSWR from "swr";
+import useSWR, { SWRConfig } from "swr";
+import client from "@libs/server/client";
 
 // 상대 user 의 아바타, 아이디, 채팅내용.
 
@@ -34,22 +35,21 @@ interface ChatRoomsResponse {
 }
 
 const Chats: NextPage = () => {
-  const { data } = useSWR<ChatRoomsResponse>("/api/chats");
+  const { data, isLoading } = useSWR<ChatRoomsResponse>("/api/chats");
   const { user } = useUser();
-
   return (
     <Layout title="채팅" hasTabBar canGoBack seoTitle="채팅">
-      <div className="divide-y-2">
+      {!isLoading ? <div className="divide-y-2">
         {data?.chatRooms?.map((chatRoom) => (
           <Link
             href={`/chats/${chatRoom?.id}`}
             key={chatRoom?.id}
             className="block"
           >
-            <div className="flex cursor-pointer justify-between items-center">
+            <div className="flex cursor-pointer items-center justify-between">
               <div className="flex items-center space-x-3 px-4 py-3">
                 {/* 유저 아바타 */}
-                <div className="relative w-16 aspect-square">
+                <div className="relative aspect-square w-16 rounded-full shadow-md">
                   {user?.id === chatRoom.purchaserId ? (
                     chatRoom.seller.avatar ? (
                       <Image
@@ -61,7 +61,7 @@ const Chats: NextPage = () => {
                         className="rounded-full"
                       />
                     ) : (
-                      <div className="w-14 aspect-square rounded-full bg-slate-500" />
+                      <div className="aspect-square w-16 rounded-full bg-slate-500" />
                     )
                   ) : chatRoom.purchaser.avatar ? (
                     <Image
@@ -79,7 +79,6 @@ const Chats: NextPage = () => {
 
                 {/* 유저 아이디 + 시간 + 메시지 */}
                 <div className="space-y-2">
-
                   <div>
                     {/* 아이디 */}
                     <span className="font-bold text-gray-700">
@@ -89,7 +88,10 @@ const Chats: NextPage = () => {
                     </span>
                     {/* 시간 */}
                     <span className="self-start py-2 px-2 text-xs text-gray-400">
-                      <DateTime date={chatRoom?.messages.at(-1)?.createdAt} timeAgo />
+                      <DateTime
+                        date={chatRoom?.messages.at(-1)?.createdAt}
+                        timeAgo
+                      />
                     </span>
                   </div>
 
@@ -100,7 +102,7 @@ const Chats: NextPage = () => {
                 </div>
               </div>
 
-              <div className="relative w-20 aspect-square mr-2">
+              <div className="relative mr-2 aspect-square w-20 shadow-md">
                 {chatRoom?.product?.image ? (
                   <Image
                     src={`https://imagedelivery.net/214BxOnlVKSU2amZRZmdaQ/${chatRoom?.product?.image}/thumbnail`}
@@ -117,9 +119,68 @@ const Chats: NextPage = () => {
             </div>
           </Link>
         ))}
-      </div>
+      </div> : "Loading..."}
+      
     </Layout>
   );
 };
 
+const Page: NextPage<{ chatRooms: ChatRoomsResponse }> = ({ chatRooms }) => {
+  return (
+    <SWRConfig
+      value={{
+        fallback: {
+          "/api/chats": {
+            ok: true,
+            chatRooms,
+          },
+        },
+      }}
+    >
+      <Chats />
+    </SWRConfig>
+  );
+};
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const chatRooms = await client.chatRoom.findMany({
+    where: {
+      OR: [
+        { sellerId: context?.req?.session?.user?.id },
+        { purchaserId: context?.req?.session?.user?.id },
+      ],
+    },
+    include: {
+      purchaser: {
+        select: {
+          id: true,
+          name: true,
+          avatar: true,
+        },
+      },
+      seller: {
+        select: {
+          id: true,
+          name: true,
+          avatar: true,
+        },
+      },
+      messages: {
+        orderBy: { createdAt: "desc" },
+        take: 1,
+      },
+      product: {
+        select: {
+          image: true,
+        },
+      },
+    },
+  });
+
+  return {
+    props: {
+      chatRooms: JSON.parse(JSON.stringify(chatRooms)),
+    },
+  };
+};
 export default Chats;

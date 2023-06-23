@@ -10,6 +10,7 @@ import client from "@libs/server/client";
 import useSWR from "swr";
 import useMutation from "@libs/client/useMutation";
 import { useRouter } from "next/router";
+import { useEffect } from "react";
 
 const UserInfo = () => {
   const { user } = useUser();
@@ -18,19 +19,27 @@ const UserInfo = () => {
   const [logout, { data: logoutData, loading }] =
     useMutation("/api/users/logout");
 
+    // ============== 로그아웃 ==================
   const onLogout = (event: any) => {
     event.preventDefault();
     if (!loading) {
       logout({});
-      router.push("/enter");
     }
   };
 
+  useEffect(()=>{
+    if(logoutData?.ok){
+      router.reload();
+    }
+  },[router,logoutData])
+
+  // =============================================
+  
   return (
     <>
       <div className="px-4">
-        {/* 내 프로필 */}
 
+        {/* 내 프로필 */}
         <div className="mt-4 flex items-center space-x-3">
           <Link href="/profile/edit" className="hover:opacity-80">
             {!isLoading ? (
