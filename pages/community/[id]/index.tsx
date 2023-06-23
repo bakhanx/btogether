@@ -1,4 +1,4 @@
-import { GetStaticPaths, GetStaticProps, NextPage } from "next";
+import { GetServerSideProps, GetStaticPaths, GetStaticProps, NextPage } from "next";
 import Layout from "@components/layout";
 import TextArea from "@components/textarea";
 import useSWR, { useSWRConfig } from "swr";
@@ -14,6 +14,7 @@ import Image from "next/image";
 import useUser from "@libs/client/useUser";
 import DateTime from "@components/datetime";
 import Menu from "@components/menu";
+import CommentPage from "@components/comment";
 
 interface CommentsWithUser extends Comment {
   user: User;
@@ -319,6 +320,7 @@ const CommunityDetail: NextPage<{ story: StorySSGResponse }> = ({ story }) => {
           </div>
         </div>
 
+
         {/* 댓글 리스트 */}
         <div className="py-3">
           {storyData?.story?.comments.map((comment) => (
@@ -392,6 +394,8 @@ const CommunityDetail: NextPage<{ story: StorySSGResponse }> = ({ story }) => {
     </>
   );
 };
+
+
 
 export const getStaticPaths: GetStaticPaths = () => {
   return {
