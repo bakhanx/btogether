@@ -1,25 +1,18 @@
-import {
-  GetServerSideProps,
-  GetStaticPaths,
-  GetStaticProps,
-  NextPage,
-} from "next";
-import Layout from "@components/layout";
+import { GetServerSideProps, NextPage, NextPageContext } from "next";
 import TextArea from "@components/textarea";
-import useSWR, { SWRConfig, useSWRConfig } from "swr";
+import useSWR, { SWRConfig, unstable_serialize } from "swr";
 import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
 import { Comment, Story, User } from "@prisma/client";
 import Link from "next/link";
 import useMutation from "@libs/client/useMutation";
 import { cls } from "@libs/client/utils";
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import client from "@libs/server/client";
 import Image from "next/image";
 import useUser from "@libs/client/useUser";
 import DateTime from "@components/datetime";
 import Menu from "@components/menu";
-import CommentPage from "@components/comment";
 
 interface CommentsWithUser extends Comment {
   user: User;
@@ -38,8 +31,8 @@ interface StorySSGResponse extends Story {
   comments: CommentsWithUser[];
 }
 interface StoryResponse {
-  ok:boolean;
-  story : storyDetail;
+  ok: boolean;
+  story: storyDetail;
   isLike: boolean;
 }
 interface storyDetail extends Story {
@@ -49,10 +42,7 @@ interface storyDetail extends Story {
   };
   user: User;
   comments: CommentsWithUser[];
-
-  
 }
-
 interface CommentForm {
   comment: string;
 }
@@ -118,8 +108,6 @@ const CommunityDetail: NextPage = () => {
 
     comment(form);
   };
-
-
   const onInvalid = (form: CommentFormError) => {
     if (commentLoading) return;
     console.log(form);
@@ -231,6 +219,7 @@ const CommunityDetail: NextPage = () => {
           onModify={onModify}
         />
       </div>
+
       {storyData ? (
         <div className="pt-16">
           {/* 작성자 프로필 */}
@@ -397,18 +386,20 @@ const CommunityDetail: NextPage = () => {
           </div>
         </div>
       ) : (
-        ""
+        "Loading..."
       )}
     </>
   );
 };
 
 const Page: NextPage<{ story: StoryResponse }> = ({ story }) => {
+  const router = useRouter();
+  const apiKey = `/api/stories/${router.query.id}`;
   return (
     <SWRConfig
       value={{
         fallback: {
-          "/api/stories": {
+          [unstable_serialize(apiKey)]: {
             ok: true,
             story,
           },

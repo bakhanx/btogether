@@ -168,7 +168,8 @@ const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
             </svg>
           </button>
           <Image
-            className="object-contain"
+            className="object-scale-down"
+            quality={100}
             priority
             fill
             alt=""
@@ -216,6 +217,7 @@ const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
             <div className="relative aspect-square max-h-[512px] w-full">
               <Image
                 className="object-cover focus:cursor-pointer"
+                quality={90}
                 priority
                 fill
                 alt=""

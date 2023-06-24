@@ -32,6 +32,7 @@ export default function Item({
               <Image
                 className="rounded-md object-cover"
                 fill
+                quality={90}
                 sizes="1"
                 priority
                 alt={title}

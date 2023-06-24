@@ -107,6 +107,7 @@ export async function getServerSideProps() {
     orderBy:{
       updatedAt:"desc"
     },
+    take:8
   });
   return {
     props: {
