@@ -34,26 +34,40 @@ interface ChatRoomsResponse {
   chatRooms: ChatRoomWithUsers[];
 }
 
-const Chats: NextPage = () => {
-  const { data, isLoading } = useSWR<ChatRoomsResponse>("/api/chats");
+const ChatRoomsList = () => {
   const { user } = useUser();
+  const { data: chatsData, isLoading } =
+    useSWR<ChatRoomsResponse>("/api/chats");
   return (
-    <Layout title="채팅" hasTabBar canGoBack seoTitle="채팅">
-      {!isLoading ? <div className="divide-y-2">
-        {data?.chatRooms?.map((chatRoom) => (
-          <Link
-            href={`/chats/${chatRoom?.id}`}
-            key={chatRoom?.id}
-            className="block"
-          >
-            <div className="flex cursor-pointer items-center justify-between">
-              <div className="flex items-center space-x-3 px-4 py-3">
-                {/* 유저 아바타 */}
-                <div className="relative aspect-square w-16 rounded-full shadow-md">
-                  {user?.id === chatRoom.purchaserId ? (
-                    chatRoom.seller.avatar ? (
+    <>
+      {chatsData ? (
+        <div className="divide-y-2">
+          {chatsData?.chatRooms?.map((chatRoom) => (
+            <Link
+              href={`/chats/${chatRoom?.id}`}
+              key={chatRoom?.id}
+              className="block"
+            >
+              <div className="flex cursor-pointer items-center justify-between">
+                <div className="flex items-center space-x-3 px-4 py-3">
+                  {/* 유저 아바타 */}
+                  <div className="relative aspect-square w-16 rounded-full shadow-md">
+                    {user?.id === chatRoom.purchaserId ? (
+                      chatRoom.seller.avatar ? (
+                        <Image
+                          src={`https://imagedelivery.net/214BxOnlVKSU2amZRZmdaQ/${chatRoom.seller.avatar}/avatar`}
+                          alt=""
+                          fill
+                          priority
+                          sizes="1"
+                          className="rounded-full"
+                        />
+                      ) : (
+                        <div className="aspect-square w-16 rounded-full bg-slate-500" />
+                      )
+                    ) : chatRoom.purchaser.avatar ? (
                       <Image
-                        src={`https://imagedelivery.net/214BxOnlVKSU2amZRZmdaQ/${chatRoom.seller.avatar}/avatar`}
+                        src={`https://imagedelivery.net/214BxOnlVKSU2amZRZmdaQ/${chatRoom.purchaser.avatar}/avatar`}
                         alt=""
                         fill
                         priority
@@ -61,66 +75,64 @@ const Chats: NextPage = () => {
                         className="rounded-full"
                       />
                     ) : (
-                      <div className="aspect-square w-16 rounded-full bg-slate-500" />
-                    )
-                  ) : chatRoom.purchaser.avatar ? (
+                      <div className="h-10 w-10 rounded-full bg-slate-500" />
+                    )}
+                  </div>
+
+                  {/* 유저 아이디 + 시간 + 메시지 */}
+                  <div className="space-y-2">
+                    <div>
+                      {/* 아이디 */}
+                      <span className="font-bold text-gray-700">
+                        {chatRoom?.seller.id === user?.id
+                          ? chatRoom?.purchaser.name
+                          : chatRoom?.seller.name}
+                      </span>
+                      {/* 시간 */}
+                      <span className="self-start py-2 px-2 text-xs text-gray-400">
+                        <DateTime
+                          date={chatRoom?.messages.at(-1)?.createdAt}
+                          timeAgo
+                        />
+                      </span>
+                    </div>
+
+                    {/* 메시지 */}
+                    <p className="text-sm text-gray-500">
+                      {chatRoom?.messages.at(-1)?.message}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="relative mr-2 aspect-square w-20 shadow-md">
+                  {chatRoom?.product?.image ? (
                     <Image
-                      src={`https://imagedelivery.net/214BxOnlVKSU2amZRZmdaQ/${chatRoom.purchaser.avatar}/avatar`}
+                      src={`https://imagedelivery.net/214BxOnlVKSU2amZRZmdaQ/${chatRoom?.product?.image}/thumbnail`}
                       alt=""
                       fill
                       priority
                       sizes="1"
-                      className="rounded-full"
+                      className="rounded-md"
                     />
                   ) : (
-                    <div className="h-10 w-10 rounded-full bg-slate-500" />
+                    ""
                   )}
                 </div>
-
-                {/* 유저 아이디 + 시간 + 메시지 */}
-                <div className="space-y-2">
-                  <div>
-                    {/* 아이디 */}
-                    <span className="font-bold text-gray-700">
-                      {chatRoom?.seller.id === user?.id
-                        ? chatRoom?.purchaser.name
-                        : chatRoom?.seller.name}
-                    </span>
-                    {/* 시간 */}
-                    <span className="self-start py-2 px-2 text-xs text-gray-400">
-                      <DateTime
-                        date={chatRoom?.messages.at(-1)?.createdAt}
-                        timeAgo
-                      />
-                    </span>
-                  </div>
-
-                  {/* 메시지 */}
-                  <p className="text-sm text-gray-500">
-                    {chatRoom?.messages.at(-1)?.message}
-                  </p>
-                </div>
               </div>
+            </Link>
+          ))}
+        </div>
+      ) : (
+        "Loading..."
+      )}
+    </>
+  );
+};
 
-              <div className="relative mr-2 aspect-square w-20 shadow-md">
-                {chatRoom?.product?.image ? (
-                  <Image
-                    src={`https://imagedelivery.net/214BxOnlVKSU2amZRZmdaQ/${chatRoom?.product?.image}/thumbnail`}
-                    alt=""
-                    fill
-                    priority
-                    sizes="1"
-                    className="rounded-md"
-                  />
-                ) : (
-                  ""
-                )}
-              </div>
-            </div>
-          </Link>
-        ))}
-      </div> : "Loading..."}
-      
+const Chats: NextPage = () => {
+  return (
+    <Layout title="채팅" hasTabBar canGoBack seoTitle="채팅">
+      <ChatRoomsList />
     </Layout>
   );
 };
@@ -183,4 +195,5 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     },
   };
 };
-export default Chats;
+
+export default Page;

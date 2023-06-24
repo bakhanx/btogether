@@ -26,6 +26,7 @@ async function handler(
       orderBy: {
         updatedAt: "desc",
       },
+      take:8
     });
     res.json({
       ok: true,

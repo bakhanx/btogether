@@ -58,9 +58,6 @@ async function handler(
     });
   }
 
-  res.revalidate(`/community`)
-  res.revalidate(`/community/${id}`)
-
   res.json({
     ok: true,
   });

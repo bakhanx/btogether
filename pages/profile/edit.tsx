@@ -54,12 +54,11 @@ const EditProfile: NextPage = () => {
     setIsLoading(true);
     if (loading) return;
 
-
     if (email === "" && phone === "") {
       return setError("formErrors", {
         message: "이메일이나 주소를 입력하세요.",
       });
-    } 
+    }
 
     if (!isExistAvatar) avatar = null;
     // 기존상관없이 변경o
@@ -179,79 +178,83 @@ const EditProfile: NextPage = () => {
 
   return (
     <Layout hasTabBar canGoBack title="프로필 편집" seoTitle="내 프로필 편집">
-      <form onSubmit={handleSubmit(onValid)} className="space-y-4 py-10 px-4">
-        <div className="flex items-center space-x-3">
-          {isExistAvatar ? (
-            <div className="relative h-16 w-16 ">
-              <Image
-                src={
-                  profileData?.profile?.avatar && !avatarPreview
-                    ? `https://imagedelivery.net/214BxOnlVKSU2amZRZmdaQ/${profileData?.profile?.avatar}/avatar`
-                    : (avatarPreview as string)
-                }
-                alt=""
-                fill
-                priority
-                sizes="1"
-                className="rounded-full object-cover"
+      {profileData ? (
+        <form onSubmit={handleSubmit(onValid)} className="space-y-4 py-10 px-4">
+          <div className="flex items-center space-x-3">
+            {isExistAvatar ? (
+              <div className="relative h-16 w-16 ">
+                <Image
+                  src={
+                    profileData?.profile?.avatar && !avatarPreview
+                      ? `https://imagedelivery.net/214BxOnlVKSU2amZRZmdaQ/${profileData?.profile?.avatar}/avatar`
+                      : (avatarPreview as string)
+                  }
+                  alt=""
+                  fill
+                  priority
+                  sizes="1"
+                  className="rounded-full object-cover"
+                />
+              </div>
+            ) : (
+              <div className="h-16 w-16 rounded-full bg-slate-500" />
+            )}
+
+            {/* 이미지 변경 */}
+            <label
+              htmlFor="picture"
+              className="cursor-pointer rounded-md border border-gray-300 py-2 px-3 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+            >
+              변경하기
+              <input
+                {...register("avatar")}
+                id="picture"
+                type="file"
+                className="hidden"
+                accept="image/*"
               />
-            </div>
-          ) : (
-            <div className="h-16 w-16 rounded-full bg-slate-500" />
-          )}
+            </label>
 
-          {/* 이미지 변경 */}
-          <label
-            htmlFor="picture"
-            className="cursor-pointer rounded-md border border-gray-300 py-2 px-3 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-          >
-            변경하기
-            <input
-              {...register("avatar")}
-              id="picture"
-              type="file"
-              className="hidden"
-              accept="image/*"
-            />
-          </label>
+            {/* 이미지 삭제 */}
+            <label className="cursor-pointer rounded-md border border-gray-300 py-2 px-3 text-sm font-medium text-red-500 shadow-sm hover:bg-gray-50 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+              <button onClick={resetAvatar}>삭제</button>
+            </label>
+          </div>
+          <Input
+            register={register("name", { required: true })}
+            label="닉네임"
+            value={profileData?.profile?.name}
+            name="name"
+            type="text"
+            required={true}
+            onChange={onChange}
+          />
 
-          {/* 이미지 삭제 */}
-          <label className="cursor-pointer rounded-md border border-gray-300 py-2 px-3 text-sm font-medium text-red-500 shadow-sm hover:bg-gray-50 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
-            <button onClick={resetAvatar}>삭제</button>
-          </label>
-        </div>
-        <Input
-          register={register("name", { required: true })}
-          label="닉네임"
-          value={profileData?.profile?.name}
-          name="name"
-          type="text"
-          required={true}
-          onChange={onChange}
-        />
+          <Input
+            register={register("email", { required: false })}
+            label="이메일 주소"
+            name="email"
+            type="email"
+            required={false}
+            onChange={onChange}
+          />
+          <Input
+            register={register("phone", { required: false })}
+            label="전화번호"
+            name="phone"
+            type="phone"
+            required={false}
+            onChange={onChange}
+          />
 
-        <Input
-          register={register("email", { required: false })}
-          label="이메일 주소"
-          name="email"
-          type="email"
-          required={false}
-          onChange={onChange}
-        />
-        <Input
-          register={register("phone", { required: false })}
-          label="전화번호"
-          name="phone"
-          type="phone"
-          required={false}
-          onChange={onChange}
-        />
-
-        <div className="my-2 font-bold text-red-500">
-          <span>{errors?.formErrors?.message}</span>
-        </div>
-        <Button text={isLoading ? "수정중..." : "프로필 수정"} />
-      </form>
+          <div className="my-2 font-bold text-red-500">
+            <span>{errors?.formErrors?.message}</span>
+          </div>
+          <Button text={isLoading ? "수정중..." : "프로필 수정"} />
+        </form>
+      ) : (
+        "Loading..."
+      )}
     </Layout>
   );
 };

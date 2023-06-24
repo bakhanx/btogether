@@ -46,9 +46,6 @@ async function handler(
       },
     });
 
-    await res.revalidate(`/community/${Number(id)}`);
-    await res.revalidate(`/community`);
-
     res.json({
       ok: true,
       createComment,

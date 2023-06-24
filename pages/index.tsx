@@ -19,7 +19,7 @@ interface ProductsResponse {
   products: ProductWithCount[];
 }
 
-const ProductList = () => {
+const ProductsList = () => {
   const { data: productsData, isLoading } =
     useSWR<ProductsResponse>(`/api/products`);
   return (
@@ -55,7 +55,7 @@ const Home: NextPage = () => {
       seoTitle="이웃과 함께하는"
       writeBtnPath="product"
     >
-      <ProductList />
+      <ProductsList />
     </Layout>
   );
 };

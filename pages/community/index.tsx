@@ -29,18 +29,11 @@ interface StoryResponse {
   stories: StoryWithUserAndCount[];
 }
 
-const Community: NextPage = () => {
+const StoriesList = () => {
   const { data: storyData, isLoading } = useSWR<StoryResponse>(`/api/stories`);
-
   return (
-    <Layout
-      hasTabBar
-      canGoBack
-      title="이웃 스토리"
-      seoTitle="이웃 소식"
-      writeBtnPath="story"
-    >
-      {!isLoading ? (
+    <>
+      {storyData ? (
         <div className="divide space-y-2 divide-y-4 divide-blue-100">
           {storyData?.stories?.map((story) => (
             <div key={story.id}>
@@ -75,7 +68,7 @@ const Community: NextPage = () => {
                         />
                       </svg>
 
-                      <span>좋아요 {story?._count?.likes}</span>
+                      <span>좋아요 {story?._count?.likes || 0}</span>
                     </span>
 
                     <span className="flex items-center space-x-2 text-sm">
@@ -93,7 +86,7 @@ const Community: NextPage = () => {
                           d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
                         ></path>
                       </svg>
-                      <span>댓글 {story?._count?.comments}</span>
+                      <span>댓글 {story?._count?.comments || 0}</span>
                     </span>
                   </div>
                 </div>
@@ -102,8 +95,22 @@ const Community: NextPage = () => {
           ))}
         </div>
       ) : (
-        ""
+        "Loading..."
       )}
+    </>
+  );
+};
+
+const Community: NextPage = () => {
+  return (
+    <Layout
+      hasTabBar
+      canGoBack
+      title="이웃 스토리"
+      seoTitle="이웃 소식"
+      writeBtnPath="story"
+    >
+      <StoriesList />
     </Layout>
   );
 };
@@ -127,23 +134,11 @@ const Page: NextPage<{ stories: StoryResponse }> = ({ stories }) => {
 
 export const getServerSideProps: GetServerSideProps = async () => {
   const stories = await client.story.findMany({
-    include: {
-      _count: {
-        select: {
-          likes: true,
-          comments: true,
-        },
-      },
-      user: {
-        select: {
-          id: true,
-          name: true,
-        },
-      },
-    },
+    
     orderBy: {
       updatedAt: "desc",
     },
+    take:8
   });
   return {
     props: {
