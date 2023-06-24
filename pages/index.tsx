@@ -19,19 +19,13 @@ interface ProductsResponse {
   products: ProductWithCount[];
 }
 
-const Home: NextPage = () => {
+const ProductList = () => {
   const { data: productsData, isLoading } =
     useSWR<ProductsResponse>(`/api/products`);
-
   return (
-    <Layout
-      hasTabBar
-      mainTitle
-      seoTitle="이웃과 함께하는"
-      writeBtnPath="product"
-    >
+    <>
       {/* 작성된 게시글 리스트 */}
-      {!isLoading ? (
+      {productsData ? (
         <div className="flex flex-col space-y-1 divide-y py-1">
           {productsData?.products.map((product) => (
             <Item
@@ -47,8 +41,21 @@ const Home: NextPage = () => {
           ))}
         </div>
       ) : (
-        ""
+        "Not found 404"
       )}
+    </>
+  );
+};
+
+const Home: NextPage = () => {
+  return (
+    <Layout
+      hasTabBar
+      mainTitle
+      seoTitle="이웃과 함께하는"
+      writeBtnPath="product"
+    >
+      <ProductList />
     </Layout>
   );
 };
@@ -96,7 +103,11 @@ const Page: NextPage<{ products: ProductWithCount[] }> = ({ products }) => {
 };
 
 export async function getServerSideProps() {
-  const products = await client?.product.findMany({});
+  const products = await client?.product.findMany({
+    orderBy:{
+      updatedAt:"desc"
+    },
+  });
   return {
     props: {
       products: JSON.parse(JSON.stringify(products)),
