@@ -11,16 +11,15 @@ async function handler(
     const products = await client.product.findMany({
       include: {
         _count: {
-         select:{
-          records:true
-         }
+          select: {
+            records: true,
+          },
         },
       },
-      orderBy:{
-        updatedAt:"desc"
+      take: 8,
+      orderBy: {
+        updatedAt: "desc",
       },
-      take:8,
-  
     });
     res.json({
       ok: true,
@@ -34,29 +33,29 @@ async function handler(
     } = req;
 
     // modify
-    if(productId){
+    if (productId) {
       const updateProduct = await client.product.update({
-        where:{
-          id:productId,
+        where: {
+          id: productId,
         },
-        data:{
+        data: {
           name,
-          price: +(price.replaceAll(",","")),
+          price: +price.replaceAll(",", ""),
           description,
           image: photoId ? photoId : "",
-          
+
           seller: {
             connect: {
               id: user?.id,
             },
           },
-        }
-      })
+        },
+      });
 
       res.json({
-        ok:true,
+        ok: true,
         updateProduct,
-      })
+      });
     }
 
     // create
@@ -64,10 +63,10 @@ async function handler(
       const product = await client.product.create({
         data: {
           name,
-          price: +(price.replaceAll(",","")),
+          price: +price.replaceAll(",", ""),
           description,
           image: photoId ? photoId : "",
-          
+
           seller: {
             connect: {
               id: user?.id,

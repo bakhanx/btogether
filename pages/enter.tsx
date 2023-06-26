@@ -70,7 +70,9 @@ const Enter: NextPage = () => {
     console.log(tokenData);
     console.log();
     if (tokenData?.ok) {
+      
       router.push("/");
+
     }
   }, [router, tokenData]);
 

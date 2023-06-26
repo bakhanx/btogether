@@ -104,10 +104,10 @@ const Page: NextPage<{ products: ProductWithCount[] }> = ({ products }) => {
 
 export async function getServerSideProps() {
   const products = await client?.product.findMany({
-    orderBy:{
-      updatedAt:"desc"
+    take: 8,
+    orderBy: {
+      updatedAt: "desc",
     },
-    take:8
   });
   return {
     props: {

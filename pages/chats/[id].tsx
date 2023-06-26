@@ -28,7 +28,7 @@ const ChatDetail = () => {
     }
   );
 
-  const { data: userData} = useSWR<UserResponse>(`api/users/me`);
+  const { data: userData} = useSWR<UserResponse>(`/api/users/me`);
 
   const scrollRef = useRef<HTMLDivElement | null>(null);
   const [sendMutation, { loading, data }] = useMutation(
