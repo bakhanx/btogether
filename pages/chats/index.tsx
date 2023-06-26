@@ -140,79 +140,79 @@ const Chats: NextPage = () => {
   );
 };
 
-// const Page: NextPage<{ chatRooms: ChatRoomsResponse, profile:User }> = ({ chatRooms, profile }) => {
-//   return (
-//     <SWRConfig
-//       value={{
-//         fallback: {
-//           "/api/chats": {
-//             ok: true,
-//             chatRooms,
-//           },
-//           "/api/users/me":{
-//             ok:true,
-//             profile,
-//           }
-//         },
-//       }}
-//     >
-//       <Chats />
-//     </SWRConfig>
-//   );
-// };
+const Page: NextPage<{ chatRooms: ChatRoomsResponse, profile:User }> = ({ chatRooms, profile }) => {
+  return (
+    <SWRConfig
+      value={{
+        fallback: {
+          "/api/chats": {
+            ok: true,
+            chatRooms,
+          },
+          "/api/users/me":{
+            ok:true,
+            profile,
+          }
+        },
+      }}
+    >
+      <Chats />
+    </SWRConfig>
+  );
+};
 
-// export const getServerSideProps = withSsrSession(
-//   async ({ req }: NextPageContext) => {
-//     const chatRooms = await client.chatRoom.findMany({
-//       where: {
-//         OR: [
-//           { sellerId: req?.session?.user?.id },
-//           { purchaserId: req?.session?.user?.id },
-//         ],
-//       },
-//       include: {
-//         purchaser: {
-//           select: {
-//             id: true,
-//             name: true,
-//             avatar: true,
-//           },
-//         },
-//         seller: {
-//           select: {
-//             id: true,
-//             name: true,
-//             avatar: true,
-//           },
-//         },
-//         messages: {
-//           orderBy: { createdAt: "desc" },
-//           take: 1,
-//         },
-//         product: {
-//           select: {
-//             image: true,
-//           },
-//         },
-//       },
-//     });
+export const getServerSideProps = withSsrSession(
+  async ({ req }: NextPageContext) => {
+    const chatRooms = await client.chatRoom.findMany({
+      where: {
+        OR: [
+          { sellerId: req?.session?.user?.id },
+          { purchaserId: req?.session?.user?.id },
+        ],
+      },
+      include: {
+        purchaser: {
+          select: {
+            id: true,
+            name: true,
+            avatar: true,
+          },
+        },
+        seller: {
+          select: {
+            id: true,
+            name: true,
+            avatar: true,
+          },
+        },
+        messages: {
+          orderBy: { createdAt: "desc" },
+          take: 1,
+        },
+        product: {
+          select: {
+            image: true,
+          },
+        },
+      },
+    });
 
-//     const profile = await client.user.findUnique({
-//       where:{
-//         id:Number(req?.session?.user?.id)
-//       },
-//       select:{
-//         id:true
-//       }
-//     })
+    const profile = await client.user.findUnique({
+      where:{
+        id:Number(req?.session?.user?.id)
+      },
+      select:{
+        id:true
+      }
+    })
 
-//     return {
-//       props: {
-//         chatRooms: JSON.parse(JSON.stringify(chatRooms)),
-//         profile : JSON.parse(JSON.stringify(profile))
-//       },
-//     };
-//   }
-// );
+    return {
+      props: {
+        chatRooms: JSON.parse(JSON.stringify(chatRooms)),
+        profile : JSON.parse(JSON.stringify(profile))
+      },
+    };
+  }
+);
 
-export default Chats;
+export default Page;
