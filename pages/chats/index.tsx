@@ -125,184 +125,94 @@ const ChatRoomsList = () => {
           ))}
         </div>
       ) : (
-        "Loading..."
+        <div className="text-center">Loading...</div>
       )}
     </>
   );
 };
 
 const Chats: NextPage = () => {
-  const {data:userData} = useSWR<UserResponse>(`/api/users/me`);
-  const { data: chatsData, isLoading } =
-    useSWR<ChatRoomsResponse>("/api/chats");
-
   return (
     <Layout title="채팅" hasTabBar canGoBack seoTitle="채팅">
       {/* <ChatRoomsList /> */}
-      <>
-      {chatsData ? (
-        <div className="divide-y-2">
-          {chatsData?.chatRooms?.map((chatRoom) => (
-            <Link
-              href={`/chats/${chatRoom?.id}`}
-              key={chatRoom?.id}
-              className="block"
-            >
-              <div className="flex cursor-pointer items-center justify-between">
-                <div className="flex items-center space-x-3 px-4 py-3">
-                  {/* 유저 아바타 */}
-                  <div className="relative aspect-square w-16 rounded-full shadow-md">
-                    {userData?.profile?.id === chatRoom.purchaserId ? (
-                      chatRoom.seller.avatar ? (
-                        <Image
-                          src={`https://imagedelivery.net/214BxOnlVKSU2amZRZmdaQ/${chatRoom.seller.avatar}/avatar`}
-                          alt=""
-                          fill
-                          priority
-                          sizes="1"
-                          className="rounded-full"
-                        />
-                      ) : (
-                        <div className="aspect-square w-16 rounded-full bg-slate-500" />
-                      )
-                    ) : chatRoom.purchaser.avatar ? (
-                      <Image
-                        src={`https://imagedelivery.net/214BxOnlVKSU2amZRZmdaQ/${chatRoom.purchaser.avatar}/avatar`}
-                        alt=""
-                        fill
-                        priority
-                        sizes="1"
-                        className="rounded-full"
-                      />
-                    ) : (
-                      <div className="h-16 w-16 rounded-full bg-slate-500" />
-                    )}
-                  </div>
-
-                  {/* 유저 아이디 + 시간 + 메시지 */}
-                  <div className="space-y-2">
-                    <div>
-                      {/* 아이디 */}
-                      <span className="font-bold text-gray-700">
-                        {chatRoom?.seller.id === userData?.profile?.id
-                          ? chatRoom?.purchaser.name
-                          : chatRoom?.seller.name}
-                      </span>
-                      {/* 시간 */}
-                      <span className="self-start py-2 px-2 text-xs text-gray-400">
-                        <DateTime
-                          date={chatRoom?.messages.at(-1)?.createdAt}
-                          timeAgo
-                        />
-                      </span>
-                    </div>
-
-                    {/* 메시지 */}
-                    <p className="text-sm text-gray-500">
-                      {chatRoom?.messages.at(-1)?.message}
-                    </p>
-                  </div>
-                </div>
-
-                <div className="relative mr-2 aspect-square w-20 shadow-md">
-                  {chatRoom?.product?.image ? (
-                    <Image
-                      src={`https://imagedelivery.net/214BxOnlVKSU2amZRZmdaQ/${chatRoom?.product?.image}/thumbnail`}
-                      alt=""
-                      fill
-                      priority
-                      sizes="1"
-                      className="rounded-md"
-                    />
-                  ) : (
-                    ""
-                  )}
-                </div>
-              </div>
-            </Link>
-          ))}
-        </div>
-      ) : (
-        "Loading..."
-      )}
-    </>
+     <ChatRoomsList/>
     </Layout>
   );
 };
 
-const Page: NextPage<{ chatRooms: ChatRoomsResponse, profile:User }> = ({ chatRooms, profile }) => {
-  return (
-    <SWRConfig
-      value={{
-        fallback: {
-          "/api/chats": {
-            ok: true,
-            chatRooms,
-          },
-          "/api/users/me":{
-            ok:true,
-            profile,
-          }
-        },
-      }}
-    >
-      <Chats />
-    </SWRConfig>
-  );
-};
+// const Page: NextPage<{ chatRooms: ChatRoomsResponse, profile:User }> = ({ chatRooms, profile }) => {
+//   return (
+//     <SWRConfig
+//       value={{
+//         fallback: {
+//           "/api/chats": {
+//             ok: true,
+//             chatRooms,
+//           },
+//           "/api/users/me":{
+//             ok:true,
+//             profile,
+//           }
+//         },
+//       }}
+//     >
+//       <Chats />
+//     </SWRConfig>
+//   );
+// };
 
-export const getServerSideProps = withSsrSession(
-  async ({ req }: NextPageContext) => {
-    const chatRooms = await client.chatRoom.findMany({
-      where: {
-        OR: [
-          { sellerId: req?.session?.user?.id },
-          { purchaserId: req?.session?.user?.id },
-        ],
-      },
-      include: {
-        purchaser: {
-          select: {
-            id: true,
-            name: true,
-            avatar: true,
-          },
-        },
-        seller: {
-          select: {
-            id: true,
-            name: true,
-            avatar: true,
-          },
-        },
-        messages: {
-          orderBy: { createdAt: "desc" },
-          take: 1,
-        },
-        product: {
-          select: {
-            image: true,
-          },
-        },
-      },
-    });
+// export const getServerSideProps = withSsrSession(
+//   async ({ req }: NextPageContext) => {
+//     const chatRooms = await client.chatRoom.findMany({
+//       where: {
+//         OR: [
+//           { sellerId: req?.session?.user?.id },
+//           { purchaserId: req?.session?.user?.id },
+//         ],
+//       },
+//       include: {
+//         purchaser: {
+//           select: {
+//             id: true,
+//             name: true,
+//             avatar: true,
+//           },
+//         },
+//         seller: {
+//           select: {
+//             id: true,
+//             name: true,
+//             avatar: true,
+//           },
+//         },
+//         messages: {
+//           orderBy: { createdAt: "desc" },
+//           take: 1,
+//         },
+//         product: {
+//           select: {
+//             image: true,
+//           },
+//         },
+//       },
+//     });
 
-    const profile = await client.user.findUnique({
-      where:{
-        id:Number(req?.session?.user?.id)
-      },
-      select:{
-        id:true
-      }
-    })
+//     const profile = await client.user.findUnique({
+//       where:{
+//         id:Number(req?.session?.user?.id)
+//       },
+//       select:{
+//         id:true
+//       }
+//     })
 
-    return {
-      props: {
-        chatRooms: JSON.parse(JSON.stringify(chatRooms)),
-        profile : JSON.parse(JSON.stringify(profile))
-      },
-    };
-  }
-);
+//     return {
+//       props: {
+//         chatRooms: JSON.parse(JSON.stringify(chatRooms)),
+//         profile : JSON.parse(JSON.stringify(profile))
+//       },
+//     };
+//   }
+// );
 
-export default Page;
+export default Chats;

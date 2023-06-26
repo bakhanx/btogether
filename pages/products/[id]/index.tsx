@@ -107,7 +107,7 @@ const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
   }, [setIsWriter, productData, user]);
 
   const onBack = () => {
-    router.push("/");
+    router.back();
   };
 
   const onDelete = (event: React.MouseEvent<HTMLButtonElement>) => {

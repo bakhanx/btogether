@@ -38,7 +38,6 @@ const Write: NextPage = () => {
 
   useEffect(() => {
     if (data && data.ok) {
-      router.prefetch(`/community`)
       router.push(`/community/${data.story.id}`);
     }
   }, [router, data]);

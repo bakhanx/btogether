@@ -148,7 +148,7 @@ const CommunityDetail: NextPage = () => {
   }, [setIsWriter, storyData, user]);
 
   const onBack = () => {
-    router.push("/community");
+    router.back();
   };
 
   const onDelete = (event: React.MouseEvent<HTMLButtonElement>) => {

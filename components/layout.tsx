@@ -26,7 +26,6 @@ export default function Layout({
 }: LayoutProps) {
   const router = useRouter();
 
-  const canPostPath = ["/", "/community"];
   const onBack = () => {
     router.back();
   };

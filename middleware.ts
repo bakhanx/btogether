@@ -29,7 +29,7 @@ export function middleware(req: NextRequest, ev: NextFetchEvent) {
   // 디바이스체크
   const viewport = ua.device.type === "mobile" ? "mobile" : "desktop";
   // 채팅
-  if (req.nextUrl.pathname.startsWith("/chats")) {
-    console.log("chat middleware");
-  }
+  // if (req.nextUrl.pathname.startsWith("/chats")) {
+  //   console.log("chat middleware");
+  // }
 }
