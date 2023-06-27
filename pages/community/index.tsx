@@ -10,9 +10,10 @@ import client from "@libs/server/client";
 import Layout from "@components/layout";
 import DateTime from "@components/datetime";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
+import { Suspense, useEffect } from "react";
 import useMutation from "@libs/client/useMutation";
 import useSWR, { SWRConfig } from "swr";
+import Loading from "@components/loading";
 
 interface StoryWithUserAndCount extends Story {
   _count: {
@@ -110,21 +111,18 @@ const Community: NextPage = () => {
       seoTitle="이웃 소식"
       writeBtnPath="story"
     >
+      <Suspense fallback={<Loading />}>
       <StoriesList />
+      </Suspense>
     </Layout>
   );
 };
 
-const Page: NextPage<{ stories: StoryResponse }> = ({ stories }) => {
+const Page: NextPage = () => {
   return (
     <SWRConfig
       value={{
-        fallback: {
-          "/api/stories": {
-            ok: true,
-            stories,
-          },
-        },
+        suspense: true,
       }}
     >
       <Community />
@@ -132,20 +130,20 @@ const Page: NextPage<{ stories: StoryResponse }> = ({ stories }) => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async () => {
-  const stories = await client.story.findMany({
-    
-    orderBy: {
-      updatedAt: "desc",
-    },
-    take:8
-  });
-  return {
-    props: {
-      stories: JSON.parse(JSON.stringify(stories)),
-    },
-  };
-};
+// export const getServerSideProps: GetServerSideProps = async () => {
+//   const stories = await client.story.findMany({
+
+//     orderBy: {
+//       updatedAt: "desc",
+//     },
+//     take:8
+//   });
+//   return {
+//     props: {
+//       stories: JSON.parse(JSON.stringify(stories)),
+//     },
+//   };
+// };
 
 // export const getStaticProps: GetStaticProps = async () => {
 //   const stories = await client?.story.findMany({
