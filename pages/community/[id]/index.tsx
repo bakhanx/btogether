@@ -7,7 +7,7 @@ import { Comment, Story, User } from "@prisma/client";
 import Link from "next/link";
 import useMutation from "@libs/client/useMutation";
 import { cls } from "@libs/client/utils";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import client from "@libs/server/client";
 import Image from "next/image";
 import useUser from "@libs/client/useUser";
@@ -313,77 +313,79 @@ const CommunityDetail: NextPage = () => {
             </div>
           </div>
 
-          {/* 댓글 리스트 */}
-          <div className="py-3">
-            {storyData?.story.comments.map((comment) => (
-              <div
-                key={comment?.id}
-                className="my-3 flex space-x-3 bg-gray-50 py-3 px-3"
-              >
-                {comment?.user?.avatar ? (
-                  <div className="relative h-14 w-14">
-                    <Image
-                      src={`https://imagedelivery.net/214BxOnlVKSU2amZRZmdaQ/${comment?.user?.avatar}/avatar`}
-                      alt=""
-                      fill
-                      priority
-                      sizes="1"
-                      className="rounded-full"
-                    />
-                  </div>
-                ) : (
-                  <div className="h-14 w-14 rounded-full  bg-slate-500" />
-                )}
-                <div className="flex space-x-5">
-                  <div>
-                    <span className="block text-sm font-medium text-gray-700">
-                      {comment?.user?.name}
-                    </span>
-                    <span className="block text-xs text-gray-500 ">
-                      <DateTime date={comment?.updatedAt} />
-                    </span>
-                    <p className="mt-2 text-gray-700">{comment?.comment}</p>
-                  </div>
-                  {comment.user.id === user?.id ? (
-                    <button
-                      onClick={(e) => {
-                        onDeleteComment(comment.id, e);
-                      }}
-                      className="self-start text-xs"
-                    >
-                      ❌
-                    </button>
+          <Suspense fallback="Loading...">
+            {/* 댓글 리스트 */}
+            <div className="py-3">
+              {storyData?.story.comments.map((comment) => (
+                <div
+                  key={comment?.id}
+                  className="my-3 flex space-x-3 bg-gray-50 py-3 px-3"
+                >
+                  {comment?.user?.avatar ? (
+                    <div className="relative h-14 w-14">
+                      <Image
+                        src={`https://imagedelivery.net/214BxOnlVKSU2amZRZmdaQ/${comment?.user?.avatar}/avatar`}
+                        alt=""
+                        fill
+                        priority
+                        sizes="1"
+                        className="rounded-full"
+                      />
+                    </div>
                   ) : (
-                    ""
+                    <div className="h-14 w-14 rounded-full  bg-slate-500" />
                   )}
+                  <div className="flex space-x-5">
+                    <div>
+                      <span className="block text-sm font-medium text-gray-700">
+                        {comment?.user?.name}
+                      </span>
+                      <span className="block text-xs text-gray-500 ">
+                        <DateTime date={comment?.updatedAt} />
+                      </span>
+                      <p className="mt-2 text-gray-700">{comment?.comment}</p>
+                    </div>
+                    {comment.user.id === user?.id ? (
+                      <button
+                        onClick={(e) => {
+                          onDeleteComment(comment.id, e);
+                        }}
+                        className="self-start text-xs"
+                      >
+                        ❌
+                      </button>
+                    ) : (
+                      ""
+                    )}
+                  </div>
                 </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
 
-          {/* 댓글 입력칸 */}
-          <div className="px-4">
-            <form onSubmit={handleSubmit(onValid, onInvalid)}>
-              <TextArea
-                register={register("comment", {
-                  required: true,
-                })}
-                name="comment"
-                placeholder="댓글을 입력해주세요."
-                required
-              />
-              <button
-                className={cls(
-                  commentLoading
-                    ? "hover:cursor-wait"
-                    : "hover:cusor-pointer hover:bg-blue-500",
-                  "my-7 mt-2 w-full rounded-md border border-transparent bg-blue-400 py-3 px-4 text-sm font-medium  text-white shadow-sm  focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-                )}
-              >
-                {commentLoading ? "잠시만 기다려주세요..." : "댓글 달기"}
-              </button>
-            </form>
-          </div>
+            {/* 댓글 입력칸 */}
+            <div className="px-4">
+              <form onSubmit={handleSubmit(onValid, onInvalid)}>
+                <TextArea
+                  register={register("comment", {
+                    required: true,
+                  })}
+                  name="comment"
+                  placeholder="댓글을 입력해주세요."
+                  required
+                />
+                <button
+                  className={cls(
+                    commentLoading
+                      ? "hover:cursor-wait"
+                      : "hover:cusor-pointer hover:bg-blue-500",
+                    "my-7 mt-2 w-full rounded-md border border-transparent bg-blue-400 py-3 px-4 text-sm font-medium  text-white shadow-sm  focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                  )}
+                >
+                  {commentLoading ? "잠시만 기다려주세요..." : "댓글 달기"}
+                </button>
+              </form>
+            </div>
+          </Suspense>
         </div>
       ) : (
         "Loading..."
@@ -392,7 +394,7 @@ const CommunityDetail: NextPage = () => {
   );
 };
 
-const Page: NextPage<{ story: StoryResponse }> = ({ story }) => {
+const Page: NextPage<{ story: StoryResponse; profile: User }> = ({ story }) => {
   const router = useRouter();
   const apiKey = `/api/stories/${router.query.id}`;
   return (
@@ -403,6 +405,7 @@ const Page: NextPage<{ story: StoryResponse }> = ({ story }) => {
             ok: true,
             story,
           },
+          Suspense: true,
         },
       }}
     >

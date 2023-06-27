@@ -8,6 +8,7 @@ import useMutation from "@libs/client/useMutation";
 import { useRouter } from "next/router";
 import useUser from "@libs/client/useUser";
 import dynamic from "next/dynamic";
+import Image from "next/image";
 
 // const Alert = lazy(
 //   (): any =>
@@ -70,19 +71,21 @@ const Enter: NextPage = () => {
     console.log(tokenData);
     console.log();
     if (tokenData?.ok) {
-      
       router.push("/");
-
     }
   }, [router, tokenData]);
 
   return (
-    
     <div className="mt-16 px-4">
       <title>로그인 # B-together</title>
-      <h3 className="text-center text-3xl font-bold">B - Together</h3>
-
-      <div className="mt-12">
+      <div className="flex flex-col items-center">
+        <h3 className=" text-3xl font-bold">B - Together</h3>
+        <h1 className="p-1 text-gray-400">이웃과 함께하는</h1>
+        <div className="relative w-64 h-32">
+          <Image className="" fill alt="" src={"/logo_01_small.png"} />
+        </div>
+      </div>
+      <div className="mt-5">
         {data?.ok ? (
           <>
             <form
@@ -162,9 +165,6 @@ const Enter: NextPage = () => {
                   <Button
                     text={loading ? "요청중..." : "일회용 비밀번호 받기"}
                   />
-                  {/* <Suspense fallback={<span>로딩중입니다...</span>}>
-                    <Alert />
-                  </Suspense> */}
                 </div>
               ) : null}
             </form>
