@@ -6,6 +6,7 @@ import { useForm } from "react-hook-form";
 import Button from "@components/button";
 import useMutation from "@libs/client/useMutation";
 import { useRouter } from "next/router";
+import Logo from '../public/logo_01_small.png'
 
 import Image from "next/image";
 
@@ -82,7 +83,7 @@ const Enter: NextPage = () => {
         <h1 className="p-1 text-gray-400">이웃과 함께하는</h1>
         <div className="h-32 w-64">
           <div className="relative h-full w-full">
-            <Image fill alt="" src={"/logo_01_small.png\n"} priority sizes="1" />
+            <Image fill alt="" src={Logo} priority sizes="1" />
           </div>
         </div>
       </div>
