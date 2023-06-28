@@ -1,13 +1,12 @@
 import Input from "@components/input";
 import { cls } from "@libs/client/utils";
 import { NextPage } from "next";
-import { Suspense, lazy, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import Button from "@components/button";
 import useMutation from "@libs/client/useMutation";
 import { useRouter } from "next/router";
-import useUser from "@libs/client/useUser";
-import dynamic from "next/dynamic";
+
 import Image from "next/image";
 
 // const Alert = lazy(
@@ -81,7 +80,7 @@ const Enter: NextPage = () => {
       <div className="flex flex-col items-center">
         <h3 className=" text-3xl font-bold">B - Together</h3>
         <h1 className="p-1 text-gray-400">이웃과 함께하는</h1>
-        <div className="h-32 w-64">
+        <div className="h-12 w-20">
           <div className="relative h-full w-full">
             <Image fill alt="" src={"/logo_01_small.png"} priority sizes="1" />
           </div>
