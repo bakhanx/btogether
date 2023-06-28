@@ -81,8 +81,8 @@ const Enter: NextPage = () => {
       <div className="flex flex-col items-center">
         <h3 className=" text-3xl font-bold">B - Together</h3>
         <h1 className="p-1 text-gray-400">이웃과 함께하는</h1>
-        <div className="relative h-32 w-64">
-          <Image fill alt="" src={"/logo_04.png"} sizes="1" />
+        <div className="relative w-64 h-32 ">
+          <Image fill alt="" src={"/logo_01_small.png"} priority sizes="1" />
         </div>
       </div>
       <div className="mt-5">

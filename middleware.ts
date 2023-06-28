@@ -22,7 +22,7 @@ export function middleware(req: NextRequest, ev: NextFetchEvent) {
     if (!req.cookies.get(COOKIE_SESSION_NAME) && !req.url.includes("/enter")) {
       
       console.log("세션 없음");
-      return NextResponse.redirect(new URL("/enter", req.url));
+      return NextResponse.redirect(new URL("/enter", req.nextUrl));
     }
   }
 
