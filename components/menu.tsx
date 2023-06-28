@@ -19,10 +19,9 @@ export default function Menu(props: {
     setisOnMenu(!isOnMenu);
   };
   const onLeaveFocusOut = () => {
-    setTimeout(()=>{
+    setTimeout(() => {
       setisOnMenu(false);
-    }, 100)
-     
+    }, 100);
   };
 
   return (
@@ -49,12 +48,14 @@ export default function Menu(props: {
           {props.writerId === user?.id ? (
             // 작성자 UI
             <div className="py-1">
-              <button
-                onClick={props.onModify}
-                className="block w-full py-2 pr-10 text-sm text-gray-700 hover:bg-slate-100"
-              >
-                수정하기
-              </button>
+              {props.type !== "Comment" && (
+                <button
+                  onClick={props.onModify}
+                  className="block w-full py-2 pr-10 text-sm text-gray-700 hover:bg-slate-100"
+                >
+                  수정하기
+                </button>
+              )}
               <button
                 onClick={props.onDelete}
                 className="block  w-full py-2 pr-10 text-sm text-red-500 hover:bg-slate-100"

@@ -1,6 +1,6 @@
 import { GetServerSideProps, NextPage, NextPageContext } from "next";
 import TextArea from "@components/textarea";
-import useSWR, { KeyedMutator, SWRConfig, unstable_serialize } from "swr";
+import useSWR, { SWRConfig, useSWRConfig } from "swr";
 import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
 import { Comment, Story, User } from "@prisma/client";
@@ -63,7 +63,6 @@ interface CommentResponse {
 
 const CommunityDetail: NextPage = () => {
   const router = useRouter();
-  const { user } = useUser();
   const { data: storyData, mutate } = useSWR<StoryResponse>(
     router.query.id ? `/api/stories/${router.query.id}` : null
   );
@@ -117,67 +116,6 @@ const CommunityDetail: NextPage = () => {
     if (!likeLoading) {
       storyMutation({});
     }
-  };
-
-  // ========================= 댓글 갯수 카운트===================
-  const [commentCount, setCommentCount] = useState(0);
-
-  // Comment Component에서 전달받은 count props
-  const commentProps = (count: number) => {
-    setCommentCount(count);
-  };
-  useEffect(() => {
-    if (storyData) setCommentCount(storyData?.story._count.comments);
-  }, [storyData]);
-
-  // ===================댓글 작성 ========================
-
-  const [comment, { data: commentData, loading: commentLoading }] =
-    useMutation<CommentResponse>(`/api/stories/${router.query.id}/comment`);
-
-  const { register, handleSubmit, reset } = useForm<CommentForm>();
-  // ==================댓글 작성======================
-  const onValid = (form: CommentForm) => {
-    if (commentLoading) return;
-    reset();
-    if (!storyData || !user) return;
-    mutate(
-      {
-        ...storyData,
-        story: {
-          ...storyData.story,
-          comments: [
-            ...storyData.story.comments,
-            {
-              id: Date.now(),
-              createdAt: new Date(),
-              updatedAt: new Date(),
-              comment: form.comment,
-              userId: user.id,
-              storyId: Number(router.query.id),
-              user: { ...user },
-            },
-          ],
-          _count: {
-            ...storyData.story._count,
-            comments: storyData.story._count.comments + 1,
-          },
-        },
-      },
-      false
-    );
-    comment(form);
-  };
-
-  useEffect(() => {
-    if (commentData?.ok && commentData.createComment) {
-      mutate();
-    }
-  }, [commentData, mutate]);
-
-  const onInvalid = (form: CommentFormError) => {
-    if (commentLoading) return;
-    console.log(form);
   };
 
   return (
@@ -279,43 +217,12 @@ const CommunityDetail: NextPage = () => {
                     d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
                   ></path>
                 </svg>
-                <span>댓글 {commentCount}</span>
+                <span>댓글 {storyData?.story?._count?.comments}</span>
               </span>
             </div>
 
-            {/* 댓글 입력 */}
-            {/* 댓글 입력칸 */}
-            <div className="px-4">
-              <form onSubmit={handleSubmit(onValid, onInvalid)}>
-                <TextArea
-                  register={register("comment", {
-                    required: true,
-                  })}
-                  name="comment"
-                  placeholder="댓글을 입력해주세요."
-                  required
-                />
-                <Button
-                  text={commentLoading ? "잠시만 기다려주세요..." : "댓글 달기"}
-                  color="orange"
-                  large
-                />
-
-                {/* <button
-            className={cls(
-              commentLoading
-                ? "hover:cursor-wait"
-                : "hover:cusor-pointer hover:bg-blue-500",
-              "my-7 mt-2 w-full rounded-md border border-transparent bg-blue-400 py-3 px-4 text-sm font-medium  text-white shadow-sm  focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-            )}
-          >
-            {commentLoading ? "잠시만 기다려주세요..." : "댓글 달기"}
-          </button> */}
-              </form>
-            </div>
-
             <Suspense fallback={<Loading />}>
-              <Comments count={commentProps} />
+              <Comments />
             </Suspense>
           </div>
         </>
@@ -337,16 +244,54 @@ interface CommentWithUser extends Comment {
   user: User;
 }
 
-const Comments = ({ count }: { count: Function }) => {
+const Comments = () => {
   const router = useRouter();
+  const { user } = useUser();
+  const { mutate: globalMutate } = useSWRConfig();
   const { data: commentsData, mutate } = useSWR<CommentsResponse>(
     router.query.id ? `/api/stories/${router.query.id}/comment` : null,
     { suspense: true }
   );
-
   const [comment, { data: commentData, loading: commentLoading }] =
     useMutation<CommentResponse>(`/api/stories/${router.query.id}/comment`);
 
+  // =======================댓글 작성 ====================
+  const { register, handleSubmit, reset } = useForm<CommentForm>();
+  // ==================댓글 작성======================
+  const onValid = (form: CommentForm) => {
+    if (commentLoading) return;
+    reset();
+    if (!commentsData || !user) return;
+    mutate(
+      {
+        ...commentsData,
+        story: {
+          ...commentsData.story,
+          comments: [
+            ...commentsData.story.comments,
+            {
+              id: Date.now(),
+              createdAt: new Date(),
+              updatedAt: new Date(),
+              comment: form.comment,
+              userId: user.id,
+              storyId: Number(router.query.id),
+              user: { ...user },
+            },
+          ],
+          _count: {
+            comments: commentsData.story._count.comments + 1,
+          },
+        },
+      },
+      false
+    );
+    comment(form);
+  };
+  const onInvalid = (form: CommentFormError) => {
+    if (commentLoading) return;
+    console.log(form);
+  };
   // ===================스토리 댓글 삭제=====================
 
   const onDeleteComment = (
@@ -357,21 +302,45 @@ const Comments = ({ count }: { count: Function }) => {
     if (!commentLoading) {
       comment({ commentId });
     }
-    if (commentLoading) {
-      console.log("삭제중");
-    }
   };
 
+  // 댓글 작성 시 갱신
+  useEffect(() => {
+    if (commentData?.ok && commentData?.createComment) {
+      mutate();
+      globalMutate(`/api/stories/${router.query.id}`);
+    }
+  }, [commentData, mutate, commentsData, globalMutate, router]);
+
+  // 댓글 삭제 시 갱신
   useEffect(() => {
     if (commentData?.ok && commentData?.deleteComment) {
-      // refetch
       mutate();
-      count(commentsData?.story?._count?.comments);
+      globalMutate(`/api/stories/${router.query.id}`);
     }
-  }, [commentData, mutate, count, commentsData]);
+  }, [commentData, mutate, , commentsData, globalMutate, router]);
 
   return (
     <>
+      {/* 댓글 작성란 */}
+
+      <div className="px-4">
+        <form onSubmit={handleSubmit(onValid, onInvalid)}>
+          <TextArea
+            register={register("comment", {
+              required: true,
+            })}
+            name="comment"
+            placeholder="댓글을 입력해주세요."
+            required
+          />
+          <Button
+            text={commentLoading ? "잠시만 기다려주세요..." : "댓글 달기"}
+            color="orange"
+            large
+          />
+        </form>
+      </div>
       {/* 댓글 리스트 */}
       <div className="py-3">
         {commentsData?.story?.comments.map((comment) => (
