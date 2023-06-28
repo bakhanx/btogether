@@ -12,7 +12,7 @@ const Home: NextPage = () => {
       hasTabBar
       mainTitle
       seoTitle="이웃과 함께하는"
-      writeBtnPath="product"
+      pathName="Product"
     >
       <Suspense fallback={<Loading />}>
         <ProductsList />

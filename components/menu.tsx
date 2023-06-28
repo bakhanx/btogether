@@ -1,8 +1,5 @@
-import useMutation from "@libs/client/useMutation";
 import useUser from "@libs/client/useUser";
-import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import useSWR from "swr";
 
 export default function Menu(props: {
   type: "Product" | "Story" | "Comment";

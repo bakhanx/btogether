@@ -15,6 +15,7 @@ import DateTime from "@components/datetime";
 import Menu from "@components/menu";
 import Loading from "@components/loading";
 import TopNav from "@components/topNav";
+import Button from "@components/button";
 
 interface CommentsWithUser extends Comment {
   user: User;
@@ -113,7 +114,7 @@ const CommunityDetail: NextPage = () => {
       false
     );
     if (!likeLoading) {
-      storyMutation({});
+      // storyMutation({});
     }
   };
 
@@ -124,7 +125,7 @@ const CommunityDetail: NextPage = () => {
         <>
           <TopNav
             menuProps={{
-              type: "Product",
+              type: "Story",
               writerId: storyData?.story?.userId,
               onDelete: onDelete,
               onModify: onModify,
@@ -232,7 +233,7 @@ const CommunityDetail: NextPage = () => {
 
 interface CommentsResponse {
   ok: true;
-  comments: {
+  story: {
     comments: CommentWithUser[];
   };
 }
@@ -246,6 +247,8 @@ const Comments = () => {
   const { data: commentsData, mutate } = useSWR<CommentsResponse>(
     router.query.id ? `/api/stories/${router.query.id}/comment` : null
   );
+  const [comment, { data: commentData, loading: commentLoading }] =
+    useMutation<CommentResponse>(`/api/stories/${router.query.id}/comment`);
 
   const { register, handleSubmit, reset } = useForm<CommentForm>();
   // ==================댓글 작성======================
@@ -269,7 +272,6 @@ const Comments = () => {
               },
             ],
             _count: {
-              ...prev.story._count,
               comments: prev.story._count.comments + 1,
             },
           },
@@ -279,13 +281,11 @@ const Comments = () => {
 
     comment(form);
   };
+
   const onInvalid = (form: CommentFormError) => {
     if (commentLoading) return;
     console.log(form);
   };
-
-  const [comment, { data: commentData, loading: commentLoading }] =
-    useMutation<CommentResponse>(`/api/stories/${router.query.id}/comment`);
 
   // ===================스토리 댓글 삭제=====================
 
@@ -310,7 +310,7 @@ const Comments = () => {
     <>
       {/* 댓글 리스트 */}
       <div className="py-3">
-        {commentsData?.comments.comments.map((comment) => (
+        {commentsData?.story?.comments.map((comment) => (
           <div
             key={comment?.id}
             className="my-3 flex space-x-3 bg-gray-50 py-3 px-3"
@@ -329,7 +329,7 @@ const Comments = () => {
             ) : (
               <div className="h-14 w-14 rounded-full  bg-slate-500" />
             )}
-            <div className="flex justify-between w-full">
+            <div className="flex w-full justify-between">
               <div>
                 <span className="block text-sm font-medium text-gray-700">
                   {comment?.user?.name}
@@ -346,9 +346,7 @@ const Comments = () => {
                 type="Comment"
               />
             </div>
-          
           </div>
-          
         ))}
       </div>
 
@@ -363,7 +361,13 @@ const Comments = () => {
             placeholder="댓글을 입력해주세요."
             required
           />
-          <button
+          <Button
+            text={commentLoading ? "잠시만 기다려주세요..." : "댓글 달기"}
+            color="orange"
+            large
+          />
+
+          {/* <button
             className={cls(
               commentLoading
                 ? "hover:cursor-wait"
@@ -372,7 +376,7 @@ const Comments = () => {
             )}
           >
             {commentLoading ? "잠시만 기다려주세요..." : "댓글 달기"}
-          </button>
+          </button> */}
         </form>
       </div>
     </>

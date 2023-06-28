@@ -1,5 +1,6 @@
 import { useRouter } from "next/router";
 import Menu from "./menu";
+import { cls } from "@libs/client/utils";
 
 interface MenuProps {
   menuProps: {
@@ -16,12 +17,21 @@ export default function TopNav({ menuProps: props }: MenuProps) {
     router.back();
   };
   return (
-    <div className="fixed top-0 z-10 flex h-12 w-full max-w-screen-lg  items-center justify-between bg-slate-300 px-5 text-lg font-medium text-white ">
+    <div
+      className={cls(
+        props.type === "Product"
+          ? "bg-opacity-10"
+          : props.type === "Story"
+          ? "bg-gradient-to-r from-pink-500 via-orange-500 to-yellow-500"
+          : "",
+        "fixed top-0 z-10 flex h-12 w-full max-w-screen-lg  items-center justify-between bg-blue-300 px-5 text-lg font-medium text-white "
+      )}
+    >
       {/* 뒤로가기 */}
 
       <button onClick={onBack} className="">
         <svg
-          className="h-6 w-6"
+          className="h-6 w-6  "
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"

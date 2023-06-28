@@ -11,7 +11,7 @@ interface LayoutProps {
   hasTabBar?: boolean;
   seoTitle?: string;
   mainTitle?: boolean;
-  writeBtnPath?: string;
+  pathName?: "Product" | "Story" | "Chat" | "Profile";
   children: React.ReactNode;
 }
 
@@ -22,7 +22,7 @@ export default function Layout({
   seoTitle,
   children,
   mainTitle,
-  writeBtnPath,
+  pathName,
 }: LayoutProps) {
   const router = useRouter();
 
@@ -36,7 +36,16 @@ export default function Layout({
       </Head>
 
       {/* 상단 탭 */}
-      <div className="fixed top-0 z-10 flex h-12 w-full max-w-screen-lg  items-center justify-center  bg-blue-500 px-10 text-lg font-medium text-white ">
+      <div
+        className={cls(
+          pathName === "Product"
+            ? "from-cyan-500 via-blue-500 to-purple-500"
+            : pathName === "Story"
+            ? "from-pink-500 via-orange-500 to-yellow-500"
+            : "",
+          "fixed top-0 z-10 flex h-12 w-full max-w-screen-lg  items-center justify-center bg-gradient-to-r  px-10 text-lg font-medium text-white "
+        )}
+      >
         {/* 뒤로가기 */}
         {canGoBack ? (
           <button onClick={onBack} className="absolute left-4">
@@ -135,7 +144,7 @@ export default function Layout({
           </Link>
 
           {/* 글쓰기 */}
-          {writeBtnPath ? (
+          {pathName ? (
             <div className="h-12 w-20">
               <div className="relative h-full w-full">
                 <Image
@@ -147,7 +156,7 @@ export default function Layout({
                   src="/logo_01_small.png"
                 />
               </div>
-              <FloatingButton writeBtnPath={writeBtnPath} />
+              <FloatingButton pathName={pathName} />
             </div>
           ) : (
             ""

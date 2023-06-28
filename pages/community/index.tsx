@@ -35,7 +35,7 @@ const StoriesList = () => {
   return (
     <>
       {storyData ? (
-        <div className="divide space-y-2 divide-y-4 divide-blue-100">
+        <div className="divide space-y-2 divide-y-4 divide-slate-200">
           {storyData?.stories?.map((story) => (
             <div key={story.id}>
               <Link href={`/community/${story.id}`}>
@@ -109,7 +109,7 @@ const Community: NextPage = () => {
       canGoBack
       title="이웃 스토리"
       seoTitle="이웃 소식"
-      writeBtnPath="story"
+      pathName="Story"
     >
       <Suspense fallback={<Loading />}>
       <StoriesList />

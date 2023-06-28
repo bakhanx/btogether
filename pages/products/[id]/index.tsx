@@ -12,6 +12,7 @@ import client from "@libs/server/client";
 import Layout from "@components/layout";
 import { useEffect, useState } from "react";
 import Menu from "@components/menu";
+import TopNav from "@components/topNav";
 
 interface ProductWithUser extends Product {
   seller: {
@@ -183,32 +184,14 @@ const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
       {/* ==================== 메인 ========================== */}
 
       {/* 탑 레이아웃 */}
-      <div className="fixed top-0 z-10 flex h-12 w-full max-w-screen-lg  items-center justify-center bg-black bg-opacity-10 px-10 text-lg font-medium text-white ">
-        {/* 뒤로가기 */}
-        <button onClick={onBack} className="absolute left-4">
-          <svg
-            className="h-6 w-6"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              d="M15 19l-7-7 7-7"
-            ></path>
-          </svg>
-        </button>
-        {/* 메뉴 */}
-        <Menu
-          type={"Product"}
-          isWriter={isWriter}
-          onDelete={onDelete}
-          onModify={onModify}
-        />
-      </div>
+      <TopNav
+        menuProps={{
+          type: "Product",
+          writerId: productData?.product.sellerId || 0,
+          onDelete: onDelete,
+          onModify: onModify,
+        }}
+      />
 
       {/* 판매 내용 */}
       <div className="mb-8 ">

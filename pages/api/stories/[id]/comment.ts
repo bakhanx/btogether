@@ -70,7 +70,7 @@ async function handler(
       query: { id },
     } = req;
 
-    const comments = await client.story.findFirst({
+    const story = await client.story.findFirst({
       where: {
         id: Number(id),
       },
@@ -78,12 +78,17 @@ async function handler(
         comments: {
           include: { user: true },
         },
+        _count:{
+          select: {
+            comments:true
+          }
+        }
       },
     });
 
     res.json({
       ok: true,
-      comments,
+      story,
     });
   }
 }

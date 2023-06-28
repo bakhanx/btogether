@@ -1,15 +1,15 @@
 import Link from "next/link";
 
 interface FloatingButton {
-  writeBtnPath: string;
+  pathName: "Product" | "Story" | "Chat" | "Profile";
 }
 
-export default function FloatingButton({ writeBtnPath }: FloatingButton) {
+export default function FloatingButton({ pathName }: FloatingButton) {
   return (
     <div className="relative bottom-24 z-40 flex max-w-screen-xl   justify-center border-none">
-      {writeBtnPath === "product" && (
+      {pathName === "Product" && (
         <Link href={"products/upload"}>
-          <div className="bottom-24 flex h-16 w-16 cursor-pointer items-center justify-center rounded-full border-0 border-transparent bg-blue-500 text-white shadow-xl transition-colors  hover:bg-blue-600 ">
+          <div className="bottom-24 flex h-16 w-16 cursor-pointer items-center justify-center rounded-full border-0 border-transparent bg-gradient-to-t from-cyan-500 via-blue-500 to-purple-500 text-white shadow-xl transition-colors  hover:from-cyan-600 hover:via-blue-600 hover:to-purple-600">
             <svg
               className="h-6 w-6"
               xmlns="http://www.w3.org/2000/svg"
@@ -29,9 +29,9 @@ export default function FloatingButton({ writeBtnPath }: FloatingButton) {
         </Link>
       )}
 
-      {writeBtnPath === "story" && (
+      {pathName === "Story" && (
         <Link href={"community/write"}>
-          <div className="bottom-24 flex h-16 w-16 cursor-pointer items-center justify-center rounded-full border-0 border-transparent bg-blue-500 text-white shadow-xl transition-colors  hover:bg-blue-600 ">
+          <div className="bottom-24 flex h-16 w-16 cursor-pointer items-center justify-center rounded-full border-0 border-transparent bg-gradient-to-t text-white shadow-xl transition-colors from-pink-500 via-orange-500 to-yellow-500 hover:from-pink-600 hover:via-orange-600 hover:to-yellow-600   ">
             <svg
               className="h-6 w-6"
               fill="none"
