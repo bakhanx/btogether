@@ -63,6 +63,7 @@ interface CommentResponse {
 
 const CommunityDetail: NextPage = () => {
   const router = useRouter();
+  const { user } = useUser();
   const { data: storyData, mutate } = useSWR<StoryResponse>(
     router.query.id ? `/api/stories/${router.query.id}` : null
   );
@@ -94,7 +95,7 @@ const CommunityDetail: NextPage = () => {
   const [storyMutation, { loading: likeLoading }] = useMutation(
     `/api/stories/${router.query.id}/like`
   );
-  //  ======================== 스토리 좋아요
+  //  ======================== 스토리 좋아요 ====================
   const onLikeClick = () => {
     if (!storyData || likeLoading) return;
     mutate(
@@ -118,14 +119,67 @@ const CommunityDetail: NextPage = () => {
     }
   };
 
-  // ========================= 댓글 갯수 카운트
+  // ========================= 댓글 갯수 카운트===================
   const [commentCount, setCommentCount] = useState(0);
+
+  // Comment Component에서 전달받은 count props
   const commentProps = (count: number) => {
     setCommentCount(count);
   };
   useEffect(() => {
     if (storyData) setCommentCount(storyData?.story._count.comments);
   }, [storyData]);
+
+  // ===================댓글 작성 ========================
+
+  const [comment, { data: commentData, loading: commentLoading }] =
+    useMutation<CommentResponse>(`/api/stories/${router.query.id}/comment`);
+
+  const { register, handleSubmit, reset } = useForm<CommentForm>();
+  // ==================댓글 작성======================
+  const onValid = (form: CommentForm) => {
+    if (commentLoading) return;
+    reset();
+    if (!storyData || !user) return;
+    mutate(
+      {
+        ...storyData,
+        story: {
+          ...storyData.story,
+          comments: [
+            ...storyData.story.comments,
+            {
+              id: Date.now(),
+              createdAt: new Date(),
+              updatedAt: new Date(),
+              comment: form.comment,
+              userId: user.id,
+              storyId: Number(router.query.id),
+              user: { ...user },
+            },
+          ],
+          _count: {
+            ...storyData.story._count,
+            comments: storyData.story._count.comments + 1,
+          },
+        },
+      },
+      false 
+    );
+    comment(form);
+  };
+
+  useEffect(() => {
+    if (commentData?.ok && commentData.createComment) {
+      mutate();
+    }
+  }, [commentData, mutate]);
+
+  const onInvalid = (form: CommentFormError) => {
+    if (commentLoading) return;
+    console.log(form);
+  };
+
   return (
     <>
       {/* 탑 레이아웃 */}
@@ -229,6 +283,37 @@ const CommunityDetail: NextPage = () => {
               </span>
             </div>
 
+            {/* 댓글 입력 */}
+            {/* 댓글 입력칸 */}
+            <div className="px-4">
+              <form onSubmit={handleSubmit(onValid, onInvalid)}>
+                <TextArea
+                  register={register("comment", {
+                    required: true,
+                  })}
+                  name="comment"
+                  placeholder="댓글을 입력해주세요."
+                  required
+                />
+                <Button
+                  text={commentLoading ? "잠시만 기다려주세요..." : "댓글 달기"}
+                  color="orange"
+                  large
+                />
+
+                {/* <button
+            className={cls(
+              commentLoading
+                ? "hover:cursor-wait"
+                : "hover:cusor-pointer hover:bg-blue-500",
+              "my-7 mt-2 w-full rounded-md border border-transparent bg-blue-400 py-3 px-4 text-sm font-medium  text-white shadow-sm  focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+            )}
+          >
+            {commentLoading ? "잠시만 기다려주세요..." : "댓글 달기"}
+          </button> */}
+              </form>
+            </div>
+
             <Suspense fallback={<Loading />}>
               <Comments count={commentProps} />
             </Suspense>
@@ -254,56 +339,12 @@ interface CommentWithUser extends Comment {
 
 const Comments = ({ count }: { count: Function }) => {
   const router = useRouter();
-  const { user } = useUser();
   const { data: commentsData, mutate } = useSWR<CommentsResponse>(
-    router.query.id ? `/api/stories/${router.query.id}/comment` : null
+    router.query.id ? `/api/stories/${router.query.id}/comment` : null , {suspense:true}
   );
+
   const [comment, { data: commentData, loading: commentLoading }] =
     useMutation<CommentResponse>(`/api/stories/${router.query.id}/comment`);
-
-  const { register, handleSubmit, reset } = useForm<CommentForm>();
-  // ==================댓글 작성======================
-  const onValid = (form: CommentForm) => {
-    if (commentLoading) return;
-    reset();
-    if (!commentsData || !user) return;
-    mutate(
-      {
-        ...commentsData,
-        story: {
-          ...commentsData.story,
-          comments: [
-            ...commentsData.story.comments,
-            {
-              id: Date.now(),
-              createdAt: new Date(),
-              updatedAt: new Date(),
-              comment: form.comment,
-              userId: user.id,
-              storyId: Number(router.query.id),
-              user: { ...user },
-            },
-          ],
-          _count: {
-            comments: commentsData.story._count.comments + 1,
-          },
-        },
-      },
-      false
-    );
-    comment(form);
-  };
-
-  useEffect(() => {
-    if (commentData?.ok && commentData.createComment) {
-      count(commentsData?.story?._count?.comments);
-    }
-  }, [commentData, commentsData, count]);
-
-  const onInvalid = (form: CommentFormError) => {
-    if (commentLoading) return;
-    console.log(form);
-  };
 
   // ===================스토리 댓글 삭제=====================
 
@@ -315,14 +356,18 @@ const Comments = ({ count }: { count: Function }) => {
     if (!commentLoading) {
       comment({ commentId });
     }
+    if (commentLoading) {
+      console.log("삭제중");
+    }
   };
 
   useEffect(() => {
     if (commentData?.ok && commentData?.deleteComment) {
       // refetch
       mutate();
+      count(commentsData?.story?._count?.comments);
     }
-  }, [commentData, mutate]);
+  }, [commentData, mutate, count, commentsData]);
 
   return (
     <>
@@ -367,36 +412,6 @@ const Comments = ({ count }: { count: Function }) => {
           </div>
         ))}
       </div>
-
-      {/* 댓글 입력칸 */}
-      <div className="px-4">
-        <form onSubmit={handleSubmit(onValid, onInvalid)}>
-          <TextArea
-            register={register("comment", {
-              required: true,
-            })}
-            name="comment"
-            placeholder="댓글을 입력해주세요."
-            required
-          />
-          <Button
-            text={commentLoading ? "잠시만 기다려주세요..." : "댓글 달기"}
-            color="orange"
-            large
-          />
-
-          {/* <button
-            className={cls(
-              commentLoading
-                ? "hover:cursor-wait"
-                : "hover:cusor-pointer hover:bg-blue-500",
-              "my-7 mt-2 w-full rounded-md border border-transparent bg-blue-400 py-3 px-4 text-sm font-medium  text-white shadow-sm  focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-            )}
-          >
-            {commentLoading ? "잠시만 기다려주세요..." : "댓글 달기"}
-          </button> */}
-        </form>
-      </div>
     </>
   );
 };
@@ -405,7 +420,7 @@ const Page: NextPage = () => {
   return (
     <SWRConfig
       value={{
-        suspense: true,
+        suspense: false,
       }}
     >
       <CommunityDetail />
