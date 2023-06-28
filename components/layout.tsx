@@ -70,7 +70,7 @@ export default function Layout({
         {mainTitle ? (
           <div className="flex items-center gap-x-2 text-xl">
             <div className="relative h-[24px] w-[148px]">
-              <Image alt="" src="/logo_04.png" sizes="1" fill />
+              <Image alt="" src="/static/logo_04.png" sizes="1" fill />
             </div>
           </div>
         ) : null}
