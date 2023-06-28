@@ -43,7 +43,12 @@ const Write: NextPage = () => {
   }, [router, data]);
 
   return (
-    <Layout canGoBack title="스토리 쓰기" seoTitle="스토리 쓰기" pathName="Story">
+    <Layout
+      canGoBack
+      title="스토리 쓰기"
+      seoTitle="스토리 쓰기"
+      pathName="Story"
+    >
       <form onSubmit={handleSubmit(onValid)} className="space-y-4 p-4">
         <TextArea
           register={register("content", {
@@ -56,7 +61,11 @@ const Write: NextPage = () => {
 
         <span className="text-red-500">{errors.content?.message}</span>
 
-        <Button text={isLoading ? "스토리 등록중..." : "스토리 공유하기"} color="orange" />
+        <Button
+          text={isLoading ? "스토리 등록중..." : "스토리 공유하기"}
+          color="orange"
+          large
+        />
       </form>
     </Layout>
   );

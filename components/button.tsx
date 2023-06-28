@@ -22,7 +22,7 @@ export default function Button({
         color === "blue"
           ? "bg-blue-400 hover:bg-blue-500 focus:ring-blue-500 "
           : color === "orange"
-          ? "bg-orange-400 hover:bg-orange-500 focus:ring-orange-500"
+          ? "bg-amber-400 hover:bg-amber-500 focus:ring-amber-500"
           : " bg-gray-400 hover:bg-gray-500 focus:ring-gray-500"
       )}
     >
