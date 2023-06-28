@@ -18,16 +18,16 @@ export default function Menu(props: {
   const onClickMenu = () => {
     setisOnMenu(!isOnMenu);
   };
-  const onLeaveFocusOut = ()=>{
-    setisOnMenu(false);
-  }
-  useEffect(()=>{
-    
-  },)
+  const onLeaveFocusOut = () => {
+    setTimeout(()=>{
+      setisOnMenu(false);
+    }, 100)
+     
+  };
 
   return (
     <div className="relative right-1">
-      <button onClick={onClickMenu} onBlur={onLeaveFocusOut} type="button">
+      <button onClick={onClickMenu} type="button" onBlur={onLeaveFocusOut}>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
