@@ -164,7 +164,7 @@ const CommunityDetail: NextPage = () => {
           },
         },
       },
-      false 
+      false
     );
     comment(form);
   };
@@ -340,7 +340,8 @@ interface CommentWithUser extends Comment {
 const Comments = ({ count }: { count: Function }) => {
   const router = useRouter();
   const { data: commentsData, mutate } = useSWR<CommentsResponse>(
-    router.query.id ? `/api/stories/${router.query.id}/comment` : null , {suspense:true}
+    router.query.id ? `/api/stories/${router.query.id}/comment` : null,
+    { suspense: true }
   );
 
   const [comment, { data: commentData, loading: commentLoading }] =

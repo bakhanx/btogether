@@ -29,45 +29,6 @@ const Page: NextPage = () => {
   );
 };
 
-// SSR
-// export async function getServerSideProps() {
-//   const products = await client?.product.findMany({
-//     take: 8,
-//     orderBy: {
-//       updatedAt: "desc",
-//     },
-//   });
-//   return {
-//     props: {
-//       products: JSON.parse(JSON.stringify(products)),
-//     },
-//   };
-// }
 
-// SSG
-// export async function getStaticProps() {
-//   const products = await client?.product.findMany({
-//     include: {
-//       _count: {
-//         select: {
-//           chatRooms: true,
-//           records: {
-//             where: {
-//               kind: { equals: "Favorite" },
-//             },
-//           },
-//         },
-//       },
-//     },
-//     orderBy: {
-//       updatedAt: "desc",
-//     },
-//   });
-//   return {
-//     props: {
-//       products: JSON.parse(JSON.stringify(products)),
-//     },
-//   };
-// }
 
 export default Page;

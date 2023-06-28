@@ -5,7 +5,7 @@ import DateTime from "./datetime";
 interface ItemProps {
   title: string;
   id: number;
-  time:Date;
+  time: Date;
   price: number;
   comments: number;
   hearts: number;
@@ -19,8 +19,7 @@ export default function Item({
   comments,
   hearts,
   image,
-    time
-,
+  time,
 }: ItemProps) {
   return (
     <Link href={`/products/${id}`}>
@@ -46,10 +45,12 @@ export default function Item({
           <div className="flex w-full flex-col justify-between truncate ">
             <div className="flex flex-col">
               <span className="truncate text-lg ">{title}</span>
-              <span className="truncate text-sm text-gray-500 pt-1">
-                <DateTime date={time} timeAgo/>
-                </span>
-              <span className="font-medium text-sm pt-1">{price.toLocaleString()}원</span>
+              <span className="truncate pt-1 text-sm text-gray-500">
+                <DateTime date={time} timeAgo />
+              </span>
+              <span className="pt-1 text-sm font-medium">
+                {price.toLocaleString()}원
+              </span>
             </div>
             {/* 댓글, 좋아요 */}
             <div>

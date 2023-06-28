@@ -14,7 +14,7 @@ interface ProductsResponse {
 }
 
 const ProductsList = () => {
-  const { data: productsData } = useSWR<ProductsResponse>("/api/products");
+  const { data: productsData } = useSWR<ProductsResponse>(`/api/products`);
 
   return (
     <>
