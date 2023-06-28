@@ -102,7 +102,7 @@ const Enter: NextPage = () => {
                 required
               />
 
-              <Button text={tokenLoading ? "요청중..." : "토큰 인증하기"} />
+              <Button text={tokenLoading ? "요청중..." : "토큰 인증하기"} large color="blue"/>
             </form>
           </>
         ) : (
