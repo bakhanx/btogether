@@ -114,10 +114,18 @@ const CommunityDetail: NextPage = () => {
       false
     );
     if (!likeLoading) {
-      // storyMutation({});
+      storyMutation({});
     }
   };
 
+  // ========================= 댓글 갯수 카운트
+  const [commentCount, setCommentCount] = useState(0);
+  const commentProps = (count: number) => {
+    setCommentCount(count);
+  };
+  useEffect(() => {
+    if (storyData) setCommentCount(storyData?.story._count.comments);
+  }, [storyData]);
   return (
     <>
       {/* 탑 레이아웃 */}
@@ -217,12 +225,12 @@ const CommunityDetail: NextPage = () => {
                     d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
                   ></path>
                 </svg>
-                <span>댓글 {storyData?.story?._count?.comments}</span>
+                <span>댓글 {commentCount}</span>
               </span>
             </div>
 
             <Suspense fallback={<Loading />}>
-              <Comments />
+              <Comments count={commentProps} />
             </Suspense>
           </div>
         </>
@@ -235,13 +243,16 @@ interface CommentsResponse {
   ok: true;
   story: {
     comments: CommentWithUser[];
+    _count: {
+      comments: number;
+    };
   };
 }
 interface CommentWithUser extends Comment {
   user: User;
 }
 
-const Comments = () => {
+const Comments = ({ count }: { count: Function }) => {
   const router = useRouter();
   const { user } = useUser();
   const { data: commentsData, mutate } = useSWR<CommentsResponse>(
@@ -255,32 +266,39 @@ const Comments = () => {
   const onValid = (form: CommentForm) => {
     if (commentLoading) return;
     reset();
-    mutate((prev: any) => {
-      return (
-        prev && {
-          ...prev,
-          story: {
-            ...prev.story,
-            comments: [
-              ...prev.story.comments,
-              {
-                id: Date.now(),
-                createdAt: Date.now(),
-                updatedAt: Date.now(),
-                comment: form.comment,
-                user: { ...user },
-              },
-            ],
-            _count: {
-              comments: prev.story._count.comments + 1,
+    if (!commentsData || !user) return;
+    mutate(
+      {
+        ...commentsData,
+        story: {
+          ...commentsData.story,
+          comments: [
+            ...commentsData.story.comments,
+            {
+              id: Date.now(),
+              createdAt: new Date(),
+              updatedAt: new Date(),
+              comment: form.comment,
+              userId: user.id,
+              storyId: Number(router.query.id),
+              user: { ...user },
             },
+          ],
+          _count: {
+            comments: commentsData.story._count.comments + 1,
           },
-        }
-      );
-    }, false);
-
+        },
+      },
+      false
+    );
     comment(form);
   };
+
+  useEffect(() => {
+    if (commentData?.ok && commentData.createComment) {
+      count(commentsData?.story?._count?.comments);
+    }
+  }, [commentData, commentsData, count]);
 
   const onInvalid = (form: CommentFormError) => {
     if (commentLoading) return;

@@ -174,7 +174,7 @@ const Upload: NextPage = () => {
           placeholder="공지사항 위반 내용 기입 시, 삭제 처리될 수 있습니다."
         />
 
-        <Button text={isLoading ? "등록중..." : "상품 등록하기"} />
+        <Button text={isLoading ? "등록중..." : "상품 등록하기"} large color="blue" />
       </form>
       {}
     </Layout>
