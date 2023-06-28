@@ -76,7 +76,7 @@ const Enter: NextPage = () => {
   }, [router, tokenData]);
 
   return (
-    <div className="mt-16 px-4">
+    <div className="mt-16 px-4 ">
       <title>로그인 # B-together</title>
       <div className="flex flex-col items-center">
         <h3 className=" text-3xl font-bold">B - Together</h3>
@@ -158,12 +158,12 @@ const Enter: NextPage = () => {
                 />
               ) : null}
               {method === "email" ? (
-                <Button text={loading ? "요청중..." : "로그인 주소 받기"} />
+                <Button text={loading ? "요청중..." : "로그인 주소 받기"} large color="blue"/>
               ) : null}
               {method === "phone" ? (
                 <div>
                   <Button
-                    text={loading ? "요청중..." : "일회용 비밀번호 받기"}
+                    text={loading ? "요청중..." : "일회용 비밀번호 받기"} large color="blue"
                   />
                 </div>
               ) : null}
