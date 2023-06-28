@@ -4,7 +4,7 @@ import type { NextFetchEvent, NextRequest } from "next/server";
 const COOKIE_SESSION_NAME = "btsession";
 
 export const config = {
-  matcher: ["/((?!api|_next/static|_next/image|favicon.ico|image).*)"],
+  matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
 };
 
 export function middleware(req: NextRequest, ev: NextFetchEvent) {
