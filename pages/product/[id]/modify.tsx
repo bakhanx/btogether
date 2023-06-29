@@ -139,7 +139,7 @@ const Modify: NextPage = () => {
 
   useEffect(() => {
     if (data?.ok && data.updateProduct) {
-      router.push(`/products/${router.query.id}`);
+      router.push(`/product/${router.query.id}`);
     }
   }, [data, router]);
 

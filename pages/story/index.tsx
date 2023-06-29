@@ -30,7 +30,7 @@ interface StoryResponse {
   stories: StoryWithUserAndCount[];
 }
 
-const StoriesList = () => {
+const StoryList = () => {
   const { data: storyData, isLoading } = useSWR<StoryResponse>(`/api/stories`);
   return (
     <>
@@ -38,7 +38,7 @@ const StoriesList = () => {
         <div className="divide space-y-2 divide-y-4 divide-slate-200">
           {storyData?.stories?.map((story) => (
             <div key={story.id}>
-              <Link href={`/community/${story.id}`}>
+              <Link href={`/story/${story.id}`}>
                 <div className="flex cursor-pointer flex-col items-start pt-4">
                   <span className="ml-3.5 flex items-center rounded-full bg-violet-500 px-2.5 py-0.5 text-xs font-bold text-white">
                     일상
@@ -102,7 +102,7 @@ const StoriesList = () => {
   );
 };
 
-const Community: NextPage = () => {
+const Main: NextPage = () => {
   return (
     <Layout
       hasTabBar
@@ -112,7 +112,7 @@ const Community: NextPage = () => {
       pathName="Story"
     >
       <Suspense fallback={<Loading />}>
-      <StoriesList />
+        <StoryList />
       </Suspense>
     </Layout>
   );
@@ -125,7 +125,7 @@ const Page: NextPage = () => {
         suspense: true,
       }}
     >
-      <Community />
+      <Main />
     </SWRConfig>
   );
 };

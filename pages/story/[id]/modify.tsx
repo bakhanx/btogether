@@ -7,48 +7,47 @@ import useMutation from "@libs/client/useMutation";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { Story } from "@prisma/client";
-import { useSWRConfig } from "swr";
+import useSWR, { useSWRConfig } from "swr";
 
-interface WriteForm {
+interface StoryForm {
   content: string;
 }
 
-interface WriteResponse {
+interface StoryResponse {
   ok: boolean;
-  revalidated?: boolean;
-  story: Story;
+  story?: Story;
+  updateStory?: Story;
 }
 
-const Write: NextPage = () => {
+const Modify: NextPage = () => {
   const router = useRouter();
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<WriteForm>({ mode: "onSubmit" });
+  } = useForm<StoryForm>({ mode: "onSubmit" });
   const [storyMutate, { data, loading }] =
-    useMutation<WriteResponse>("/api/stories");
+    useMutation<StoryResponse>(`/api/stories/${router.query.id}`);
   const [isLoading, setIsLoading] = useState(false);
+  const { data: storyData, isLoading: storyIsLoading } = useSWR<StoryResponse>(
+    `/api/stories/${router.query.id}`
+  );
+  console.log(storyData);
 
-  const onValid = (form: WriteForm) => {
+  const onValid = (form: StoryForm) => {
     setIsLoading(true);
     if (loading) return;
     storyMutate(form);
   };
 
   useEffect(() => {
-    if (data && data.ok) {
-      router.push(`/community/${data.story.id}`);
+    if (data?.ok && data?.updateStory) {
+      router.push(`/story/${storyData?.story?.id}`);
     }
-  }, [router, data]);
+  }, [router, data,storyData]);
 
   return (
-    <Layout
-      canGoBack
-      title="스토리 쓰기"
-      seoTitle="스토리 쓰기"
-      pathName="Story"
-    >
+    <Layout canGoBack title="스토리 수정" seoTitle="스토리 수정">
       <form onSubmit={handleSubmit(onValid)} className="space-y-4 p-4">
         <TextArea
           register={register("content", {
@@ -56,19 +55,15 @@ const Write: NextPage = () => {
             minLength: { value: 5, message: "5글자 이상 입력하시오" },
           })}
           required
-          placeholder="이웃에게 내 스토리를 공유하세요!"
+          defaultValue={storyData?.story?.content}
         />
 
         <span className="text-red-500">{errors.content?.message}</span>
 
-        <Button
-          text={isLoading ? "스토리 등록중..." : "스토리 공유하기"}
-          color="orange"
-          large
-        />
+        <Button text={isLoading ? "스토리 수정중..." : "스토리 수정하기"} />
       </form>
     </Layout>
   );
 };
 
-export default Write;
+export default Modify;

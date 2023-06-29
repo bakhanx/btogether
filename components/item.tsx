@@ -22,7 +22,7 @@ export default function Item({
   time,
 }: ItemProps) {
   return (
-    <Link href={`/products/${id}`}>
+    <Link href={`/product/${id}`}>
       <div className="cursor-pointer justify-between px-4 py-2 ">
         {/* title,price */}
         <div className="flex space-x-4">

@@ -116,11 +116,11 @@ export default function Layout({
             </div>
           </Link>
           {/* 스토리 */}
-          <Link href="/community">
+          <Link href="/story">
             <div
               className={cls(
                 "flex w-14 flex-col items-center space-y-2  ",
-                router.pathname === "/community"
+                router.pathname === "/story"
                   ? "text-blue-500"
                   : "transition-colors hover:text-gray-500"
               )}
@@ -163,11 +163,11 @@ export default function Layout({
           )}
 
           {/* 채팅 */}
-          <Link href="/chats">
+          <Link href="/chat">
             <div
               className={cls(
                 "flex w-14 flex-col items-center space-y-2",
-                router.pathname === "/chats"
+                router.pathname === "/chat"
                   ? "text-blue-500"
                   : "transition-colors hover:text-gray-500"
               )}

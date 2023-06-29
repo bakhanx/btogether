@@ -51,7 +51,7 @@ async function handler(
       },
     });
 
-    await res.revalidate("/community");
+    // await res.revalidate("/story");
 
     res.json({
       ok: true,

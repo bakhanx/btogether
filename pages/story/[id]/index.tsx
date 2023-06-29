@@ -61,7 +61,7 @@ interface CommentResponse {
   deleteComment?: Comment;
 }
 
-const CommunityDetail: NextPage = () => {
+const StoryDetail: NextPage = () => {
   const router = useRouter();
   const { data: storyData, mutate } = useSWR<StoryResponse>(
     router.query.id ? `/api/stories/${router.query.id}` : null
@@ -81,14 +81,14 @@ const CommunityDetail: NextPage = () => {
   useEffect(() => {
     if (deleteData?.ok) {
       alert("스토리 삭제가 완료되었습니다.");
-      router.push("/community");
+      router.push("/story");
     }
   }, [deleteData, router]);
 
   // ======================= 스토리 수정 ====================
   const onModify = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
-    router.push(`/community/${router.query.id}/modify`);
+    router.push(`/story/${router.query.id}/modify`);
   };
 
   const [storyMutation, { loading: likeLoading }] = useMutation(
@@ -393,7 +393,7 @@ const Page: NextPage = () => {
         suspense: false,
       }}
     >
-      <CommunityDetail />
+      <StoryDetail />
     </SWRConfig>
   );
 };

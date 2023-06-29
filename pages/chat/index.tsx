@@ -47,7 +47,7 @@ const ChatRoomsList = () => {
         <div className="divide-y-2">
           {chatsData?.chatRooms?.map((chatRoom) => (
             <Link
-              href={`/chats/${chatRoom?.id}`}
+              href={`/chat/${chatRoom?.id}`}
               key={chatRoom?.id}
               className="block"
             >
@@ -132,7 +132,7 @@ const ChatRoomsList = () => {
   );
 };
 
-const Chats: NextPage = () => {
+const Chat: NextPage = () => {
   return (
     <Layout title="채팅" hasTabBar canGoBack seoTitle="채팅">
       <Suspense
@@ -171,7 +171,7 @@ const Page: NextPage<{ chatRooms: ChatRoomsResponse; profile: User }> = ({
         suspense: true,
       }}
     >
-      <Chats />
+      <Chat />
     </SWRConfig>
   );
 };

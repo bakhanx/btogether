@@ -80,20 +80,20 @@ const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
   // 채팅방 생성
   useEffect(() => {
     if (chatData?.ok) {
-      router.push(`/chats/${chatData?.chats?.id}`);
+      router.push(`/chat/${chatData?.chats?.id}`);
     }
   }, [chatData, router]);
 
   // 채팅방 이미 존재
   useEffect(() => {
     if (chatData?.ok === false) {
-      router.push(`/chats/${productData?.myChatRoomId}`);
+      router.push(`/chat/${productData?.myChatRoomId}`);
     }
   }, [router, chatData, productData]);
 
   //본인 포스트일 경우
   const onMoveChatList = () => {
-    router.push(`/chats`);
+    router.push(`/chat`);
   };
 
   // ===================== 삭제 / 수정 ===================
@@ -127,7 +127,7 @@ const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
 
   const onModify = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
-    router.push(`/products/${router.query.id}/modify`);
+    router.push(`/product/${router.query.id}/modify`);
   };
 
   if (router.isFallback) {
@@ -362,7 +362,7 @@ const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
             <div className=" mt-6 grid grid-cols-2 gap-4">
               {relatedProducts.map((product) => (
                 <div key={product.id}>
-                  <Link href={`/products/${product.id}`}>
+                  <Link href={`/product/${product.id}`}>
                     <div className="mb-4 h-56 w-full bg-slate-300" />
                     <h3 className="-mb-1 text-gray-700">{product.name}</h3>
                     <span className="text-sm font-medium text-gray-900">

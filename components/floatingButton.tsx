@@ -8,7 +8,7 @@ export default function FloatingButton({ pathName }: FloatingButton) {
   return (
     <div className="relative bottom-24 z-40 flex max-w-screen-xl   justify-center border-none">
       {pathName === "Product" && (
-        <Link href={"products/upload"}>
+        <Link href={"product/upload"}>
           <div className="bottom-24 flex h-16 w-16 cursor-pointer items-center justify-center rounded-full border-0 border-transparent bg-gradient-to-t from-cyan-500 via-blue-500 to-purple-500 text-white shadow-xl transition-colors  hover:from-cyan-600 hover:via-blue-600 hover:to-purple-600">
             <svg
               className="h-6 w-6"
@@ -30,7 +30,7 @@ export default function FloatingButton({ pathName }: FloatingButton) {
       )}
 
       {pathName === "Story" && (
-        <Link href={"community/write"}>
+        <Link href={"story/upload"}>
           <div className="bottom-24 flex h-16 w-16 cursor-pointer items-center justify-center rounded-full border-0 border-transparent bg-gradient-to-t text-white shadow-xl transition-colors from-pink-500 via-orange-500 to-yellow-500 hover:from-pink-600 hover:via-orange-600 hover:to-yellow-600   ">
             <svg
               className="h-6 w-6"
