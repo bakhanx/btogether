@@ -20,7 +20,7 @@ export default function TopNav({ menuProps: props }: MenuProps) {
     <div
       className={cls(
         props.type === "Product"
-          ? "bg-opacity-10"
+          ? "bg-gradient-to-r from-cyan-500 via-blue-500 to-purple-500 opacity-40"
           : props.type === "Story"
           ? "bg-gradient-to-r from-pink-500 via-amber-500 to-yellow-500"
           : "",

@@ -132,7 +132,7 @@ const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
 
   if (router.isFallback) {
     return (
-      <Layout canGoBack seoTitle="로딩중..." title="로딩중...">
+      <Layout canGoBack seoTitle="로딩중..." title="로딩중..." pathName="Product" >
         <div className="text-center">Loading...</div>
       </Layout>
     );
