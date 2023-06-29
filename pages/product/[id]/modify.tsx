@@ -144,7 +144,7 @@ const Modify: NextPage = () => {
   }, [data, router]);
 
   return (
-    <Layout canGoBack title="Upload Product" seoTitle="상품 올리기">
+    <Layout canGoBack title="상품 수정하기" seoTitle="상품 수정하기" pathName="Product">
       <form className="space-y-4 p-4" onSubmit={handleSubmit(onValid)}>
         <div className="flex items-center justify-center">
           <div className="absolute -z-50 w-10/12 h-96 ">
@@ -242,7 +242,7 @@ const Modify: NextPage = () => {
           {errors?.description ? errors?.description?.message : ""}
         </span>
 
-        <Button text={isLoading ? "등록중..." : "상품 등록하기"} />
+        <Button text={isLoading ? "수정중..." : "상품 수정하기"} large color="blue" />
       </form>
       {}
     </Layout>

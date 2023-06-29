@@ -4,7 +4,7 @@ interface ButtonProps {
   large?: boolean;
   text: string;
   [key: string]: any;
-  color?: "blue" | "orange";
+  color?: "blue" | "amber";
 }
 
 export default function Button({
@@ -21,7 +21,7 @@ export default function Button({
         large ? "py-3 text-base" : "py-2 text-sm",
         color === "blue"
           ? "bg-blue-400 hover:bg-blue-500 focus:ring-blue-500 "
-          : color === "orange"
+          : color === "amber"
           ? "bg-amber-400 hover:bg-amber-500 focus:ring-amber-500"
           : " bg-gray-400 hover:bg-gray-500 focus:ring-gray-500"
       )}

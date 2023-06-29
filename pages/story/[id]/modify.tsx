@@ -47,7 +47,7 @@ const Modify: NextPage = () => {
   }, [router, data,storyData]);
 
   return (
-    <Layout canGoBack title="스토리 수정" seoTitle="스토리 수정">
+    <Layout canGoBack title="스토리 수정하기" seoTitle="스토리 수정하기" pathName="Story">
       <form onSubmit={handleSubmit(onValid)} className="space-y-4 p-4">
         <TextArea
           register={register("content", {
@@ -60,7 +60,7 @@ const Modify: NextPage = () => {
 
         <span className="text-red-500">{errors.content?.message}</span>
 
-        <Button text={isLoading ? "스토리 수정중..." : "스토리 수정하기"} />
+        <Button text={isLoading ? "스토리 수정중..." : "스토리 수정하기"} large color="amber" />
       </form>
     </Layout>
   );

@@ -22,7 +22,7 @@ export default function TopNav({ menuProps: props }: MenuProps) {
         props.type === "Product"
           ? "bg-opacity-10"
           : props.type === "Story"
-          ? "bg-gradient-to-r from-pink-500 via-orange-500 to-yellow-500"
+          ? "bg-gradient-to-r from-pink-500 via-amber-500 to-yellow-500"
           : "",
         "fixed top-0 z-10 flex h-12 w-full max-w-screen-lg  items-center justify-between bg-blue-300 px-5 text-lg font-medium text-white "
       )}

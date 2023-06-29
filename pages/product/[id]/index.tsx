@@ -255,7 +255,7 @@ const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
 
             <div className="flex items-center justify-between space-x-2">
               {productData?.product?.seller?.id === user?.id ? (
-                <Button onClick={onMoveChatList} large text="채팅 목록" />
+                <Button onClick={onMoveChatList} large text="채팅 목록" color="blue" />
               ) : (
                 <Button onClick={onClickChat} large text="거래하기 (채팅)" color="blue" />
               )}

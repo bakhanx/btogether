@@ -63,7 +63,7 @@ const Upload: NextPage = () => {
 
         <Button
           text={isLoading ? "스토리 등록중..." : "스토리 공유하기"}
-          color="orange"
+          color="amber"
           large
         />
       </form>

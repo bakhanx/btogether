@@ -206,7 +206,7 @@ const StoryDetail: NextPage = () => {
                 <svg
                   className="h-5 w-5"
                   fill="none"
-                  stroke="orange"
+                  stroke="amber"
                   viewBox="0 0 24 24"
                   xmlns="http://www.w3.org/2000/svg"
                 >
@@ -336,7 +336,7 @@ const Comments = () => {
           />
           <Button
             text={commentLoading ? "잠시만 기다려주세요..." : "댓글 달기"}
-            color="orange"
+            color="amber"
             large
           />
         </form>
