@@ -42,7 +42,7 @@ export default function Layout({
             ? "from-cyan-500 via-blue-500 to-purple-500"
             : pathName === "Story"
             ? "from-pink-500 via-amber-500 to-yellow-500"
-            : "",
+            : "from-lime-300 via-green-500 to-sky-500",
           "fixed top-0 z-10 flex h-12 w-full max-w-screen-lg  items-center justify-center bg-gradient-to-r  px-10 text-lg font-medium text-white "
         )}
       >
