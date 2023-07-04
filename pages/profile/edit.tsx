@@ -177,7 +177,7 @@ const EditProfile: NextPage = () => {
   }, [profileData, avatarPreview, init]);
 
   return (
-    <Layout hasTabBar canGoBack title="프로필 편집" seoTitle="내 프로필 편집">
+    <Layout hasTabBar canGoBack title="프로필 편집" seoTitle="내 프로필 편집" pathName="Profile">
       {profileData ? (
         <form onSubmit={handleSubmit(onValid)} className="space-y-4 py-10 px-4">
           <div className="flex items-center space-x-3">
@@ -250,7 +250,7 @@ const EditProfile: NextPage = () => {
           <div className="my-2 font-bold text-red-500">
             <span>{errors?.formErrors?.message}</span>
           </div>
-          <Button text={isLoading ? "수정중..." : "프로필 수정"} />
+          <Button text={isLoading ? "수정중..." : "프로필 수정"} color="blue"/>
         </form>
       ) : (
         "Loading..."

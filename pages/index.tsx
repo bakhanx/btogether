@@ -9,7 +9,7 @@ const ProductsList = lazy(()=> import('../components/ProductsList'));
 const Home: NextPage = () => {
   return (
     <Layout hasTabBar mainTitle seoTitle="이웃과 함께하는" pathName="Product">
-      <Suspense fallback={<Loading />}>
+      <Suspense fallback={<Loading />} >
         <ProductsList />
       </Suspense>
     </Layout>
