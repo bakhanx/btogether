@@ -132,7 +132,12 @@ const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
 
   if (router.isFallback) {
     return (
-      <Layout canGoBack seoTitle="로딩중..." title="로딩중..." pathName="Product" >
+      <Layout
+        canGoBack
+        seoTitle="로딩중..."
+        title="로딩중..."
+        pathName="Product"
+      >
         <div className="text-center">Loading...</div>
       </Layout>
     );
@@ -195,6 +200,7 @@ const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
 
       {/* 판매 내용 */}
       <div className="mb-8 ">
+        {/* 상품 이미지 */}
         <div onClick={onClickImage}>
           {product?.image ? (
             <div className="relative aspect-square max-h-[512px] w-full">
@@ -208,14 +214,11 @@ const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
               />
             </div>
           ) : (
-            <div className="h-96 bg-slate-300" />
+            <div className="h-96 bg-slate-500" />
           )}
         </div>
 
-        <div
-          className="px-4 py-4
-              "
-        >
+        <div className="px-4 py-4">
           {/* Profile */}
           <div className="flex cursor-pointer items-center space-x-3 border-t border-b py-3">
             {product?.seller.avatar ? (
@@ -255,9 +258,19 @@ const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
 
             <div className="flex items-center justify-between space-x-2">
               {productData?.product?.seller?.id === user?.id ? (
-                <Button onClick={onMoveChatList} large text="채팅 목록" color="blue" />
+                <Button
+                  onClick={onMoveChatList}
+                  large
+                  text="채팅 목록"
+                  color="blue"
+                />
               ) : (
-                <Button onClick={onClickChat} large text="거래하기 (채팅)" color="blue" />
+                <Button
+                  onClick={onClickChat}
+                  large
+                  text="거래하기 (채팅)"
+                  color="blue"
+                />
               )}
 
               {/* 거래하기 PopUp */}
