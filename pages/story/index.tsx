@@ -1,18 +1,13 @@
-import {
-  GetServerSideProps,
-  GetStaticPaths,
-  GetStaticProps,
-  NextPage,
-} from "next";
+import { NextPage } from "next";
 import Link from "next/link";
 import { Story } from "@prisma/client";
-import client from "@libs/server/client";
+
 import Layout from "@components/layout";
 import DateTime from "@components/datetime";
-import { useRouter } from "next/router";
-import { Suspense, useEffect } from "react";
-import useMutation from "@libs/client/useMutation";
-import useSWR, { SWRConfig } from "swr";
+
+import { Suspense } from "react";
+
+import useSWR from "swr";
 import Loading from "@components/loading";
 
 interface StoryWithUserAndCount extends Story {
@@ -31,10 +26,13 @@ interface StoryResponse {
 }
 
 const StoryList = () => {
-  const { data: storyData, isLoading } = useSWR<StoryResponse>(`/api/stories`);
+  const { data: storyData } = useSWR<StoryResponse>(
+    typeof window === null ? "" : `/api/stories`,
+    { suspense: true,}
+  );
   return (
     <>
-      {storyData ? (
+      {storyData && (
         <div className="divide space-y-2 divide-y-4 divide-slate-200">
           {storyData?.stories?.map((story) => (
             <div key={story.id}>
@@ -95,8 +93,6 @@ const StoryList = () => {
             </div>
           ))}
         </div>
-      ) : (
-        "Loading..."
       )}
     </>
   );
@@ -118,17 +114,17 @@ const Main: NextPage = () => {
   );
 };
 
-const Page: NextPage = () => {
-  return (
-    <SWRConfig
-      value={{
-        suspense: true,
-      }}
-    >
-      <Main />
-    </SWRConfig>
-  );
-};
+// const Page: NextPage = () => {
+//   return (
+//     <SWRConfig
+//       value={{
+//         suspense: true,
+//       }}
+//     >
+//       <Main />
+//     </SWRConfig>
+//   );
+// };
 
 // export const getServerSideProps: GetServerSideProps = async () => {
 //   const stories = await client.story.findMany({
@@ -173,4 +169,4 @@ const Page: NextPage = () => {
 //   };
 // };
 
-export default Page;
+export default Main;

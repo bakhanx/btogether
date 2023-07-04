@@ -61,40 +61,17 @@ interface CommentResponse {
   deleteComment?: Comment;
 }
 
-const StoryDetail: NextPage = () => {
+const Content: NextPage = () => {
   const router = useRouter();
   const { data: storyData, mutate } = useSWR<StoryResponse>(
-    router.query.id ? `/api/stories/${router.query.id}` : null
+    router.query.id ? `/api/stories/${router.query.id}` : null, {suspense:true}
   );
 
-  const [deleteMutation, { data: deleteData, loading: deleteLoading }] =
-    useMutation(`/api/stories/${router.query.id}/delete`);
-
-  // =====================스토리 삭제 ===================
-  const onDelete = (event: React.MouseEvent<HTMLButtonElement>) => {
-    event.preventDefault();
-    if (!deleteLoading) {
-      deleteMutation({});
-    }
-  };
-
-  useEffect(() => {
-    if (deleteData?.ok) {
-      alert("스토리 삭제가 완료되었습니다.");
-      router.push("/story");
-    }
-  }, [deleteData, router]);
-
-  // ======================= 스토리 수정 ====================
-  const onModify = (event: React.MouseEvent<HTMLButtonElement>) => {
-    event.preventDefault();
-    router.push(`/story/${router.query.id}/modify`);
-  };
-
+  //  ======================== 스토리 좋아요 ====================
   const [storyMutation, { loading: likeLoading }] = useMutation(
     `/api/stories/${router.query.id}/like`
   );
-  //  ======================== 스토리 좋아요 ====================
+
   const onLikeClick = () => {
     if (!storyData || likeLoading) return;
     mutate(
@@ -121,113 +98,100 @@ const StoryDetail: NextPage = () => {
   return (
     <>
       {/* 탑 레이아웃 */}
-      {storyData && (
-        <>
-          <TopNav
-            menuProps={{
-              type: "Story",
-              writerId: storyData?.story?.userId,
-              onDelete: onDelete,
-              onModify: onModify,
-            }}
-          />
-          <div className="pt-16">
-            {/* 카테고리 */}
-            <span className="ml-4 items-center rounded-full bg-gray-100 px-2.5 py-0.5 text-xs font-medium text-gray-800">
-              후기
-            </span>
 
-            {/* 작성자 프로필 */}
-            <Link href={`/users/profile/${storyData?.story.user?.id}`}>
-              <div className="mt-4 mb-3 flex cursor-pointer items-center space-x-3 border-b px-4 pb-3">
-                {storyData?.story.user?.avatar ? (
-                  <div className="relative h-14 w-14">
-                    <Image
-                      src={`https://imagedelivery.net/214BxOnlVKSU2amZRZmdaQ/${storyData?.story.user?.avatar}/avatar`}
-                      alt=""
-                      sizes="1"
-                      priority
-                      fill
-                      className="rounded-full"
-                    />
-                  </div>
-                ) : (
-                  <div className="h-14 w-14 rounded-full bg-slate-500" />
-                )}
-                <div>
-                  <p className="text-sm font-medium text-gray-700">
-                    {storyData?.story.user?.name}
-                  </p>
-                  <p className="text-xs font-medium text-gray-500">
-                    View profile &rarr;
-                  </p>
+      <>
+        <div className="pt-16">
+          {/* 카테고리 */}
+          <span className="ml-4 items-center rounded-full bg-gray-100 px-2.5 py-0.5 text-xs font-medium text-gray-800">
+            후기
+          </span>
+
+          {/* 작성자 프로필 */}
+          <Link href={`/users/profile/${storyData?.story?.user?.id}`}>
+            <div className="mt-4 mb-3 flex cursor-pointer items-center space-x-3 border-b px-4 pb-3">
+              {storyData?.story?.user?.avatar ? (
+                <div className="relative h-14 w-14">
+                  <Image
+                    src={`https://imagedelivery.net/214BxOnlVKSU2amZRZmdaQ/${storyData?.story?.user?.avatar}/avatar`}
+                    alt=""
+                    sizes="1"
+                    priority
+                    fill
+                    className="rounded-full"
+                  />
                 </div>
-              </div>
-            </Link>
-
-            {/* 내용 */}
-            <div className="mt-2 px-4">
-              <div className="py-5">
-                <span>{storyData?.story?.content}</span>
-              </div>
-              <div className="text-xs text-gray-500 ">
-                <DateTime date={storyData?.story?.updatedAt} />
+              ) : (
+                <div className="h-14 w-14 rounded-full bg-slate-500" />
+              )}
+              <div>
+                <p className="text-sm font-medium text-gray-700">
+                  {storyData?.story?.user?.name}
+                </p>
+                <p className="text-xs font-medium text-gray-500">
+                  View profile &rarr;
+                </p>
               </div>
             </div>
+          </Link>
 
-            <div className="mt-3 flex w-full justify-start space-x-5 border-t px-4 py-2.5">
-              {/* 좋아요 */}
-              <button
-                onClick={onLikeClick}
-                className={cls(
-                  "flex items-center space-x-2 text-sm",
-                  storyData?.isLike ? "text-green-600" : "text-black"
-                )}
-              >
-                <svg
-                  className="h-5 w-5"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                  ></path>
-                </svg>
-                <span>좋아요 {storyData?.story?._count?.likes}</span>
-              </button>
-
-              {/* 댓글 */}
-              <span className="flex items-center space-x-2 text-sm">
-                <svg
-                  className="h-5 w-5"
-                  fill="none"
-                  stroke="orange"
-                  viewBox="0 0 24 24"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
-                  ></path>
-                </svg>
-
-                <span>댓글 {storyData?.story?._count?.comments}</span>
-              </span>
+          {/* 내용 */}
+          <div className="mt-2 px-4">
+            <div className="py-5">
+              <span>{storyData?.story?.content}</span>
             </div>
-
-            <Suspense fallback={<Loading />}>
-              <Comments />
-            </Suspense>
+            <div className="text-xs text-gray-500 ">
+              <DateTime date={storyData?.story?.updatedAt} />
+            </div>
           </div>
-        </>
-      )}
+
+          <div className="mt-3 flex w-full justify-start space-x-5 border-t px-4 py-2.5">
+            {/* 좋아요 */}
+            <button
+              onClick={onLikeClick}
+              className={cls(
+                "flex items-center space-x-2 text-sm",
+                storyData?.isLike ? "text-green-600" : "text-black"
+              )}
+            >
+              <svg
+                className="h-5 w-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                ></path>
+              </svg>
+              <span>좋아요 {storyData?.story?._count?.likes}</span>
+            </button>
+
+            {/* 댓글 */}
+            <span className="flex items-center space-x-2 text-sm">
+              <svg
+                className="h-5 w-5"
+                fill="none"
+                stroke="orange"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
+                ></path>
+              </svg>
+
+              <span>댓글 {storyData?.story?._count?.comments}</span>
+            </span>
+          </div>
+        </div>
+      </>
     </>
   );
 };
@@ -387,17 +351,94 @@ const Comments = () => {
   );
 };
 
-const Page: NextPage = () => {
+const Top = () => {
+  const router = useRouter();
+  const onBack = () => {
+    router.back();
+  };
+  // =====================스토리 삭제 ===================
+  const [deleteMutation, { data: deleteData, loading: deleteLoading }] =
+    useMutation(`/api/stories/${router.query.id}/delete`);
+
+  const onDelete = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+    if (!deleteLoading) {
+      deleteMutation({});
+    }
+  };
+
+  useEffect(() => {
+    if (deleteData?.ok) {
+      alert("스토리 삭제가 완료되었습니다.");
+      router.push("/story");
+    }
+  }, [deleteData, router]);
+
+  // ======================= 스토리 수정 ====================
+  const onModify = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+    router.push(`/story/${router.query.id}/modify`);
+  };
+
+  const { data: storyData, mutate } = useSWR<StoryResponse>(
+    router.query.id ? `/api/stories/${router.query.id}` : null
+  );
+
   return (
-    <SWRConfig
-      value={{
-        suspense: false,
-      }}
-    >
-      <StoryDetail />
-    </SWRConfig>
+    <div className="fixed top-0 z-10 flex h-12 w-full max-w-screen-lg items-center justify-between bg-blue-300 bg-gradient-to-r  from-pink-500 via-amber-500 to-yellow-500 px-5 text-lg font-medium text-white ">
+      {/* 뒤로가기 */}
+
+      <button onClick={onBack} className="">
+        <svg
+          className="h-6 w-6  "
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth="2"
+            d="M15 19l-7-7 7-7"
+          ></path>
+        </svg>
+      </button>
+
+      {/* 메뉴 */}
+
+      <Menu
+        type={"Story"}
+        writerId={storyData?.story?.userId || 0}
+        onDelete={onDelete}
+        onModify={onModify}
+      />
+    </div>
   );
 };
+
+const StoryDetail: NextPage = () => {
+  return (
+    <>
+      <Top />
+      <Suspense fallback={<Loading />}>
+        <Content />
+      </Suspense>
+
+      <Suspense fallback={<Loading />}>
+        <Comments />
+      </Suspense>
+    </>
+  );
+};
+
+// const Page: NextPage = () => {
+//   return (
+//     <SWRConfig value={{ suspense: true, fallback: <Loading /> }}>
+//       <StoryDetail />
+//     </SWRConfig>
+//   );
+// };
 
 // export const getServerSideProps: GetServerSideProps = async (context) => {
 //   const story = await client.story.findUnique({
@@ -480,4 +521,4 @@ const Page: NextPage = () => {
 //   };
 // };
 
-export default Page;
+export default StoryDetail;

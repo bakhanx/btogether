@@ -49,18 +49,6 @@ async function handler(
             comments: true,
           },
         },
-  
-        comments: {
-          include: {
-            user: {
-              select: {
-                id: true,
-                name: true,
-                avatar: true,
-              },
-            },
-          },
-        },
       },
     });
   

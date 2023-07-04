@@ -1,11 +1,12 @@
 interface DateTimeProps {
   time?: boolean;
   timeAgo?: boolean;
-  date: Date;
+  date?: Date;
 }
 
 export default function DateTime({ date, time, timeAgo }: DateTimeProps) {
-  const dateTime = new Date(date);
+  
+  const dateTime = new Date(date ? date : "");
   const nowTime = new Date(Date.now());
 
   const year = dateTime.getFullYear();

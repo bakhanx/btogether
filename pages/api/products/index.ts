@@ -79,7 +79,7 @@ async function handler(
         product,
       });
     }
-    res.revalidate(`/`);
+    // res.revalidate(`/`);
   }
 }
 

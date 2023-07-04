@@ -23,12 +23,11 @@ interface ChatRoomResponse {
 const ProductInfo = () => {
   const router = useRouter();
   const { data: chatData } = useSWR<ChatRoomResponse>(
-    `/api/chats/${router.query.id}` ,
-
+    `/api/chats/${router.query.id}`
   );
   return (
     <>
-      <div className="fixed z-40 w-full max-w-screen-xl border-b-2 border-b-blue-200 bg-white px-4">
+      <div className="fixed z-30 w-full max-w-screen-lg border-b-2 border-b-blue-200 bg-white px-4">
         <div className="flex items-center p-2">
           <div className="relative h-16 w-16 shadow-md">
             {chatData?.chatRoom?.product?.image ? (
@@ -63,23 +62,24 @@ const ChatContents = () => {
   const { register, reset, handleSubmit } = useForm();
   const router = useRouter();
   const { data: chatData, mutate } = useSWR<ChatRoomResponse>(
-     `/api/chats/${router.query.id}`,
+    `/api/chats/${router.query.id}`,
     {
       refreshInterval: 1000,
+      suspense: true,
     }
   );
 
-  const { data: userData } = useSWR<UserResponse>(`/api/users/me`, );
+  const { data: userData } = useSWR<UserResponse>(`/api/users/me`);
 
   const scrollRef = useRef<HTMLDivElement | null>(null);
   const [sendMutation, { loading, data }] = useMutation(
     `/api/chats/${router.query.id}/message`
   );
 
-  useEffect(()=>{
-    scrollRef.current?.scrollIntoView({ behavior: 'instant', inline: 'end' })
+  useEffect(() => {
+    scrollRef.current?.scrollIntoView({ inline: "end" });
     // window.scrollTo(9999,9999)
-  },[router])
+  }, [router]);
 
   const onValid = async (form: any) => {
     if (loading) return;
@@ -176,20 +176,6 @@ const ChatContents = () => {
 };
 
 const ChatDetail = () => {
-  return (
-    <>
-      <Suspense fallback={<Loading />}>
-        <ProductInfo />
-      </Suspense>
-      
-      <Suspense fallback={<Loading />}>
-        <ChatContents />
-      </Suspense>
-    </>
-  );
-};
-
-const Page: NextPage = () => {
   const router = useRouter();
   return (
     <Layout
@@ -197,9 +183,10 @@ const Page: NextPage = () => {
       seoTitle={`${router.query.name}`}
       canGoBack
     >
-      <SWRConfig value={{ suspense: true }}>
-        <ChatDetail />
-      </SWRConfig>
+      <ProductInfo />
+      <Suspense fallback={<Loading />}>
+        <ChatContents />
+      </Suspense>
     </Layout>
   );
 };
@@ -239,4 +226,4 @@ const Page: NextPage = () => {
 //   }
 // );
 
-export default Page;
+export default ChatDetail;
