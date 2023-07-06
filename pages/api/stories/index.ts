@@ -8,6 +8,13 @@ async function handler(
   res: NextApiResponse<ResponseType>
 ) {
   if (req.method === "GET") {
+    const {
+      query: { page },
+    } = req;
+    const PAGE = Number(page) - 1;
+    const TAKE = 8;
+    const SKIP = PAGE * 8;
+
     const stories = await client.story.findMany({
       include: {
         _count: {
@@ -26,11 +33,16 @@ async function handler(
       orderBy: {
         updatedAt: "desc",
       },
-      take:8
+      take: TAKE,
+      skip: SKIP,
     });
+
+    const storiesCount = await client.story.count();
+
     res.json({
       ok: true,
       stories,
+      pages: Math.ceil(storiesCount / 10),
     });
   }
 

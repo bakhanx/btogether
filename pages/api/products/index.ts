@@ -8,6 +8,13 @@ async function handler(
   res: NextApiResponse<ResponseType>
 ) {
   if (req.method === "GET") {
+    const {
+      query: { page },
+    } = req;
+    const PAGE = Number(page) - 1;
+    const TAKE = 8;
+    const SKIP = PAGE * 8;
+
     const products = await client.product.findMany({
       include: {
         _count: {
@@ -16,14 +23,19 @@ async function handler(
           },
         },
       },
-      take: 8,
+      take: TAKE,
+      skip: SKIP,
       orderBy: {
         updatedAt: "desc",
       },
     });
+
+    const productsCount = await client.product.count();
+
     res.json({
       ok: true,
       products,
+      pages: Math.ceil(productsCount / 10),
     });
   }
   if (req.method === "POST") {

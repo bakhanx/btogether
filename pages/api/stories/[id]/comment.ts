@@ -63,12 +63,16 @@ async function handler(
         deleteComment,
       });
     }
-  } 
-  
+  }
+
   if (req.method === "GET") {
     const {
-      query: { id },
+      query: { id, page },
     } = req;
+
+    const PAGE = Number(page) - 1;
+    const TAKE = 6;
+    const SKIP = PAGE * 6;
 
     const story = await client.story.findFirst({
       where: {
@@ -77,18 +81,24 @@ async function handler(
       select: {
         comments: {
           include: { user: true },
+          take: TAKE,
+          skip: SKIP,
+          orderBy:{updatedAt:"desc"}    
         },
-        _count:{
+      
+
+        _count: {
           select: {
-            comments:true
-          }
-        }
+            comments: true,
+          },
+        },
       },
     });
 
     res.json({
       ok: true,
       story,
+      pages: story && Math.ceil(story._count.comments / 10),
     });
   }
 }

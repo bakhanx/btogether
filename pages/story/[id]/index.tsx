@@ -1,6 +1,7 @@
 import { GetServerSideProps, NextPage, NextPageContext } from "next";
 import TextArea from "@components/textarea";
 import useSWR, { SWRConfig, useSWRConfig } from "swr";
+import useSWRInfinite from "swr/infinite";
 import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
 import { Comment, Story, User } from "@prisma/client";
@@ -16,6 +17,7 @@ import Menu from "@components/menu";
 import Loading from "@components/loading";
 import TopNav from "@components/topNav";
 import Button from "@components/button";
+import { usePagination } from "@libs/client/usePagination";
 
 interface CommentsWithUser extends Comment {
   user: User;
@@ -60,11 +62,90 @@ interface CommentResponse {
   createComment?: Comment;
   deleteComment?: Comment;
 }
+interface CommentWithUser extends Comment {
+  user: User;
+}
+interface CommentsResponse {
+  ok: true;
+  story: {
+    comments: CommentWithUser[];
+    _count: {
+      comments: number;
+    };
+  };
+  pages: number;
+}
 
+const Top = () => {
+  const router = useRouter();
+  const onBack = () => {
+    router.back();
+  };
+  // =====================스토리 삭제 ===================
+  const [deleteMutation, { data: deleteData, loading: deleteLoading }] =
+    useMutation(`/api/stories/${router.query.id}/delete`);
+
+  const onDelete = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+    if (!deleteLoading) {
+      deleteMutation({});
+    }
+  };
+
+  useEffect(() => {
+    if (deleteData?.ok) {
+      alert("스토리 삭제가 완료되었습니다.");
+      router.push("/story");
+    }
+  }, [deleteData, router]);
+
+  // ======================= 스토리 수정 ====================
+  const onModify = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+    router.push(`/story/${router.query.id}/modify`);
+  };
+
+  const { data: storyData, mutate } = useSWR<StoryResponse>(
+    router.query.id ? `/api/stories/${router.query.id}` : null
+  );
+
+  return (
+    <div className="fixed top-0 z-10 flex h-12 w-full max-w-screen-lg items-center justify-between bg-blue-300 bg-gradient-to-r  from-pink-500 via-amber-500 to-yellow-500 px-5 text-lg font-medium text-white ">
+      {/* 뒤로가기 */}
+
+      <button onClick={onBack} className="">
+        <svg
+          className="h-6 w-6  "
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth="2"
+            d="M15 19l-7-7 7-7"
+          ></path>
+        </svg>
+      </button>
+
+      {/* 메뉴 */}
+
+      <Menu
+        type={"Story"}
+        writerId={storyData?.story?.userId || 0}
+        onDelete={onDelete}
+        onModify={onModify}
+      />
+    </div>
+  );
+};
 const Content: NextPage = () => {
   const router = useRouter();
   const { data: storyData, mutate } = useSWR<StoryResponse>(
-    router.query.id ? `/api/stories/${router.query.id}` : null, {suspense:true}
+    router.query.id ? `/api/stories/${router.query.id}` : null,
+    { suspense: true }
   );
 
   //  ======================== 스토리 좋아요 ====================
@@ -196,27 +277,32 @@ const Content: NextPage = () => {
   );
 };
 
-interface CommentsResponse {
-  ok: true;
-  story: {
-    comments: CommentWithUser[];
-    _count: {
-      comments: number;
-    };
-  };
-}
-interface CommentWithUser extends Comment {
-  user: User;
-}
+
 
 const Comments = () => {
+  
   const router = useRouter();
+  const getKey = (pageIndex: number, previousPageData: CommentsResponse) => {
+
+    if (pageIndex === 0) return `/api/stories/${router.query.id}/comment?page=1`;
+    if (pageIndex + 1 > previousPageData.pages) return null;
+    return `/api/stories/${73}/comment?page=${pageIndex + 1}`;
+  };
+  const { data, setSize, mutate } = useSWRInfinite<CommentsResponse>(getKey, {
+    suspense: true,
+  });
+  const comments = data ? data.map((item) => item.story.comments).flat() : [];
+  const page = usePagination();
+  useEffect(() => {
+    setSize(page);
+  }, [page, setSize]);
+
   const { user } = useUser();
   const { mutate: globalMutate } = useSWRConfig();
-  const { data: commentsData, mutate } = useSWR<CommentsResponse>(
-    router.query.id ? `/api/stories/${router.query.id}/comment` : null,
-    { suspense: true }
-  );
+  // const { data: commentsData, mutate } = useSWR<CommentsResponse>(
+  //   router.query.id ? `/api/stories/${router.query.id}/comment` : null,
+  //   { suspense: true }
+  // );
   const [comment, { data: commentData, loading: commentLoading }] =
     useMutation<CommentResponse>(`/api/stories/${router.query.id}/comment`);
 
@@ -226,33 +312,33 @@ const Comments = () => {
   const onValid = (form: CommentForm) => {
     if (commentLoading) return;
     reset();
-    if (!commentsData || !user) return;
-    mutate(
-      {
-        ...commentsData,
-        story: {
-          ...commentsData.story,
-          comments: [
-            ...commentsData.story.comments,
-            {
-              id: Date.now(),
-              createdAt: new Date(),
-              updatedAt: new Date(),
-              comment: form.comment,
-              userId: user.id,
-              storyId: Number(router.query.id),
-              user: { ...user },
-            },
-          ],
-          _count: {
-            comments: commentsData.story._count.comments + 1,
-          },
-        },
-      },
-      false
-    );
+
+    //   {
+    //     ...data,
+    //     story: {
+    //       ...commentsData.story,
+    //       comments: [
+    //         ...commentsData.story.comments,
+    //         {
+    //           id: Date.now(),
+    //           createdAt: new Date(),
+    //           updatedAt: new Date(),
+    //           comment: form.comment,
+    //           userId: user.id,
+    //           storyId: Number(router.query.id),
+    //           user: { ...user },
+    //         },
+    //       ],
+    //       _count: {
+    //         comments: commentsData.story._count.comments + 1,
+    //       },
+    //     },
+    //   },
+    //   false
+    // );
     comment(form);
   };
+
   const onInvalid = (form: CommentFormError) => {
     if (commentLoading) return;
     console.log(form);
@@ -275,7 +361,7 @@ const Comments = () => {
       mutate();
       globalMutate(`/api/stories/${router.query.id}`);
     }
-  }, [commentData, mutate, commentsData, globalMutate, router]);
+  }, [commentData, mutate, globalMutate, router]);
 
   // 댓글 삭제 시 갱신
   useEffect(() => {
@@ -283,7 +369,7 @@ const Comments = () => {
       mutate();
       globalMutate(`/api/stories/${router.query.id}`);
     }
-  }, [commentData, mutate, , commentsData, globalMutate, router]);
+  }, [commentData, mutate, , globalMutate, router]);
 
   return (
     <>
@@ -307,8 +393,9 @@ const Comments = () => {
         </form>
       </div>
       {/* 댓글 리스트 */}
-      <div className="py-3">
-        {commentsData?.story?.comments.map((comment) => (
+      <div className="px-2 py-3">
+        <div className="pl-2 text-sm"> · 최신순</div>
+        {comments.map((comment) => (
           <div
             key={comment?.id}
             className="my-3 flex space-x-3 bg-gray-50 py-3 px-3"
@@ -348,72 +435,6 @@ const Comments = () => {
         ))}
       </div>
     </>
-  );
-};
-
-const Top = () => {
-  const router = useRouter();
-  const onBack = () => {
-    router.back();
-  };
-  // =====================스토리 삭제 ===================
-  const [deleteMutation, { data: deleteData, loading: deleteLoading }] =
-    useMutation(`/api/stories/${router.query.id}/delete`);
-
-  const onDelete = (event: React.MouseEvent<HTMLButtonElement>) => {
-    event.preventDefault();
-    if (!deleteLoading) {
-      deleteMutation({});
-    }
-  };
-
-  useEffect(() => {
-    if (deleteData?.ok) {
-      alert("스토리 삭제가 완료되었습니다.");
-      router.push("/story");
-    }
-  }, [deleteData, router]);
-
-  // ======================= 스토리 수정 ====================
-  const onModify = (event: React.MouseEvent<HTMLButtonElement>) => {
-    event.preventDefault();
-    router.push(`/story/${router.query.id}/modify`);
-  };
-
-  const { data: storyData, mutate } = useSWR<StoryResponse>(
-    router.query.id ? `/api/stories/${router.query.id}` : null
-  );
-
-  return (
-    <div className="fixed top-0 z-10 flex h-12 w-full max-w-screen-lg items-center justify-between bg-blue-300 bg-gradient-to-r  from-pink-500 via-amber-500 to-yellow-500 px-5 text-lg font-medium text-white ">
-      {/* 뒤로가기 */}
-
-      <button onClick={onBack} className="">
-        <svg
-          className="h-6 w-6  "
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth="2"
-            d="M15 19l-7-7 7-7"
-          ></path>
-        </svg>
-      </button>
-
-      {/* 메뉴 */}
-
-      <Menu
-        type={"Story"}
-        writerId={storyData?.story?.userId || 0}
-        onDelete={onDelete}
-        onModify={onModify}
-      />
-    </div>
   );
 };
 

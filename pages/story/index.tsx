@@ -5,10 +5,12 @@ import { Story } from "@prisma/client";
 import Layout from "@components/layout";
 import DateTime from "@components/datetime";
 
-import { Suspense } from "react";
+import { Suspense, useEffect } from "react";
 
 import useSWR from "swr";
+import useSWRInfinite from "swr/infinite";
 import Loading from "@components/loading";
+import { usePagination } from "@libs/client/usePagination";
 
 interface StoryWithUserAndCount extends Story {
   _count: {
@@ -23,18 +25,31 @@ interface StoryWithUserAndCount extends Story {
 interface StoryResponse {
   ok: boolean;
   stories: StoryWithUserAndCount[];
+  pages: number;
 }
 
+const getKey = (pageIndex: number, previousPageData: StoryResponse) => {
+  // console.log(pageIndex);
+  if (pageIndex === 0) return `/api/stories?page=1`;
+  if (pageIndex + 1 > previousPageData.pages) return null;
+  return `/api/stories?page=${pageIndex + 1}`;
+};
+
 const StoryList = () => {
-  const { data: storyData } = useSWR<StoryResponse>(
-    typeof window === null ? "" : `/api/stories`,
-    { suspense: true,}
-  );
+  const { data, setSize } = useSWRInfinite<StoryResponse>(getKey, {
+    suspense: true,
+  });
+  const stories = data ? data.map((item) => item.stories).flat() : [];
+  const page = usePagination();
+  useEffect(() => {
+    setSize(page);
+  }, [page, setSize]);
+
   return (
     <>
-      {storyData && (
+      {stories && (
         <div className="divide space-y-2 divide-y-4 divide-slate-200">
-          {storyData?.stories?.map((story) => (
+          {stories.map((story) => (
             <div key={story.id}>
               <Link href={`/story/${story.id}`}>
                 <div className="flex cursor-pointer flex-col items-start pt-4">

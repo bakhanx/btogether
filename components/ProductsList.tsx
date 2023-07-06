@@ -1,6 +1,9 @@
 import { Product } from "@prisma/client";
 import Item from "./item";
 import useSWR from "swr";
+import useSWRInfinite from "swr/infinite";
+import { useEffect, useRef, useState } from "react";
+import { usePagination } from "@libs/client/usePagination";
 
 export interface ProductWithCount extends Product {
   _count: {
@@ -11,19 +14,32 @@ export interface ProductWithCount extends Product {
 interface ProductsResponse {
   ok: boolean;
   products: ProductWithCount[];
+  pages: number;
 }
 
+const getKey = (pageIndex: number, previousPageData: ProductsResponse) => {
+  // console.log(pageIndex);
+  if (pageIndex === 0) return `/api/products?page=1`;
+  if (pageIndex + 1 > previousPageData.pages) return null;
+  return `/api/products?page=${pageIndex + 1}`;
+};
+
 const ProductsList = () => {
-  const { data: productsData } = useSWR<ProductsResponse>(`/api/products`, {
+  const { data, setSize } = useSWRInfinite<ProductsResponse>(getKey, {
     suspense: true,
   });
+  const products = data ? data.map((item) => item.products).flat() : [];
+  const page = usePagination();
+  useEffect(() => {
+    setSize(page);
+  }, [page, setSize]);
 
   return (
     <>
       {/* 작성된 게시글 리스트 */}
 
       <div className="flex flex-col space-y-1 divide-y py-1">
-        {productsData?.products.map((product) => (
+        {products.map((product) => (
           <Item
             id={product?.id}
             image={product?.image}
