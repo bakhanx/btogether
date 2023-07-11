@@ -1,7 +1,7 @@
 import type { GetStaticPaths, GetStaticProps, NextPage } from "next";
 import Button from "@components/button";
 import { useRouter } from "next/router";
-import useSWR, { useSWRConfig } from "swr";
+import useSWR, { mutate, useSWRConfig } from "swr";
 import { ChatRoom, Product } from "@prisma/client";
 import Link from "next/link";
 import useMutation from "@libs/client/useMutation";
@@ -13,12 +13,17 @@ import Layout from "@components/layout";
 import { useEffect, useState } from "react";
 import Menu from "@components/menu";
 import TopNav from "@components/topNav";
+import DateTime from "@components/datetime";
 
 interface ProductWithUser extends Product {
   seller: {
     id: number;
     name: string;
     avatar: string;
+  };
+  _count: {
+    chatRooms: number;
+    records: number;
   };
 }
 interface ProductResponse {
@@ -57,10 +62,22 @@ const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
     toggleFavorite({});
     if (!productData) return;
     boundMutate(
-      (prev) => prev && { ...prev, isFavorite: !prev.isFavorite },
+      (prev) =>
+        prev && {
+          ...prev,
+          product: {
+            ...prev.product,
+            _count: {
+              ...prev.product?._count,
+              records: prev.isFavorite
+                ? prev.product._count.records - 1
+                : prev.product._count.records + 1,
+            },
+          },
+          isFavorite: !prev.isFavorite,
+        },
       false
     );
-    // unboundMutate("/api/users/me", (prev:any)=> prev && {ok:!prev.ok}, false);
   };
 
   //====================채팅방 =============================
@@ -251,10 +268,17 @@ const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
             <h1 className="text-3xl font-bold text-gray-900">
               {product?.name}
             </h1>
+            <div className="mt-1 text-slate-500">
+              <DateTime date={product?.updatedAt} timeAgo />
+            </div>
             <span className="mt-3 block text-2xl text-gray-900">
               {product?.price.toLocaleString()}원
             </span>
             <p className=" my-6 text-gray-700">{product?.description}</p>
+            <div className="my-3 flex gap-x-3 text-sm text-slate-500">
+              <div>채팅 · {productData?.product?._count?.chatRooms || 0}</div>
+              <div>관심 · {productData?.product?._count?.records || 0}</div>
+            </div>
 
             <div className="flex items-center justify-between space-x-2">
               {productData?.product?.seller?.id === user?.id ? (

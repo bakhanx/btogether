@@ -23,6 +23,16 @@ async function handler(
           avatar: true,
         },
       },
+      _count: {
+        select: {
+          chatRooms: true,
+          records: {
+            where: {
+              kind: "Favorite",
+            },
+          },
+        },
+      },
     },
   });
 
@@ -50,7 +60,7 @@ async function handler(
   const isFavorite = Boolean(
     await client.record.findFirst({
       where: {
-        kind:"Favorite",
+        kind: "Favorite",
         productId: product?.id,
         userId: user?.id,
       },
@@ -61,12 +71,12 @@ async function handler(
   );
 
   const myChatRoom = await client.chatRoom.findFirst({
-    where:{
-      productId:Number(id),
-      purchaserId:user?.id
-    }
-  })
-  const myChatRoomId = myChatRoom?.id
+    where: {
+      productId: Number(id),
+      purchaserId: user?.id,
+    },
+  });
+  const myChatRoomId = myChatRoom?.id;
 
   res.json({
     ok: true,
