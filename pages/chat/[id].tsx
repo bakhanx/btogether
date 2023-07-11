@@ -182,6 +182,7 @@ const ChatDetail = () => {
       title={`${router.query.name}님과의 대화`}
       seoTitle={`${router.query.name}`}
       canGoBack
+      pathName="Chat"
     >
       <ProductInfo />
       <Suspense fallback={<Loading />}>
