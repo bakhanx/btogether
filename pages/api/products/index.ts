@@ -20,6 +20,7 @@ async function handler(
         _count: {
           select: {
             records: true,
+            chatRooms:true,
           },
         },
       },
