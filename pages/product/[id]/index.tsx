@@ -10,7 +10,12 @@ import useUser from "@libs/client/useUser";
 import Image from "next/image";
 import client from "@libs/server/client";
 import Layout from "@components/layout";
-import { useEffect, useState } from "react";
+import {
+  ButtonHTMLAttributes,
+  ChangeEventHandler,
+  useEffect,
+  useState,
+} from "react";
 import Menu from "@components/menu";
 import TopNav from "@components/topNav";
 import DateTime from "@components/datetime";
@@ -34,11 +39,16 @@ interface ProductResponse {
   myChatRoomId: number;
 }
 
+type sellingType = "selling" | "reserve" | "sold";
+
 const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
   const router = useRouter();
   const { user, isLoading } = useUser();
   const { data: productData, mutate: boundMutate } = useSWR<ProductResponse>(
     router.query.id ? `/api/products/${router.query.id} ` : null
+  );
+  const [sellStateMutate, { data:sellStateMutationResponse, loading: sellStateLoading }] = useMutation(
+    `/api/products/${router.query.id}/sellState`
   );
 
   const { mutate: unboundMutate } = useSWRConfig(); // unbound mutate
@@ -51,6 +61,7 @@ const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
 
   const [isOnImage, setIsOnImage] = useState(false);
 
+  const [sellState, setSellState] = useState<sellingType | string>("selling");
   // 메뉴
 
   const [deleteMutation, { data: deleteData, loading: deleteLoading }] =
@@ -147,6 +158,33 @@ const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
     router.push(`/product/${router.query.id}/modify`);
   };
 
+  const onSelling = () => {};
+
+  const onReserve = () => {};
+
+  const onSold = () => {};
+
+  const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    if (confirm("변경하시겠습니까?")) {
+      const state = String(event.target.value);
+      setSellState(state);
+      if(sellStateLoading) return;
+      sellStateMutate({sellState : state});
+    } else {
+      setSellState(sellState);
+    }
+  };
+
+  useEffect(() => {
+    console.log(sellState);
+  }, [sellState]);
+
+  useEffect(()=>{
+    if(sellStateMutationResponse && sellStateMutationResponse?.ok){
+      console.log(sellStateMutationResponse);  
+    }
+  },[sellStateMutationResponse])
+
   if (router.isFallback) {
     return (
       <Layout
@@ -159,6 +197,8 @@ const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
       </Layout>
     );
   }
+
+  // ============================= 판매 상태 =======================
 
   //============================================================
 
@@ -265,6 +305,20 @@ const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
 
           {/* Content */}
           <div className="mt-5">
+            <div className="pb-2">
+              <select
+                id="sellState"
+                className=" rounded-lg border border-gray-300 bg-purple-500 p-2 py-3 text-sm text-white  "
+                onChange={handleChange}
+                defaultValue={product.sellState}
+              >
+                {/* <option selected></option> */}
+                <option value="selling">거래중</option>
+                <option value="reserve">예약중</option>
+                <option value="sold">거래완료</option>
+              </select>
+            </div>
+
             <h1 className="text-3xl font-bold text-gray-900">
               {product?.name}
             </h1>
