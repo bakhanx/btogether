@@ -2,6 +2,11 @@ import Image from "next/image";
 import Link from "next/link";
 import DateTime from "./datetime";
 
+type sellStateType = "selling" | "reserve" | "sold";
+
+interface sellStateProps {
+  sellState: sellStateType;
+}
 interface ItemProps {
   title: string;
   id: number;
@@ -10,7 +15,25 @@ interface ItemProps {
   comments: number;
   hearts: number;
   image: string;
+  sellState: sellStateType;
 }
+
+const SellStateLabel = ({ sellState }: sellStateProps) => {
+  return (
+    <>
+      {sellState === "reserve" && (
+        <span className=" rounded-sm mr-1 bg-green-600 p-1 text-xs text-white">
+          예약중
+        </span>
+      )}
+      {sellState === "sold" && (
+        <span className=" rounded-sm mr-1 bg-gray-500 p-1 text-xs text-white">
+          판매완료
+        </span>
+      )}
+    </>
+  );
+};
 
 export default function Item({
   title,
@@ -20,6 +43,7 @@ export default function Item({
   hearts,
   image,
   time,
+  sellState,
 }: ItemProps) {
   return (
     <Link href={`/product/${id}`}>
@@ -44,7 +68,10 @@ export default function Item({
 
           <div className="flex w-full flex-col justify-between truncate ">
             <div className="flex flex-col">
-              <span className="truncate text-lg ">{title}</span>
+              <div className="flex items-center">
+                <SellStateLabel sellState={sellState} />
+                <span className="truncate text-lg ">{title}</span>
+              </div>
               <span className="truncate pt-1 text-sm text-gray-500">
                 <DateTime date={time} timeAgo />
               </span>

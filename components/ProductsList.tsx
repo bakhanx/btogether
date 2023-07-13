@@ -10,6 +10,7 @@ export interface ProductWithCount extends Product {
     records: number;
     chatRooms: number;
   };
+  sellState: "selling" | "reserve" | "sold"
 }
 interface ProductsResponse {
   ok: boolean;
@@ -49,6 +50,7 @@ const ProductsList = () => {
             price={product?.price}
             hearts={product?._count?.records || 0}
             comments={product?._count?.chatRooms || 0}
+            sellState={product?.sellState}
           ></Item>
         ))}
       </div>
