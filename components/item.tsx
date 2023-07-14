@@ -1,12 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import DateTime from "./datetime";
+import SellStateLabel, { sellStateType } from "./sellStateLabel";
 
-type sellStateType = "selling" | "reserve" | "sold";
-
-interface sellStateProps {
-  sellState: sellStateType;
-}
 interface ItemProps {
   title: string;
   id: number;
@@ -17,23 +13,6 @@ interface ItemProps {
   image: string;
   sellState: sellStateType;
 }
-
-const SellStateLabel = ({ sellState }: sellStateProps) => {
-  return (
-    <>
-      {sellState === "reserve" && (
-        <span className=" rounded-sm mr-1 bg-green-600 p-1 text-xs text-white">
-          예약중
-        </span>
-      )}
-      {sellState === "sold" && (
-        <span className=" rounded-sm mr-1 bg-gray-500 p-1 text-xs text-white">
-          판매완료
-        </span>
-      )}
-    </>
-  );
-};
 
 export default function Item({
   title,
@@ -69,7 +48,7 @@ export default function Item({
           <div className="flex w-full flex-col justify-between truncate ">
             <div className="flex flex-col">
               <div className="flex items-center">
-                <SellStateLabel sellState={sellState} />
+                <SellStateLabel sellState={sellState} hideSelling />
                 <span className="truncate text-lg ">{title}</span>
               </div>
               <span className="truncate pt-1 text-sm text-gray-500">

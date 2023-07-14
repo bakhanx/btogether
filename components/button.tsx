@@ -23,7 +23,8 @@ export default function Button({
           ? "bg-blue-400 hover:bg-blue-500 focus:ring-blue-500 "
           : color === "amber"
           ? "bg-amber-400 hover:bg-amber-500 focus:ring-amber-500"
-          : " bg-gray-400 hover:bg-gray-500 focus:ring-gray-500"
+          : " bg-gray-400 hover:cursor-auto focus:ring-0"
+
       )}
     >
       {text}

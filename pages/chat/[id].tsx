@@ -14,6 +14,7 @@ import client from "@libs/server/client";
 import { withSsrSession } from "@libs/server/withSession";
 import Product from "pages/product/[id]";
 import Loading from "@components/loading";
+import SellStateLabel, { sellStateType } from "@components/sellStateLabel";
 
 interface ChatRoomResponse {
   ok: boolean;
@@ -45,12 +46,13 @@ const ProductInfo = () => {
           </div>
 
           <div className="px-4">
-            <div>
-              <span>{chatData?.chatRoom.product.sellstate}</span>
-              <span className="bold text-blue-500">[거래중] </span>
-              <span>{chatData?.chatRoom.product.name}</span>
+            <div className="flex">
+              <SellStateLabel
+                sellState={chatData?.chatRoom?.product?.sellState as sellStateType}
+              />
+              <span>{chatData?.chatRoom?.product?.name}</span>
             </div>
-            <div>{chatData?.chatRoom.product.price}원</div>
+            <div>{chatData?.chatRoom?.product?.price}원</div>
           </div>
         </div>
       </div>

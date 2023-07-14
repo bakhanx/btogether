@@ -28,7 +28,7 @@ export interface ChatRoomWithUsers extends ChatRoom {
     name: string;
     price: number;
     image: string;
-    sellstate: string;
+    sellState: string;
   };
   messages: any;
 }

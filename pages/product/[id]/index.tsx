@@ -30,6 +30,7 @@ interface ProductWithUser extends Product {
     chatRooms: number;
     records: number;
   };
+  sellState: "selling" | "sold" | "reserve";
 }
 interface ProductResponse {
   ok: boolean;
@@ -47,9 +48,10 @@ const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
   const { data: productData, mutate: boundMutate } = useSWR<ProductResponse>(
     router.query.id ? `/api/products/${router.query.id} ` : null
   );
-  const [sellStateMutate, { data:sellStateMutationResponse, loading: sellStateLoading }] = useMutation(
-    `/api/products/${router.query.id}/sellState`
-  );
+  const [
+    sellStateMutate,
+    { data: sellStateMutationResponse, loading: sellStateLoading },
+  ] = useMutation(`/api/products/${router.query.id}/sellState`);
 
   const { mutate: unboundMutate } = useSWRConfig(); // unbound mutate
   const [isShow, setIsShow] = useState(false);
@@ -168,8 +170,8 @@ const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
     if (confirm("변경하시겠습니까?")) {
       const state = String(event.target.value);
       setSellState(state);
-      if(sellStateLoading) return;
-      sellStateMutate({sellState : state});
+      if (sellStateLoading) return;
+      sellStateMutate({ sellState: state });
     } else {
       setSellState(sellState);
     }
@@ -179,11 +181,11 @@ const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
     console.log(sellState);
   }, [sellState]);
 
-  useEffect(()=>{
-    if(sellStateMutationResponse && sellStateMutationResponse?.ok){
-      console.log(sellStateMutationResponse);  
+  useEffect(() => {
+    if (sellStateMutationResponse && sellStateMutationResponse?.ok) {
+      console.log(sellStateMutationResponse);
     }
-  },[sellStateMutationResponse])
+  }, [sellStateMutationResponse]);
 
   if (router.isFallback) {
     return (
@@ -306,17 +308,25 @@ const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
           {/* Content */}
           <div className="mt-5">
             <div className="pb-2">
-              <select
-                id="sellState"
-                className=" rounded-lg border border-gray-300 bg-purple-500 p-2 py-3 text-sm text-white  "
-                onChange={handleChange}
-                defaultValue={product.sellState}
-              >
-                {/* <option selected></option> */}
-                <option value="selling">거래중</option>
-                <option value="reserve">예약중</option>
-                <option value="sold">거래완료</option>
-              </select>
+              {product.sellerId === user?.id ? (
+                <select
+                  id="sellState"
+                  className=" rounded-lg border border-gray-300 bg-violet-500 p-1 py-2 text-sm text-white  "
+                  onChange={handleChange}
+                  defaultValue={product.sellState}
+                >
+                  {/* <option selected></option> */}
+                  <option value="selling">거래중</option>
+                  <option value="reserve">예약중</option>
+                  <option value="sold">거래완료</option>
+                </select>
+              ) : (
+                <span className="rounded-lg inline-block bg-violet-500 p-2 py-2 text-sm text-white">
+                  {product.sellState ==="selling" && "판매중" }
+                  {product.sellState ==="reserve" && "예약중" }
+                  {product.sellState ==="sold" && "판매완료" }
+                </span>
+              )}
             </div>
 
             <h1 className="text-3xl font-bold text-gray-900">
@@ -335,20 +345,27 @@ const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
             </div>
 
             <div className="flex items-center justify-between space-x-2">
-              {productData?.product?.seller?.id === user?.id ? (
-                <Button
-                  onClick={onMoveChatList}
-                  large
-                  text="채팅 목록"
-                  color="blue"
-                />
-              ) : (
-                <Button
-                  onClick={onClickChat}
-                  large
-                  text="거래하기 (채팅)"
-                  color="blue"
-                />
+              {productData?.product?.sellState === "selling" &&
+                (productData?.product?.seller?.id === user?.id ? (
+                  <Button
+                    onClick={onMoveChatList}
+                    large
+                    text="채팅 목록"
+                    color="blue"
+                  />
+                ) : (
+                  <Button
+                    onClick={onClickChat}
+                    large
+                    text="거래하기 (채팅)"
+                    color="blue"
+                  />
+                ))}
+              {productData?.product?.sellState === "reserve" && (
+                <Button large text="예약중입니다" />
+              )}
+              {productData?.product?.sellState === "sold" && (
+                <Button large text="거래완료된 상품입니다" />
               )}
 
               {/* 거래하기 PopUp */}
