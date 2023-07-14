@@ -2,7 +2,7 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
   previewFeatures = ["filteredRelationCount"]
 }
 
@@ -56,7 +56,7 @@ model Product {
   seller      User       @relation(name: "saleProduct", fields: [sellerId], references: [id], onDelete: Cascade)
   sellerId    Int
   purchaser   User?      @relation(name: "purchaseProduct", fields: [purchaserId], references: [id], onDelete: Cascade)
-  purchaserId Int?        @default(0)
+  purchaserId Int?       @default(0)
   sellState   String     @default("selling")
   image       String
   name        String
@@ -137,6 +137,7 @@ model Record {
   @@index([userId])
   @@index([productId])
 }
+
 enum Kind {
   Purchase
   Favorite
@@ -176,5 +177,3 @@ model ChatRoom {
   @@index([purchaserId])
   @@index([sellerId])
 }
-
-

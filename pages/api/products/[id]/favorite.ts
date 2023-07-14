@@ -51,7 +51,7 @@ async function handler(
             id: Number(id),
           },
         },
-        kind:"Favorite"
+        kind: "Favorite"
       },
     });
   }

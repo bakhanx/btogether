@@ -20,7 +20,7 @@ async function handler(
         _count: {
           select: {
             records: true,
-            chatRooms:true,
+            chatRooms: true,
           },
         },
       },
@@ -87,9 +87,27 @@ async function handler(
           },
         },
       });
+
+      const record = await client.record.create({
+        data: {
+          user: {
+            connect: {
+              id: user?.id,
+            },
+          },
+          product: {
+            connect: {
+              id: product?.id,
+            },
+          },
+          kind: "Sale",
+        },
+      });
+
       res.json({
         ok: true,
         product,
+        record,
       });
     }
     // res.revalidate(`/`);

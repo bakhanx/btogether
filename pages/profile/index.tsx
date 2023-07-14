@@ -93,7 +93,7 @@ const UserInfo = () => {
       {/* 내 히스토리 */}
       <div className="mt-10 flex justify-around">
         {/* 판매내역 */}
-        <Link href="/profile/sold">
+        <Link href="/profile/sale">
           <div className="flex flex-col items-center">
             <div className="flex h-14 w-14 items-center justify-center rounded-full bg-blue-400 text-white">
               <svg
@@ -118,7 +118,7 @@ const UserInfo = () => {
         </Link>
 
         {/* 구매내역 */}
-        <Link href="/profile/purchased">
+        <Link href="/profile/purchase">
           <div className="flex flex-col items-center">
             <div className="flex h-14 w-14 items-center justify-center rounded-full bg-blue-400 text-white">
               <svg
@@ -143,7 +143,7 @@ const UserInfo = () => {
         </Link>
 
         {/* 관심목록 */}
-        <Link href="/profile/favorited">
+        <Link href="/profile/favorite">
           <div className="flex flex-col items-center">
             <div className="flex h-14 w-14 items-center justify-center rounded-full bg-blue-400 text-white">
               <svg

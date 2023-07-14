@@ -10,20 +10,20 @@ async function handler(
 ) {
   const {
     session: { user },
-    query: { kind },
+    query:{kind}
   } = req;
-
+  console.log(kind);
   const records = await client.record.findMany({
     where: {
       userId: user?.id,
-      kind: kind as Kind,
+      kind:kind as Kind
     },
     include: {
       product: {
         include: {
           _count: {
             select: {
-              records: true,
+              records:true,
               chatRooms: true,
             },
           },
