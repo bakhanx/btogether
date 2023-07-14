@@ -10,13 +10,7 @@ import useUser from "@libs/client/useUser";
 import Image from "next/image";
 import client from "@libs/server/client";
 import Layout from "@components/layout";
-import {
-  ButtonHTMLAttributes,
-  ChangeEventHandler,
-  useEffect,
-  useState,
-} from "react";
-import Menu from "@components/menu";
+import { useEffect, useState } from "react";
 import TopNav from "@components/topNav";
 import DateTime from "@components/datetime";
 
@@ -31,6 +25,14 @@ interface ProductWithUser extends Product {
     records: number;
   };
   sellState: "selling" | "sold" | "reserve";
+  chatRooms: {
+    id: number;
+    purchaser: {
+      avatar: string;
+      id: number;
+      name: string;
+    };
+  }[];
 }
 interface ProductResponse {
   ok: boolean;
@@ -160,21 +162,26 @@ const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
     router.push(`/product/${router.query.id}/modify`);
   };
 
-  const onSelling = () => {};
+  const [isOnPurchaser, setIsOnPurchaser] = useState(false);
 
-  const onReserve = () => {};
-
-  const onSold = () => {};
+  const selectPurchaser = () => {
+    setIsOnPurchaser(true);
+  };
 
   const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    if (confirm("변경하시겠습니까?")) {
-      const state = String(event.target.value);
-      setSellState(state);
-      if (sellStateLoading) return;
-      sellStateMutate({ sellState: state });
-    } else {
-      setSellState(sellState);
+    const state = String(event.target.value);
+    console.log(state);
+    if (state === "reserve") {
+      selectPurchaser();
     }
+
+    // if (confirm("변경하시겠습니까?")) {
+    //   setSellState(state);
+    //   if (sellStateLoading) return;
+    //   sellStateMutate({ sellState: state });
+    // } else {
+    //   setSellState(sellState);
+    // }
   };
 
   useEffect(() => {
@@ -213,6 +220,36 @@ const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
 
   return (
     <>
+      {/* 유저리스트 */}
+      {isOnPurchaser && (
+        <div className="relative flex justify-center  ">
+          <div className="center fixed top-48 z-50 flex h-96 w-2/3 max-w-xl items-center justify-center bg-black bg-opacity-40 text-white ">
+            <div className="flex h-full w-full flex-col ">
+              <div className="p-5 text-center">예약자 선택</div>
+              <div className="divide-y-2 p-5">
+                {productData?.product?.chatRooms?.map((chatRoom) => (
+                  <div
+                    className="flex items-center w-full cursor-pointer p-2 hover:bg-white hover:text-black gap-x-2"
+                    key={chatRoom.id}
+                  >
+                    <div className="relative w-9 h-9 ">
+                      <Image
+                        alt=""
+                        src={`https://imagedelivery.net/214BxOnlVKSU2amZRZmdaQ/${chatRoom?.purchaser.avatar}/avatar`}
+                        fill
+                        priority
+                        className="rounded-full"
+                      />
+                    </div>
+                    {chatRoom.purchaser.name}
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* 이미지 확대 */}
       {isOnImage ? (
         <div className="fixed left-0 z-20 flex h-full w-full items-start bg-black">

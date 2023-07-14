@@ -28,7 +28,19 @@ async function handler(
           chatRooms: true,
           records: {
             where: {
-              kind: "Favorite" ,
+              kind: "Favorite",
+            },
+          },
+        },
+      },
+      chatRooms: {
+        select: {
+          id: true,
+          purchaser: {
+            select: {
+              avatar: true,
+              id: true,
+              name: true,
             },
           },
         },
@@ -60,7 +72,7 @@ async function handler(
   const isFavorite = Boolean(
     await client.record.findFirst({
       where: {
-        kind: "Favorite" ,
+        kind: "Favorite",
         productId: product?.id,
         userId: user?.id,
       },
