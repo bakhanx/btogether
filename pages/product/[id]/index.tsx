@@ -164,24 +164,39 @@ const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
 
   const [isOnPurchaser, setIsOnPurchaser] = useState(false);
 
-  const selectPurchaser = () => {
-    setIsOnPurchaser(true);
+  const showUserList = () => {
+    setIsOnPurchaser(!isOnPurchaser);
   };
 
   const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const state = String(event.target.value);
     console.log(state);
     if (state === "reserve") {
-      selectPurchaser();
+      showUserList();
     }
+    if (state === "sold") {
+      showUserList();
+    }
+  };
 
-    // if (confirm("변경하시겠습니까?")) {
-    //   setSellState(state);
-    //   if (sellStateLoading) return;
-    //   sellStateMutate({ sellState: state });
-    // } else {
-    //   setSellState(sellState);
-    // }
+  const [purchaserId, setPurchaserId] = useState(0);
+  const selectPurchaser = (
+    event: React.MouseEvent<HTMLDivElement>,
+    id: number
+  ) => {
+    // event.preventDefault();
+    setPurchaserId(id);
+  };
+
+  const handleReserve = () => {
+    sellStateMutate({ sellState: "reserve" });
+    // 판매자 리스트업
+    // 구매자 리스트업
+  };
+  const handleSold = () => {
+    sellStateMutate({ sellState: "sold" });
+    // 판매자 리스트업
+    // 구매자 리스트업
   };
 
   useEffect(() => {
@@ -223,16 +238,29 @@ const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
       {/* 유저리스트 */}
       {isOnPurchaser && (
         <div className="relative flex justify-center  ">
-          <div className="center fixed top-48 z-50 flex h-96 w-2/3 max-w-xl items-center justify-center bg-black bg-opacity-40 text-white ">
-            <div className="flex h-full w-full flex-col ">
-              <div className="p-5 text-center">예약자 선택</div>
-              <div className="divide-y-2 p-5">
+          <div className="center fixed top-48 z-50 flex h-96 w-2/3 max-w-xl items-center justify-center bg-black bg-opacity-60 text-white ">
+            <div className="flex h-full w-full flex-col justify-around">
+              <div
+                className="absolute top-2 right-2 cursor-pointer"
+                onClick={showUserList}
+              >
+                ❌
+              </div>
+              <div className="p-2 text-center">예약자 선택</div>
+
+              <div className="group h-80 divide-y-2  overflow-auto p-5">
                 {productData?.product?.chatRooms?.map((chatRoom) => (
                   <div
-                    className="flex items-center w-full cursor-pointer p-2 hover:bg-white hover:text-black gap-x-2"
+                    className={cls(
+                      chatRoom.purchaser.id === purchaserId
+                        ? "bg-white text-black"
+                        : " hover:bg-white hover:text-black",
+                      "flex w-full cursor-pointer items-center gap-x-2 p-2"
+                    )}
                     key={chatRoom.id}
+                    onClick={(e) => selectPurchaser(e, chatRoom.purchaser.id)}
                   >
-                    <div className="relative w-9 h-9 ">
+                    <div className="relative h-9 w-9 ">
                       <Image
                         alt=""
                         src={`https://imagedelivery.net/214BxOnlVKSU2amZRZmdaQ/${chatRoom?.purchaser.avatar}/avatar`}
@@ -245,6 +273,9 @@ const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
                   </div>
                 ))}
               </div>
+              <button className="bg-slate-900 p-3  hover:bg-slate-500">
+                확인
+              </button>
             </div>
           </div>
         </div>
