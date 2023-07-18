@@ -162,52 +162,50 @@ const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
     router.push(`/product/${router.query.id}/modify`);
   };
 
+  //============================= 판매 상태 변경 =======================
   const [isOnPurchaser, setIsOnPurchaser] = useState(false);
-
+  const [stateType, setStateType] = useState("selling");
   const showUserList = () => {
     setIsOnPurchaser(!isOnPurchaser);
   };
 
-  const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+  const handleStateChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const state = String(event.target.value);
-    console.log(state);
-    if (state === "reserve") {
+    setStateType(state);
+    if (state !== "selling") {
       showUserList();
+    } else {
+      if (confirm("거래중으로 변경하시겠습니까?")) {
+        sellStateMutate({ sellState: state });
+      }
     }
-    if (state === "sold") {
-      showUserList();
-    }
+    
   };
 
-  const [purchaserId, setPurchaserId] = useState(0);
-  const selectPurchaser = (
+  const [selectedUserId, setselectedUserId] = useState(0);
+
+  const selectedUser = (
     event: React.MouseEvent<HTMLDivElement>,
     id: number
   ) => {
     // event.preventDefault();
-    setPurchaserId(id);
+    setselectedUserId(id);
   };
 
-  const handleReserve = () => {
-    sellStateMutate({ sellState: "reserve" });
-    // 판매자 리스트업
-    // 구매자 리스트업
-  };
-  const handleSold = () => {
-    sellStateMutate({ sellState: "sold" });
-    // 판매자 리스트업
-    // 구매자 리스트업
+  const confirmSelectedUser = () => {
+    sellStateMutate({ sellState: stateType, purchaserId: selectedUserId });
+    // router.reload();
   };
 
-  useEffect(() => {
-    console.log(sellState);
-  }, [sellState]);
+  // useEffect(() => {
+  //   console.log(sellState);
+  // }, [sellState]);
 
-  useEffect(() => {
-    if (sellStateMutationResponse && sellStateMutationResponse?.ok) {
-      console.log(sellStateMutationResponse);
-    }
-  }, [sellStateMutationResponse]);
+  // useEffect(() => {
+  //   if (sellStateMutationResponse && sellStateMutationResponse?.ok) {
+  //     console.log(sellStateMutationResponse);
+  //   }
+  // }, [sellStateMutationResponse]);
 
   if (router.isFallback) {
     return (
@@ -246,19 +244,21 @@ const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
               >
                 ❌
               </div>
-              <div className="p-2 text-center">예약자 선택</div>
+              <div className="p-2 text-center">
+                {stateType === "reserve" ? "예약자" : "구매자"} 선택
+              </div>
 
               <div className="group h-80 divide-y-2  overflow-auto p-5">
                 {productData?.product?.chatRooms?.map((chatRoom) => (
                   <div
                     className={cls(
-                      chatRoom.purchaser.id === purchaserId
+                      chatRoom.purchaser.id === selectedUserId
                         ? "bg-white text-black"
                         : " hover:bg-white hover:text-black",
                       "flex w-full cursor-pointer items-center gap-x-2 p-2"
                     )}
                     key={chatRoom.id}
-                    onClick={(e) => selectPurchaser(e, chatRoom.purchaser.id)}
+                    onClick={(e) => selectedUser(e, chatRoom.purchaser.id)}
                   >
                     <div className="relative h-9 w-9 ">
                       <Image
@@ -273,7 +273,10 @@ const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
                   </div>
                 ))}
               </div>
-              <button className="bg-slate-900 p-3  hover:bg-slate-500">
+              <button
+                className="bg-slate-900 p-3  hover:bg-slate-500"
+                onClick={confirmSelectedUser}
+              >
                 확인
               </button>
             </div>
@@ -380,7 +383,7 @@ const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
                 <select
                   id="sellState"
                   className=" rounded-lg border border-gray-300 bg-violet-500 p-1 py-2 text-sm text-white  "
-                  onChange={handleChange}
+                  onChange={handleStateChange}
                   defaultValue={product.sellState}
                 >
                   {/* <option selected></option> */}
