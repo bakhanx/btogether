@@ -179,7 +179,6 @@ const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
         sellStateMutate({ sellState: state });
       }
     }
-    
   };
 
   const [selectedUserId, setselectedUserId] = useState(0);
@@ -196,16 +195,7 @@ const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
     sellStateMutate({ sellState: stateType, purchaserId: selectedUserId });
     // router.reload();
   };
-
-  // useEffect(() => {
-  //   console.log(sellState);
-  // }, [sellState]);
-
-  // useEffect(() => {
-  //   if (sellStateMutationResponse && sellStateMutationResponse?.ok) {
-  //     console.log(sellStateMutationResponse);
-  //   }
-  // }, [sellStateMutationResponse]);
+  //========================================================================
 
   if (router.isFallback) {
     return (
@@ -219,10 +209,6 @@ const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
       </Layout>
     );
   }
-
-  // ============================= 판매 상태 =======================
-
-  //============================================================
 
   //===================== 이미지 확대 ===========================
   const onClickImage = () => {

@@ -15,11 +15,51 @@ async function handler(
   console.log(sellState);
   console.log(purchaserId);
 
+  const isExistState = Boolean(
+    await client.product.findFirst({
+      where: {
+        id: Number(id),
+      },
+      select: {
+        records: {
+          where: {
+            kind: "Purchase",
+          },
+        },
+      },
+    })
+  );
+
   if (sellState === "selling") {
-    const product = await client.product.findFirst({
-      where: { id: Number(id) },
-      select: { sellerId: true },
+    await client.product.update({
+      where: {
+        id: Number(id),
+      },
+      data: {
+        sellState: sellState,
+
+        purchaser: { disconnect: true },
+        records: {
+          deleteMany: {
+            kind: "Purchase",
+          },
+        },
+      },
     });
+  } else if (sellState === "reserve") {
+    if (isExistState) {
+      await client.product.update({
+        where: { id: Number(id) },
+        data: {
+          purchaser: {
+            disconnect: true,
+          },
+          records: {
+            deleteMany: { kind: "Purchase" },
+          },
+        },
+      });
+    }
 
     await client.product.update({
       where: {
@@ -27,29 +67,7 @@ async function handler(
       },
       data: {
         sellState: sellState,
-        purchaser: { disconnect: true },
-        records: {
-          deleteMany: {
-            kind: "Purchase",
-          },
-          create: {
-            kind: "Sale",
-            user: {
-              connect: {
-                id: Number(product?.sellerId),
-              },
-            },
-          },
-        },
-      },
-    });
-  } else if (sellState === "reserve") {
-    await client.product.update({
-      where: {
-        id: Number(id),
-      },
-      data: {
-        sellState: sellState,
+
         purchaser: {
           connect: { id: purchaserId },
           update: {
@@ -68,12 +86,27 @@ async function handler(
       },
     });
   } else if (sellState === "sold") {
+    if (isExistState) {
+      await client.product.update({
+        where: { id: Number(id) },
+        data: {
+          purchaser: {
+            disconnect: true,
+          },
+          records: {
+            deleteMany: { kind: "Purchase" },
+          },
+        },
+      });
+    }
+
     await client.product.update({
       where: {
         id: Number(id),
       },
       data: {
         sellState: sellState,
+
         purchaser: {
           connect: { id: purchaserId },
           update: {
