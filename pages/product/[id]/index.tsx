@@ -368,7 +368,7 @@ const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
               {product.sellerId === user?.id ? (
                 <select
                   id="sellState"
-                  className=" rounded-lg border border-gray-300 bg-violet-500 p-1 py-2 text-sm text-white  "
+                  className=" rounded-lg border border-gray-300 bg-violet-500 p-1 py-2 text-sm text-white shadow-md "
                   onChange={handleStateChange}
                   defaultValue={product.sellState}
                 >
@@ -378,7 +378,7 @@ const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
                   <option value="sold">거래완료</option>
                 </select>
               ) : (
-                <span className="inline-block rounded-lg bg-violet-500 p-2 py-2 text-sm text-white">
+                <span className="inline-block rounded-lg bg-violet-500 p-5 py-2 text-sm text-white shadow-md">
                   {product.sellState === "selling" && "판매중"}
                   {product.sellState === "reserve" && "예약중"}
                   {product.sellState === "sold" && "판매완료"}
