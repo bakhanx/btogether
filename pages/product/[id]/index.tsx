@@ -112,14 +112,14 @@ const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
   // 채팅방 생성
   useEffect(() => {
     if (chatData?.ok) {
-      router.push(`/chat/${chatData?.chats?.id}`);
+      router.push(`/chat/${chatData?.chats?.id}?name=${chatData?.chats?.seller?.name}`);
     }
   }, [chatData, router]);
 
   // 채팅방 이미 존재
   useEffect(() => {
     if (chatData?.ok === false) {
-      router.push(`/chat/${productData?.myChatRoomId}`);
+      router.push(`/chat/${productData?.myChatRoomId}?name=${productData?.product?.seller.name}`);
     }
   }, [router, chatData, productData]);
 
