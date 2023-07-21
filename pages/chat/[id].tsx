@@ -1,18 +1,14 @@
-import { GetServerSideProps, NextPage, NextPageContext } from "next";
 import Chat from "@components/message";
 import Layout from "@components/layout";
 import useMutation from "@libs/client/useMutation";
 import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
-import useSWR, { SWRConfig, unstable_serialize } from "swr";
-import useUser, { UserResponse } from "@libs/client/useUser";
+import useSWR from "swr";
+import  { UserResponse } from "@libs/client/useUser";
 import { ChatRoomWithUsers } from ".";
 import { Message, User } from "@prisma/client";
 import { Suspense, useEffect, useRef } from "react";
 import Image from "next/image";
-import client from "@libs/server/client";
-import { withSsrSession } from "@libs/server/withSession";
-import Product from "pages/product/[id]";
 import Loading from "@components/loading";
 import SellStateLabel, { sellStateType } from "@components/sellStateLabel";
 
