@@ -9,12 +9,10 @@ import useMutation from "@libs/client/useMutation";
 import { useRouter } from "next/router";
 import Image from "next/image";
 import { SWRConfig } from "swr";
-import { User } from "@prisma/client";
 import client from "@libs/server/client";
 import { withSsrSession } from "@libs/server/withSession";
 import useSWR from "swr";
 import { UserResponse } from "@libs/client/useUser";
-import { profile, profileEnd } from "console";
 
 interface EditProfileForm {
   email?: string;
