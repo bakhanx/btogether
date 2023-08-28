@@ -9,7 +9,7 @@ async function handler(
 ) {
   const {
     session: { user },
-    query : {id},
+    query: { id },
     body,
   } = req;
 
@@ -30,9 +30,20 @@ async function handler(
         message: body.message,
       },
     });
+
+    const updateChatRoom = await client.chatRoom.update({
+      where: {
+        id: Number(id),
+      },
+      data: {
+        id:Number(id)
+      },
+    });
+
     res.json({
       ok: true,
       message,
+      updateChatRoom,
     });
   }
 }

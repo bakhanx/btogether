@@ -102,7 +102,7 @@ const ChatRoomsList = () => {
                       {/* 시간 */}
                       <span className="self-start py-2 px-2 text-xs text-gray-400">
                         <DateTime
-                          date={chatRoom?.messages.at(-1)?.createdAt}
+                          date={chatRoom?.messages.at(-1)?.updatedAt}
                           timeAgo
                         />
                       </span>
