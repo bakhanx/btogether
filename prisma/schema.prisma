@@ -3,7 +3,7 @@
 
 generator client {
   provider        = "prisma-client-js"
-  previewFeatures = ["filteredRelationCount"]
+  // previewFeatures = ["filteredRelationCount"]
 }
 
 datasource db {
@@ -142,6 +142,7 @@ enum Kind {
   Purchase
   Favorite
   Sale
+  Reserve
 }
 
 model Message {

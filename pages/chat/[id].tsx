@@ -102,6 +102,7 @@ const ChatContents = () => {
     }, false);
     reset();
     scrollRef.current?.scrollIntoView({ behavior: "smooth" });
+        
     sendMutation(form);
   };
 
