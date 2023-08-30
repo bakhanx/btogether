@@ -70,14 +70,6 @@ const Modify: NextPage = () => {
 
   // ================= 가격 콤마 설정 ================
 
-  //   useEffect(() => {
-
-  //     let value = price;
-  //     const numValue = value?.replaceAll(",", "");
-  //     value = numValue?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-  //     setParsePrice(value);
-  //   }, [price, productData]);
-
   const handleParsePrice = () => {
     let value = getValues("price");
     console.log(value);

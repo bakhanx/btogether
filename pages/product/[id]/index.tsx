@@ -1,8 +1,8 @@
 import type { GetStaticPaths, GetStaticProps, NextPage } from "next";
 import Button from "@components/button";
 import { useRouter } from "next/router";
-import useSWR, { mutate, useSWRConfig } from "swr";
-import { ChatRoom, Product } from "@prisma/client";
+import useSWR, { useSWRConfig } from "swr";
+import { Product } from "@prisma/client";
 import Link from "next/link";
 import useMutation from "@libs/client/useMutation";
 import { cls } from "@libs/client/utils";
@@ -52,10 +52,8 @@ const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
   );
   const [
     sellStateMutate,
-    { data: sellStateMutationResponse, loading: sellStateLoading },
   ] = useMutation(`/api/products/${router.query.id}/sellState`);
 
-  const { mutate: unboundMutate } = useSWRConfig(); // unbound mutate
   const [isShow, setIsShow] = useState(false);
   const [toggleFavorite] = useMutation(
     `/api/products/${router.query.id}/favorite`
@@ -65,7 +63,6 @@ const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
 
   const [isOnImage, setIsOnImage] = useState(false);
 
-  const [sellState, setSellState] = useState<sellingType | string>("selling");
   // 메뉴
 
   const [deleteMutation, { data: deleteData, loading: deleteLoading }] =
