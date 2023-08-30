@@ -7,7 +7,6 @@ import useMutation from "@libs/client/useMutation";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { Story } from "@prisma/client";
-import { useSWRConfig } from "swr";
 
 interface UploadForm {
   content: string;

@@ -7,7 +7,7 @@ import useMutation from "@libs/client/useMutation";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { Story } from "@prisma/client";
-import useSWR, { useSWRConfig } from "swr";
+import useSWR from "swr";
 
 interface StoryForm {
   content: string;
@@ -26,8 +26,9 @@ const Modify: NextPage = () => {
     handleSubmit,
     formState: { errors },
   } = useForm<StoryForm>({ mode: "onSubmit" });
-  const [storyMutate, { data, loading }] =
-    useMutation<StoryResponse>(`/api/stories/${router.query.id}`);
+  const [storyMutate, { data, loading }] = useMutation<StoryResponse>(
+    `/api/stories/${router.query.id}`
+  );
   const [isLoading, setIsLoading] = useState(false);
   const { data: storyData, isLoading: storyIsLoading } = useSWR<StoryResponse>(
     `/api/stories/${router.query.id}`
@@ -44,10 +45,15 @@ const Modify: NextPage = () => {
     if (data?.ok && data?.updateStory) {
       router.push(`/story/${storyData?.story?.id}`);
     }
-  }, [router, data,storyData]);
+  }, [router, data, storyData]);
 
   return (
-    <Layout canGoBack title="스토리 수정하기" seoTitle="스토리 수정하기" pathName="Story">
+    <Layout
+      canGoBack
+      title="스토리 수정하기"
+      seoTitle="스토리 수정하기"
+      pathName="Story"
+    >
       <form onSubmit={handleSubmit(onValid)} className="space-y-4 p-4">
         <TextArea
           register={register("content", {
@@ -60,7 +66,11 @@ const Modify: NextPage = () => {
 
         <span className="text-red-500">{errors.content?.message}</span>
 
-        <Button text={isLoading ? "스토리 수정중..." : "스토리 수정하기"} large color="amber" />
+        <Button
+          text={isLoading ? "스토리 수정중..." : "스토리 수정하기"}
+          large
+          color="amber"
+        />
       </form>
     </Layout>
   );

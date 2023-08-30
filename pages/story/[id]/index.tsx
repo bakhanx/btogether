@@ -1,6 +1,6 @@
-import { GetServerSideProps, NextPage, NextPageContext } from "next";
+import { NextPage } from "next";
 import TextArea from "@components/textarea";
-import useSWR, { SWRConfig, useSWRConfig } from "swr";
+import useSWR, { useSWRConfig } from "swr";
 import useSWRInfinite from "swr/infinite";
 import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
@@ -8,33 +8,34 @@ import { Comment, Story, User } from "@prisma/client";
 import Link from "next/link";
 import useMutation from "@libs/client/useMutation";
 import { cls } from "@libs/client/utils";
-import { Suspense, useEffect, useState } from "react";
-import client from "@libs/server/client";
+import { Suspense, useEffect } from "react";
 import Image from "next/image";
 import useUser from "@libs/client/useUser";
 import DateTime from "@components/datetime";
 import Menu from "@components/menu";
 import Loading from "@components/loading";
-import TopNav from "@components/topNav";
 import Button from "@components/button";
 import { usePagination } from "@libs/client/usePagination";
+
+
+// interface StorySSGResponse extends Story {
+//   ok: boolean;
+//   user: {
+//     id: number;
+//     name: string;
+//     avatar: string;
+//   };
+//   _count: {
+//     comments: number;
+//     likes: number;
+//   };
+//   comments: CommentsWithUser[];
+// }
 
 interface CommentsWithUser extends Comment {
   user: User;
 }
-interface StorySSGResponse extends Story {
-  ok: boolean;
-  user: {
-    id: number;
-    name: string;
-    avatar: string;
-  };
-  _count: {
-    comments: number;
-    likes: number;
-  };
-  comments: CommentsWithUser[];
-}
+
 interface StoryResponse {
   ok: boolean;
   story: storyDetail;
@@ -277,14 +278,11 @@ const Content: NextPage = () => {
   );
 };
 
-
-
 const Comments = () => {
-  
   const router = useRouter();
   const getKey = (pageIndex: number, previousPageData: CommentsResponse) => {
-
-    if (pageIndex === 0) return `/api/stories/${router.query.id}/comment?page=1`;
+    if (pageIndex === 0)
+      return `/api/stories/${router.query.id}/comment?page=1`;
     if (pageIndex + 1 > previousPageData.pages) return null;
     return `/api/stories/${73}/comment?page=${pageIndex + 1}`;
   };
@@ -312,30 +310,6 @@ const Comments = () => {
   const onValid = (form: CommentForm) => {
     if (commentLoading) return;
     reset();
-
-    //   {
-    //     ...data,
-    //     story: {
-    //       ...commentsData.story,
-    //       comments: [
-    //         ...commentsData.story.comments,
-    //         {
-    //           id: Date.now(),
-    //           createdAt: new Date(),
-    //           updatedAt: new Date(),
-    //           comment: form.comment,
-    //           userId: user.id,
-    //           storyId: Number(router.query.id),
-    //           user: { ...user },
-    //         },
-    //       ],
-    //       _count: {
-    //         comments: commentsData.story._count.comments + 1,
-    //       },
-    //     },
-    //   },
-    //   false
-    // );
     comment(form);
   };
 

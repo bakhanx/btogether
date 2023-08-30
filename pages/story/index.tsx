@@ -6,8 +6,6 @@ import Layout from "@components/layout";
 import DateTime from "@components/datetime";
 
 import { Suspense, useEffect } from "react";
-
-import useSWR from "swr";
 import useSWRInfinite from "swr/infinite";
 import Loading from "@components/loading";
 import { usePagination } from "@libs/client/usePagination";
