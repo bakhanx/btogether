@@ -1,13 +1,11 @@
 import DateTime from "@components/datetime";
 import Layout from "@components/layout";
-import useUser, { UserResponse } from "@libs/client/useUser";
+import  { UserResponse } from "@libs/client/useUser";
 import { ChatRoom, User } from "@prisma/client";
-import { GetServerSideProps, NextPage, NextPageContext } from "next";
+import {  NextPage } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import useSWR, { SWRConfig } from "swr";
-import client from "@libs/server/client";
-import { withSsrSession } from "@libs/server/withSession";
 import { Suspense, useEffect, useState } from "react";
 import Loading from "@components/loading";
 

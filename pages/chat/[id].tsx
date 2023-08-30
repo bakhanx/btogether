@@ -4,9 +4,9 @@ import useMutation from "@libs/client/useMutation";
 import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
 import useSWR from "swr";
-import  { UserResponse } from "@libs/client/useUser";
+import { UserResponse } from "@libs/client/useUser";
 import { ChatRoomWithUsers } from ".";
-import { Message, User } from "@prisma/client";
+import { Message } from "@prisma/client";
 import { Suspense, useEffect, useRef } from "react";
 import Image from "next/image";
 import Loading from "@components/loading";
@@ -44,7 +44,9 @@ const ProductInfo = () => {
           <div className="px-4">
             <div className="flex">
               <SellStateLabel
-                sellState={chatData?.chatRoom?.product?.sellState as sellStateType}
+                sellState={
+                  chatData?.chatRoom?.product?.sellState as sellStateType
+                }
               />
               <span>{chatData?.chatRoom?.product?.name}</span>
             </div>
@@ -102,7 +104,7 @@ const ChatContents = () => {
     }, false);
     reset();
     scrollRef.current?.scrollIntoView({ behavior: "smooth" });
-        
+
     sendMutation(form);
   };
 

@@ -13,8 +13,6 @@ async function handler(
       session: { user },
     } = req;
 
-  
-
     const chatRooms = await client.chatRoom.findMany({
       where: {
         OR: [{ sellerId: user?.id }, { purchaserId: user?.id }],
@@ -43,14 +41,11 @@ async function handler(
           orderBy: { createdAt: "desc" },
           take: 1,
         },
-
       },
-      orderBy:{
-        updatedAt:"desc"
-      }
+      orderBy: {
+        updatedAt: "desc",
+      },
     });
-
-
 
     res.json({
       ok: true,
