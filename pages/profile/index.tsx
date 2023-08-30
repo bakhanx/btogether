@@ -1,7 +1,7 @@
 import { NextPage, NextPageContext } from "next";
 import Link from "next/link";
 import Layout from "@components/layout";
-import useUser, { UserResponse } from "@libs/client/useUser";
+import  { UserResponse } from "@libs/client/useUser";
 import Image from "next/image";
 import { SWRConfig } from "swr";
 import { User } from "@prisma/client";
