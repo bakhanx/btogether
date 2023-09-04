@@ -1,4 +1,3 @@
-import { HTMLInputTypeAttribute } from "react";
 import type { UseFormRegisterReturn } from "react-hook-form";
 
 interface InputProps {

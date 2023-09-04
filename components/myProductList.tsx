@@ -1,5 +1,5 @@
 import { Product } from "@prisma/client";
-import useSWR, { SWRConfig } from "swr";
+import useSWR from "swr";
 import Item from "./item";
 import { sellStateType } from "./sellStateLabel";
 

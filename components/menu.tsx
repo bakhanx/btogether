@@ -1,5 +1,5 @@
 import useUser from "@libs/client/useUser";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 export default function Menu(props: {
   type: "Product" | "Story" | "Comment";
