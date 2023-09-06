@@ -13,36 +13,10 @@ import Layout from "@components/layout";
 import { useEffect, useState } from "react";
 import TopNav from "@components/topNav";
 import DateTime from "@components/datetime";
+import { ProductResponse } from "types/product";
 
-interface ProductWithUser extends Product {
-  seller: {
-    id: number;
-    name: string;
-    avatar: string;
-  };
-  _count: {
-    chatRooms: number;
-    records: number;
-  };
-  sellState: "selling" | "sold" | "reserve";
-  chatRooms: {
-    id: number;
-    purchaser: {
-      avatar: string;
-      id: number;
-      name: string;
-    };
-  }[];
-}
-interface ProductResponse {
-  ok: boolean;
-  product: ProductWithUser;
-  relatedProducts: Product[];
-  isFavorite: Boolean;
-  myChatRoomId: number;
-}
 
-type sellingType = "selling" | "reserve" | "sold";
+
 
 const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
   const router = useRouter();

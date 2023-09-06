@@ -10,17 +10,11 @@ import { Product } from "@prisma/client";
 import { useRouter } from "next/router";
 import Image from "next/image";
 import useSWR from "swr";
+import { UploadProductForm } from "types/product";
 
 // 판매 상품 가격 제한 1억
 const MAX_PRICE = 10;
 
-interface UploadProductForm {
-  name: string;
-  price: string;
-  description: string;
-  photo: FileList;
-  productId: number;
-}
 
 interface ProductResponse {
   ok: boolean;
