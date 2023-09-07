@@ -6,20 +6,15 @@ import TextArea from "@components/textarea";
 import { useForm } from "react-hook-form";
 import useMutation from "@libs/client/useMutation";
 import { useEffect, useState } from "react";
-import { Product } from "@prisma/client";
 import { useRouter } from "next/router";
 import Image from "next/image";
 import useSWR from "swr";
-import { UploadProductForm } from "types/product";
+import { ProductResponse, UploadProductForm } from "types/product";
 
 // 판매 상품 가격 제한 1억
 const MAX_PRICE = 10;
 
-type ProductResponse = {
-  ok: boolean;
-  product: Product;
-  updateProduct: Product;
-};
+
 
 const Modify: NextPage = () => {
   const router = useRouter();

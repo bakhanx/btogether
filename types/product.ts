@@ -8,16 +8,21 @@ export type UserInfo = {
   avatar: string;
 };
 
-export type UploadProductForm ={
+export type UploadProductForm = {
   name: string;
   price: string;
   description: string;
   photo: FileList;
   productId: number;
-}
-
+};
 
 export type UploadProductMutation = {
   ok: boolean;
   product: Product;
-}
+};
+
+export type ProductResponse = {
+  ok: boolean;
+  product: Product;
+  updateProduct: Product;
+};
