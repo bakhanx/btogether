@@ -9,22 +9,10 @@ import { useEffect, useState } from "react";
 import { Product } from "@prisma/client";
 import { useRouter } from "next/router";
 import Image from "next/image";
-import { error } from "console";
+import { UploadProductForm, UploadProductMutation } from "types/product";
 
 // 판매 상품 가격 제한 1억
 const MAX_PRICE = 10;
-
-interface UploadProductForm {
-  name: string;
-  price: string;
-  description: string;
-  photo: FileList;
-}
-
-interface UploadProductMutation {
-  ok: boolean;
-  product: Product;
-}
 
 const Upload: NextPage = () => {
   const router = useRouter();

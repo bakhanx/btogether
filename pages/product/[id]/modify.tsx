@@ -15,12 +15,11 @@ import { UploadProductForm } from "types/product";
 // 판매 상품 가격 제한 1억
 const MAX_PRICE = 10;
 
-
-interface ProductResponse {
+type ProductResponse = {
   ok: boolean;
   product: Product;
   updateProduct: Product;
-}
+};
 
 const Modify: NextPage = () => {
   const router = useRouter();
@@ -130,7 +129,12 @@ const Modify: NextPage = () => {
   }, [data, router]);
 
   return (
-    <Layout canGoBack title="상품 수정하기" seoTitle="상품 수정하기" pathName="Product">
+    <Layout
+      canGoBack
+      title="상품 수정하기"
+      seoTitle="상품 수정하기"
+      pathName="Product"
+    >
       <form className="space-y-4 p-4" onSubmit={handleSubmit(onValid)}>
         <div className="flex items-center justify-center">
           <div className="absolute -z-50 w-10/12 h-96 ">
@@ -228,7 +232,11 @@ const Modify: NextPage = () => {
           {errors?.description ? errors?.description?.message : ""}
         </span>
 
-        <Button text={isLoading ? "수정중..." : "상품 수정하기"} large color="blue" />
+        <Button
+          text={isLoading ? "수정중..." : "상품 수정하기"}
+          large
+          color="blue"
+        />
       </form>
       {}
     </Layout>

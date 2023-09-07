@@ -13,20 +13,39 @@ import Layout from "@components/layout";
 import { useEffect, useState } from "react";
 import TopNav from "@components/topNav";
 import DateTime from "@components/datetime";
-import { ProductResponse } from "types/product";
+import { SellingType, UserInfo } from "types/product";
 
+interface ProductDetail extends Product {
+  sellState: SellingType;
+  seller: UserInfo;
+  _count: {
+    chatRooms: number;
+    records: number;
+  };
+  chatRooms: {
+    id: number;
+    purchaser: UserInfo;
+  }[];
+}
 
-
+interface ProductResponse {
+  ok: boolean;
+  product: ProductDetail;
+  relatedProducts: Product[];
+  isFavorite: Boolean;
+  myChatRoomId: number;
+}
 
 const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
   const router = useRouter();
+
   const { user, isLoading } = useUser();
   const { data: productData, mutate: boundMutate } = useSWR<ProductResponse>(
     router.query.id ? `/api/products/${router.query.id} ` : null
   );
-  const [
-    sellStateMutate,
-  ] = useMutation(`/api/products/${router.query.id}/sellState`);
+  const [sellStateMutate] = useMutation(
+    `/api/products/${router.query.id}/sellState`
+  );
 
   const [isShow, setIsShow] = useState(false);
   const [toggleFavorite] = useMutation(
@@ -83,14 +102,18 @@ const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
   // 채팅방 생성
   useEffect(() => {
     if (chatData?.ok) {
-      router.push(`/chat/${chatData?.chats?.id}?name=${chatData?.chats?.seller?.name}`);
+      router.push(
+        `/chat/${chatData?.chats?.id}?name=${chatData?.chats?.seller?.name}`
+      );
     }
   }, [chatData, router]);
 
   // 채팅방 이미 존재
   useEffect(() => {
     if (chatData?.ok === false) {
-      router.push(`/chat/${productData?.myChatRoomId}?name=${productData?.product?.seller.name}`);
+      router.push(
+        `/chat/${productData?.myChatRoomId}?name=${productData?.product?.seller.name}`
+      );
     }
   }, [router, chatData, productData]);
 
