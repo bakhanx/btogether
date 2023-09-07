@@ -10,9 +10,7 @@ import { Product } from "@prisma/client";
 import { useRouter } from "next/router";
 import Image from "next/image";
 import { UploadProductForm, UploadProductMutation } from "types/product";
-
-// 판매 상품 가격 제한 1억
-const MAX_PRICE = 10;
+import { PRODUCT } from "constants/product";
 
 const Upload: NextPage = () => {
   const router = useRouter();
@@ -133,7 +131,7 @@ const Upload: NextPage = () => {
           register={register("price", {
             required: true,
             maxLength: {
-              value: MAX_PRICE,
+              value: PRODUCT.MAX_PRICE_NUMBER,
               message: "고가 물품은 판매할 수 없습니다.",
             },
             pattern: {
