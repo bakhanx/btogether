@@ -62,7 +62,7 @@ export type StoryCommentResponse = {
   deleteComment?: Comment;
 };
 
-export interface StoryCommentListResponse {
+export type StoryCommentListResponse = {
   ok: true;
   story: {
     comments: StoryCommentWithUser[];
