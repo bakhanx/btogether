@@ -12,7 +12,7 @@ import { SWRConfig } from "swr";
 import client from "@libs/server/client";
 import { withSsrSession } from "@libs/server/withSession";
 import useSWR from "swr";
-import { EditProfileForm, EditProfileResponse } from "types/story";
+import { ProfileEditForm, ProfileEditResoponse } from "types/story";
 import { UserResponse } from "types/user";
 
 const EditProfile: NextPage = () => {
@@ -25,7 +25,7 @@ const EditProfile: NextPage = () => {
     watch,
 
     formState: { errors },
-  } = useForm<EditProfileForm>();
+  } = useForm<ProfileEditForm>();
 
   const { user } = useUser();
   const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
@@ -34,10 +34,10 @@ const EditProfile: NextPage = () => {
   const { data: profileData, mutate } = useSWR<UserResponse>(`/api/users/me`);
 
   const [editProfile, { data, loading }] =
-    useMutation<EditProfileResponse>(`/api/users/me`);
+    useMutation<ProfileEditResoponse>(`/api/users/me`);
 
   const [isLoading, setIsLoading] = useState(false);
-  const onValid = async ({ email, phone, name, avatar }: EditProfileForm) => {
+  const onValid = async ({ email, phone, name, avatar }: ProfileEditForm) => {
     setIsLoading(true);
     if (loading) return;
 

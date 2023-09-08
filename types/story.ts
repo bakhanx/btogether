@@ -1,4 +1,4 @@
-export type EditProfileForm = {
+export type ProfileEditForm = {
     email?: string;
     phone?: string;
     name?: string;
@@ -6,7 +6,7 @@ export type EditProfileForm = {
     avatar?: string | null;
     noAvatar?: string;
   }
-  export type EditProfileResponse = {
+  export type ProfileEditResoponse = {
     ok: boolean;
     error?: string;
   }
