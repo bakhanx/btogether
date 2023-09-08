@@ -9,7 +9,7 @@ import { useEffect, useState } from "react";
 import { Product } from "@prisma/client";
 import { useRouter } from "next/router";
 import Image from "next/image";
-import { UploadProductForm, UploadProductMutation } from "types/product";
+import { ProductUploadForm, ProductUploadMutation } from "types/product";
 import { PRODUCT } from "constants/product";
 
 const Upload: NextPage = () => {
@@ -20,9 +20,9 @@ const Upload: NextPage = () => {
     watch,
     formState: { errors },
     setError,
-  } = useForm<UploadProductForm>({ mode: "onChange" });
+  } = useForm<ProductUploadForm>({ mode: "onChange" });
   const [uploadProduct, { loading, data }] =
-    useMutation<UploadProductMutation>("/api/products");
+    useMutation<ProductUploadMutation>("/api/products");
 
   const photo = watch("photo");
   const price = watch("price");
@@ -50,7 +50,7 @@ const Upload: NextPage = () => {
     name,
     price,
     description,
-  }: UploadProductForm) => {
+  }: ProductUploadForm) => {
     setIsLoading(true);
     if (loading) return;
     if (photo && photo.length > 0) {

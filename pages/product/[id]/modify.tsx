@@ -9,7 +9,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import Image from "next/image";
 import useSWR from "swr";
-import { ProductResponse, UploadProductForm } from "types/product";
+import { ProductResponse, ProductUploadForm, ProductUploadResponse } from "types/product";
 import { PRODUCT } from "constants/product";
 
 const Modify: NextPage = () => {
@@ -21,9 +21,9 @@ const Modify: NextPage = () => {
     formState: { errors },
     setValue,
     getValues,
-  } = useForm<UploadProductForm>({ mode: "onBlur" });
+  } = useForm<ProductUploadForm>({ mode: "onBlur" });
   const [uploadProduct, { loading, data }] =
-    useMutation<ProductResponse>("/api/products");
+    useMutation<ProductUploadResponse>("/api/products");
   const { data: productData } = useSWR<ProductResponse>(
     router.query.id ? `/api/products/${router.query.id}` : ""
   );
@@ -84,7 +84,7 @@ const Modify: NextPage = () => {
     price,
     description,
     productId,
-  }: UploadProductForm) => {
+  }: ProductUploadForm) => {
     setIsLoading(true);
     if (loading) return;
     if (photo && photo.length > 0) {
