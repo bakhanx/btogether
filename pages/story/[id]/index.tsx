@@ -4,7 +4,6 @@ import useSWR, { useSWRConfig } from "swr";
 import useSWRInfinite from "swr/infinite";
 import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
-import { Comment, Story, User } from "@prisma/client";
 import Link from "next/link";
 import useMutation from "@libs/client/useMutation";
 import { cls } from "@libs/client/utils";
@@ -16,6 +15,13 @@ import Menu from "@components/menu";
 import Loading from "@components/loading";
 import Button from "@components/button";
 import { usePagination } from "@libs/client/usePagination";
+import {
+  StoryCommentForm,
+  StoryCommentFormError,
+  StoryCommentListResponse,
+  StoryCommentResponse,
+  StoryResponse,
+} from "types/story";
 
 // interface StorySSGResponse extends Story {
 //   ok: boolean;
@@ -30,51 +36,6 @@ import { usePagination } from "@libs/client/usePagination";
 //   };
 //   comments: CommentsWithUser[];
 // }
-
-interface CommentsWithUser extends Comment {
-  user: User;
-}
-
-interface StoryResponse {
-  ok: boolean;
-  story: storyDetail;
-  isLike: boolean;
-}
-interface storyDetail extends Story {
-  _count: {
-    likes: number;
-    comments: number;
-  };
-  user: User;
-  comments: CommentsWithUser[];
-}
-interface CommentForm {
-  comment: string;
-}
-interface CommentFormError {
-  comment?: {
-    type?: string;
-    message?: string;
-  };
-}
-interface CommentResponse {
-  ok: boolean;
-  createComment?: Comment;
-  deleteComment?: Comment;
-}
-interface CommentWithUser extends Comment {
-  user: User;
-}
-interface CommentsResponse {
-  ok: true;
-  story: {
-    comments: CommentWithUser[];
-    _count: {
-      comments: number;
-    };
-  };
-  pages: number;
-}
 
 const Top = () => {
   const router = useRouter();
@@ -279,15 +240,21 @@ const Content: NextPage = () => {
 
 const Comments = () => {
   const router = useRouter();
-  const getKey = (pageIndex: number, previousPageData: CommentsResponse) => {
+  const getKey = (
+    pageIndex: number,
+    previousPageData: StoryCommentListResponse
+  ) => {
     if (pageIndex === 0)
       return `/api/stories/${router.query.id}/comment?page=1`;
     if (pageIndex + 1 > previousPageData.pages) return null;
     return `/api/stories/${73}/comment?page=${pageIndex + 1}`;
   };
-  const { data, setSize, mutate } = useSWRInfinite<CommentsResponse>(getKey, {
-    suspense: true,
-  });
+  const { data, setSize, mutate } = useSWRInfinite<StoryCommentListResponse>(
+    getKey,
+    {
+      suspense: true,
+    }
+  );
   const comments = data ? data.map((item) => item.story.comments).flat() : [];
   const page = usePagination();
   useEffect(() => {
@@ -301,18 +268,20 @@ const Comments = () => {
   //   { suspense: true }
   // );
   const [comment, { data: commentData, loading: commentLoading }] =
-    useMutation<CommentResponse>(`/api/stories/${router.query.id}/comment`);
+    useMutation<StoryCommentResponse>(
+      `/api/stories/${router.query.id}/comment`
+    );
 
   // =======================댓글 작성 ====================
-  const { register, handleSubmit, reset } = useForm<CommentForm>();
+  const { register, handleSubmit, reset } = useForm<StoryCommentForm>();
   // ==================댓글 작성======================
-  const onValid = (form: CommentForm) => {
+  const onValid = (form: StoryCommentForm) => {
     if (commentLoading) return;
     reset();
     comment(form);
   };
 
-  const onInvalid = (form: CommentFormError) => {
+  const onInvalid = (form: StoryCommentFormError) => {
     if (commentLoading) return;
     console.log(form);
   };
