@@ -18,7 +18,7 @@ export type ChatRoomResponse = {
   chatRoom: ChatRoomWithUsers;
 };
 
-export type ChatRoomsResponse = {
+export type ChatRoomListResponse = {
   ok: boolean;
   chatRooms: ChatRoomWithUsers[];
 };

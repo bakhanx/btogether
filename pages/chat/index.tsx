@@ -7,7 +7,7 @@ import Link from "next/link";
 import useSWR, { SWRConfig } from "swr";
 import { Suspense, useEffect, useState } from "react";
 import Loading from "@components/loading";
-import { ChatRoomsResponse } from "types/chat";
+import { ChatRoomListResponse } from "types/chat";
 
 // 상대 user 의 아바타, 아이디, 채팅내용.
 
@@ -15,7 +15,7 @@ const ChatRoomsList = () => {
   // const { user } = useUser();
   const { data: userData } = useSWR<UserResponse>(`/api/users/me`);
   const { data: chatsData, isLoading } =
-    useSWR<ChatRoomsResponse>("/api/chats");
+    useSWR<ChatRoomListResponse>("/api/chats");
   const [roomName, setRoomName] = useState("");
 
   useEffect(() => {});

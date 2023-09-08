@@ -6,10 +6,11 @@ import { Suspense, useEffect } from "react";
 import useSWRInfinite from "swr/infinite";
 import Loading from "@components/loading";
 import { usePagination } from "@libs/client/usePagination";
-import { StoryResponse } from "types/story";
+import { StoryListResponse } from "types/story";
 
 
-const getKey = (pageIndex: number, previousPageData: StoryResponse) => {
+
+const getKey = (pageIndex: number, previousPageData: StoryListResponse) => {
   // console.log(pageIndex);
   if (pageIndex === 0) return `/api/stories?page=1`;
   if (pageIndex + 1 > previousPageData.pages) return null;
@@ -17,7 +18,7 @@ const getKey = (pageIndex: number, previousPageData: StoryResponse) => {
 };
 
 const StoryList = () => {
-  const { data, setSize } = useSWRInfinite<StoryResponse>(getKey, {
+  const { data, setSize } = useSWRInfinite<StoryListResponse>(getKey, {
     suspense: true,
   });
   const stories = data ? data.map((item) => item.stories).flat() : [];

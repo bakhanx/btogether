@@ -10,7 +10,7 @@ export interface StoryWithUser extends Story {
     comments: number;
   };
 }
-export type StoryResponse = {
+export type StoryListResponse = {
   ok: boolean;
   stories: StoryWithUser[];
   pages: number;
