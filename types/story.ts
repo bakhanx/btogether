@@ -35,6 +35,9 @@ export type StoryResponse = {
   story: storyDetail;
   isLike: boolean;
 };
+
+
+
 export interface storyDetail extends Story {
   _count: {
     likes: number;
@@ -68,4 +71,11 @@ export interface StoryCommentListResponse {
     };
   };
   pages: number;
+}
+
+
+export type StoryModifyResponse = {
+  ok: boolean;
+  story?: Story;
+  updateStory?: Story;
 }
