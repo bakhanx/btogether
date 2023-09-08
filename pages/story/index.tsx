@@ -1,30 +1,13 @@
 import { NextPage } from "next";
 import Link from "next/link";
-import { Story } from "@prisma/client";
-
 import Layout from "@components/layout";
 import DateTime from "@components/datetime";
-
 import { Suspense, useEffect } from "react";
 import useSWRInfinite from "swr/infinite";
 import Loading from "@components/loading";
 import { usePagination } from "@libs/client/usePagination";
+import { StoryResponse } from "types/story";
 
-interface StoryWithUserAndCount extends Story {
-  _count: {
-    likes: number;
-    comments: number;
-  };
-  user: {
-    name: string;
-    id: number;
-  };
-}
-interface StoryResponse {
-  ok: boolean;
-  stories: StoryWithUserAndCount[];
-  pages: number;
-}
 
 const getKey = (pageIndex: number, previousPageData: StoryResponse) => {
   // console.log(pageIndex);
