@@ -13,19 +13,8 @@ import client from "@libs/server/client";
 import { withSsrSession } from "@libs/server/withSession";
 import useSWR from "swr";
 import { UserResponse } from "@libs/client/useUser";
+import { EditProfileForm, EditProfileResponse } from "types/story";
 
-interface EditProfileForm {
-  email?: string;
-  phone?: string;
-  name?: string;
-  formErrors?: string;
-  avatar?: string | null;
-  noAvatar?: string;
-}
-interface EditProfileResponse {
-  ok: boolean;
-  error?: string;
-}
 const EditProfile: NextPage = () => {
   const {
     handleSubmit,
@@ -175,7 +164,13 @@ const EditProfile: NextPage = () => {
   }, [profileData, avatarPreview, init]);
 
   return (
-    <Layout hasTabBar canGoBack title="프로필 편집" seoTitle="내 프로필 편집" pathName="Profile">
+    <Layout
+      hasTabBar
+      canGoBack
+      title="프로필 편집"
+      seoTitle="내 프로필 편집"
+      pathName="Profile"
+    >
       {profileData ? (
         <form onSubmit={handleSubmit(onValid)} className="space-y-4 py-10 px-4">
           <div className="flex items-center space-x-3">
@@ -248,7 +243,7 @@ const EditProfile: NextPage = () => {
           <div className="my-2 font-bold text-red-500">
             <span>{errors?.formErrors?.message}</span>
           </div>
-          <Button text={isLoading ? "수정중..." : "프로필 수정"} color="blue"/>
+          <Button text={isLoading ? "수정중..." : "프로필 수정"} color="blue" />
         </form>
       ) : (
         "Loading..."
