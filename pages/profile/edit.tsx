@@ -12,7 +12,7 @@ import { SWRConfig } from "swr";
 import client from "@libs/server/client";
 import { withSsrSession } from "@libs/server/withSession";
 import useSWR from "swr";
-import { ProfileEditForm, ProfileEditResoponse } from "types/story";
+import { ProfileEditForm, ProfileEditResoponse } from "types/profile";
 import { UserResponse } from "types/user";
 
 const EditProfile: NextPage = () => {
