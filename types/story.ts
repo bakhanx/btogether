@@ -15,3 +15,13 @@ export type StoryResponse = {
   stories: StoryWithUser[];
   pages: number;
 };
+
+export type StoryUploadForm = {
+  content: string;
+}
+
+export type StoryUploadResponse = {
+  ok: boolean;
+  revalidated?: boolean;
+  story: Story;
+}

@@ -6,17 +6,7 @@ import { useForm } from "react-hook-form";
 import useMutation from "@libs/client/useMutation";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { Story } from "@prisma/client";
-
-interface UploadForm {
-  content: string;
-}
-
-interface UploadResponse {
-  ok: boolean;
-  revalidated?: boolean;
-  story: Story;
-}
+import { StoryUploadForm, StoryUploadResponse } from "types/story";
 
 const Upload: NextPage = () => {
   const router = useRouter();
@@ -24,12 +14,12 @@ const Upload: NextPage = () => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<UploadForm>({ mode: "onSubmit" });
+  } = useForm<StoryUploadForm>({ mode: "onSubmit" });
   const [storyMutate, { data, loading }] =
-    useMutation<UploadResponse>("/api/stories");
+    useMutation<StoryUploadResponse>("/api/stories");
   const [isLoading, setIsLoading] = useState(false);
 
-  const onValid = (form: UploadForm) => {
+  const onValid = (form: StoryUploadForm) => {
     setIsLoading(true);
     if (loading) return;
     storyMutate(form);
