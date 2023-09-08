@@ -1,6 +1,5 @@
 import DateTime from "@components/datetime";
 import Layout from "@components/layout";
-import { UserResponse } from "@libs/client/useUser";
 import { NextPage } from "next";
 import Image from "next/image";
 import Link from "next/link";
@@ -8,6 +7,7 @@ import useSWR, { SWRConfig } from "swr";
 import { Suspense, useEffect, useState } from "react";
 import Loading from "@components/loading";
 import { ChatRoomListResponse } from "types/chat";
+import { UserResponse } from "types/user";
 
 // 상대 user 의 아바타, 아이디, 채팅내용.
 
