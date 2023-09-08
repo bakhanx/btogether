@@ -1,7 +1,7 @@
 import { NextPage, NextPageContext } from "next";
 import Link from "next/link";
 import Layout from "@components/layout";
-import  { UserResponse } from "@libs/client/useUser";
+
 import Image from "next/image";
 import { SWRConfig } from "swr";
 import { User } from "@prisma/client";
@@ -11,6 +11,7 @@ import useSWR from "swr";
 import useMutation from "@libs/client/useMutation";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
+import { UserResponse } from "types/user";
 
 const UserInfo = () => {
   const router = useRouter();
@@ -215,7 +216,13 @@ const UserInfo = () => {
 
 const Profile: NextPage = () => {
   return (
-    <Layout canGoBack title="마이페이지" seoTitle="내 프로필" hasTabBar pathName="Profile">
+    <Layout
+      canGoBack
+      title="마이페이지"
+      seoTitle="내 프로필"
+      hasTabBar
+      pathName="Profile"
+    >
       <UserInfo />
     </Layout>
   );
