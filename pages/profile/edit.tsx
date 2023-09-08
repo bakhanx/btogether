@@ -12,8 +12,8 @@ import { SWRConfig } from "swr";
 import client from "@libs/server/client";
 import { withSsrSession } from "@libs/server/withSession";
 import useSWR from "swr";
-import { UserResponse } from "@libs/client/useUser";
 import { EditProfileForm, EditProfileResponse } from "types/story";
+import { UserResponse } from "types/user";
 
 const EditProfile: NextPage = () => {
   const {
