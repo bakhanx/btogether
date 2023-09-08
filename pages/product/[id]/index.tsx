@@ -28,7 +28,7 @@ interface ProductDetail extends Product {
   }[];
 }
 
-interface ProductResponse {
+type ProductResponse = {
   ok: boolean;
   product: ProductDetail;
   relatedProducts: Product[];

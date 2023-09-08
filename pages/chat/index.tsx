@@ -1,39 +1,15 @@
 import DateTime from "@components/datetime";
 import Layout from "@components/layout";
-import  { UserResponse } from "@libs/client/useUser";
-import { ChatRoom, User } from "@prisma/client";
-import {  NextPage } from "next";
+import { UserResponse } from "@libs/client/useUser";
+import { NextPage } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import useSWR, { SWRConfig } from "swr";
 import { Suspense, useEffect, useState } from "react";
 import Loading from "@components/loading";
+import { ChatRoomsResponse } from "types/chat";
 
 // 상대 user 의 아바타, 아이디, 채팅내용.
-
-export interface ChatRoomWithUsers extends ChatRoom {
-  purchaser: {
-    id: number;
-    name: string;
-    avatar: string;
-  };
-  seller: {
-    id: number;
-    name: string;
-    avatar: string;
-  };
-  product: {
-    name: string;
-    price: number;
-    image: string;
-    sellState: string;
-  };
-  messages: any;
-}
-interface ChatRoomsResponse {
-  ok: boolean;
-  chatRooms: ChatRoomWithUsers[];
-}
 
 const ChatRoomsList = () => {
   // const { user } = useUser();
@@ -42,9 +18,7 @@ const ChatRoomsList = () => {
     useSWR<ChatRoomsResponse>("/api/chats");
   const [roomName, setRoomName] = useState("");
 
-  useEffect(()=>{
-    
-  },)
+  useEffect(() => {});
 
   return (
     <>
@@ -92,7 +66,6 @@ const ChatRoomsList = () => {
                     <div>
                       {/* 아이디 */}
                       <span className="font-bold text-gray-700">
-                        
                         {chatRoom?.seller.id === userData?.profile?.id
                           ? chatRoom?.purchaser.name
                           : chatRoom?.seller.name}

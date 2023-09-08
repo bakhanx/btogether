@@ -5,17 +5,12 @@ import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
 import useSWR from "swr";
 import { UserResponse } from "@libs/client/useUser";
-import { ChatRoomWithUsers } from ".";
 import { Message } from "@prisma/client";
 import { Suspense, useEffect, useRef } from "react";
 import Image from "next/image";
 import Loading from "@components/loading";
 import SellStateLabel, { sellStateType } from "@components/sellStateLabel";
-
-interface ChatRoomResponse {
-  ok: boolean;
-  chatRoom: ChatRoomWithUsers;
-}
+import { ChatRoomResponse } from "types/chat";
 
 const ProductInfo = () => {
   const router = useRouter();
