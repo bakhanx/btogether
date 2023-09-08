@@ -6,9 +6,10 @@ import { useForm } from "react-hook-form";
 import Button from "@components/button";
 import useMutation from "@libs/client/useMutation";
 import { useRouter } from "next/router";
-import Logo from '../public/logo_01_small.png'
+import Logo from "../public/logo_01_small.png";
 
 import Image from "next/image";
+import { EnterForm, MutationResult, TokenForm } from "types/enter";
 
 // const Alert = lazy(
 //   (): any =>
@@ -24,20 +25,6 @@ import Image from "next/image";
 //     ),
 //   { ssr: false,suspense:true,  loading: () => <span>로딩중</span> }
 // );
-
-interface EnterForm {
-  email?: string;
-  phone?: string;
-}
-interface TokenForm {
-  token: number;
-}
-interface MutationResult {
-  ok: boolean;
-}
-interface userResponse {
-  ok: boolean;
-}
 
 const Enter: NextPage = () => {
   const [enter, { loading, data }] =
@@ -102,7 +89,11 @@ const Enter: NextPage = () => {
                 required
               />
 
-              <Button text={tokenLoading ? "요청중..." : "토큰 인증하기"} large color="blue"/>
+              <Button
+                text={tokenLoading ? "요청중..." : "토큰 인증하기"}
+                large
+                color="blue"
+              />
             </form>
           </>
         ) : (
