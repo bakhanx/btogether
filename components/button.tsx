@@ -1,6 +1,6 @@
 import { cls } from "@libs/client/utils";
 
-interface ButtonProps {
+type ButtonProps = {
   large?: boolean;
   text: string;
   [key: string]: any;
