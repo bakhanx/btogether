@@ -2,14 +2,16 @@ import { useRouter } from "next/router";
 import Menu from "./menu";
 import { cls } from "@libs/client/utils";
 
-interface MenuProps {
+type MenuType = "Product" | "Comment" | "Story";
+
+type MenuProps = {
   menuProps: {
-    type: "Product" | "Comment" | "Story";
+    type: MenuType;
     writerId: number;
     onDelete: (event: React.MouseEvent<HTMLButtonElement>) => void;
     onModify?: (event: React.MouseEvent<HTMLButtonElement>) => void;
   };
-}
+};
 
 export default function TopNav({ menuProps: props }: MenuProps) {
   const router = useRouter();
