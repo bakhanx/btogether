@@ -7,14 +7,14 @@ type KindType = {
   kind: "Favorite" | "Sale" | "Purchase";
 };
 
-interface ProductResponse {
+type ProductResponse = {
   [key: string]: Record[];
-}
+};
 
-interface Record {
+type Record = {
   id: number;
   product: ProductWithCount;
-}
+};
 interface ProductWithCount extends Product {
   _count: {
     records: number;
