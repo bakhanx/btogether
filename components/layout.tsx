@@ -5,15 +5,17 @@ import Head from "next/head";
 import Image from "next/image";
 import FloatingButton from "./floatingButton";
 
+type PathType = "Product" | "Story" | "Chat" | "Profile";
+
 type LayoutProps = {
   title?: string;
   canGoBack?: boolean;
   hasTabBar?: boolean;
   seoTitle?: string;
   mainTitle?: boolean;
-  pathName?: "Product" | "Story" | "Chat" | "Profile";
+  pathName?: PathType;
   children: React.ReactNode;
-}
+};
 
 export default function Layout({
   title,
