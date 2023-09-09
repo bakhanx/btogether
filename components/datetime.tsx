@@ -1,4 +1,4 @@
-interface DateTimeProps {
+type DateTimeProps = {
   time?: boolean;
   timeAgo?: boolean;
   date?: Date;
