@@ -2,7 +2,7 @@ import { cls } from "../libs/client/utils";
 import Image from "next/image";
 import DateTime from "./datetime";
 
-interface MessageProps {
+type MessageProps = {
   message: string;
   reversed?: boolean;
   avatar?: string;
