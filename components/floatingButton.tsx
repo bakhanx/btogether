@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-interface FloatingButton {
+type FloatingButton = {
   pathName: "Product" | "Story" | "Chat" | "Profile";
 }
 
