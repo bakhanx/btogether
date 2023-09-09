@@ -5,7 +5,7 @@ import Head from "next/head";
 import Image from "next/image";
 import FloatingButton from "./floatingButton";
 
-interface LayoutProps {
+type LayoutProps = {
   title?: string;
   canGoBack?: boolean;
   hasTabBar?: boolean;
