@@ -1,6 +1,6 @@
 import { UseFormRegisterReturn } from "react-hook-form";
 
-interface TextAreaProps {
+type TextAreaProps = {
   label?: string;
   name?: string;
   register: UseFormRegisterReturn;
