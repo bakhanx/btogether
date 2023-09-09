@@ -3,7 +3,7 @@ import Link from "next/link";
 import DateTime from "./datetime";
 import SellStateLabel, { sellStateType } from "./sellStateLabel";
 
-interface ItemProps {
+type ItemProps = {
   title: string;
   id: number;
   time: Date;
