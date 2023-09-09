@@ -1,6 +1,6 @@
 import type { UseFormRegisterReturn } from "react-hook-form";
 
-interface InputProps {
+type InputProps = {
   label: string;
   name: string;
   kind?: "text" | "phone" | "price";
