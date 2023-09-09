@@ -1,7 +1,7 @@
-export type sellStateType = "selling" | "reserve" | "sold";
+import { SellingType } from "types/product";
 
-export interface sellStateProps {
-  sellState: sellStateType;
+export type sellStateProps = {
+  sellState: SellingType;
   hideSelling?: boolean;
 }
 

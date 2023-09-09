@@ -1,7 +1,7 @@
 import { Product } from "@prisma/client";
 import useSWR from "swr";
 import Item from "./item";
-import { sellStateType } from "./sellStateLabel";
+import { SellingType } from "types/product";
 
 type KindType = {
   kind: "Favorite" | "Sale" | "Purchase";
@@ -40,7 +40,7 @@ const MyProductList = ({ kind }: KindType) => {
             image={record?.product.image}
             hearts={record?.product._count.records}
             comments={record?.product._count.chatRooms}
-            sellState={record?.product.sellState as sellStateType}
+            sellState={record?.product.sellState as SellingType}
           />
         ))}
       </div>

@@ -1,7 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import DateTime from "./datetime";
-import SellStateLabel, { sellStateType } from "./sellStateLabel";
+import SellStateLabel from "./sellStateLabel";
+import { SellingType } from "types/product";
 
 type ItemProps = {
   title: string;
@@ -11,7 +12,7 @@ type ItemProps = {
   comments: number;
   hearts: number;
   image: string;
-  sellState: sellStateType;
+  sellState: SellingType;
 }
 
 export default function Item({
