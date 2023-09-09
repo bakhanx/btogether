@@ -11,7 +11,7 @@ export interface ProductWithCount extends Product {
   };
   sellState: "selling" | "reserve" | "sold"
 }
-interface ProductsResponse {
+type ProductsResponse = {
   ok: boolean;
   products: ProductWithCount[];
   pages: number;
