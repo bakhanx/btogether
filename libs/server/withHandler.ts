@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 
-export interface ResponseType {
+export type ResponseType = {
   ok: boolean;
   [key: string]: any;
 }
