@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-interface UseMutationState<T> {
+type UseMutationState<T> = {
   loading: boolean;
   data?: T;
   error?: object;
