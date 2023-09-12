@@ -1,8 +1,7 @@
 import type { GetStaticPaths, GetStaticProps, NextPage } from "next";
 import Button from "@components/button";
 import { useRouter } from "next/router";
-import useSWR, { useSWRConfig } from "swr";
-import { Product } from "@prisma/client";
+import useSWR from "swr";
 import Link from "next/link";
 import useMutation from "@libs/client/useMutation";
 import { cls } from "@libs/client/utils";
