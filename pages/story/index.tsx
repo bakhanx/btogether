@@ -8,8 +8,6 @@ import Loading from "@components/loading";
 import { usePagination } from "@libs/client/usePagination";
 import { StoryListResponse } from "types/story";
 
-
-
 const getKey = (pageIndex: number, previousPageData: StoryListResponse) => {
   // console.log(pageIndex);
   if (pageIndex === 0) return `/api/stories?page=1`;
