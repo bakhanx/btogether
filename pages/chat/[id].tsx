@@ -4,13 +4,14 @@ import useMutation from "@libs/client/useMutation";
 import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
 import useSWR from "swr";
-import { UserResponse } from "@libs/client/useUser";
 import { Message } from "@prisma/client";
 import { Suspense, useEffect, useRef } from "react";
 import Image from "next/image";
 import Loading from "@components/loading";
-import SellStateLabel, { sellStateType } from "@components/sellStateLabel";
+import SellStateLabel from "@components/sellStateLabel";
 import { ChatRoomResponse } from "types/chat";
+import { UserResponse } from "types/user";
+import { SellingType } from "types/product";
 
 const ProductInfo = () => {
   const router = useRouter();
@@ -40,7 +41,7 @@ const ProductInfo = () => {
             <div className="flex">
               <SellStateLabel
                 sellState={
-                  chatData?.chatRoom?.product?.sellState as sellStateType
+                  chatData?.chatRoom?.product?.sellState as SellingType
                 }
               />
               <span>{chatData?.chatRoom?.product?.name}</span>
