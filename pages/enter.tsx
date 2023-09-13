@@ -81,7 +81,7 @@ const Enter: NextPage = () => {
               className="mt-8 flex flex-col space-y-4"
               onSubmit={tokenHandleSubmit(onTokenValid)}
             >
-              <p className="pt-4">입력하신 메일로 인증코드가 전송되었습니다.</p>
+              <p className="pt-4">입력하신 {method === "phone" ? "번호" : "메일"}로 인증코드가 발송되었습니다.</p>
 
               <Input
                 register={tokenRegister("token")}
@@ -154,7 +154,7 @@ const Enter: NextPage = () => {
               ) : null}
               {method === "email" ? (
                 <Button
-                  text={loading ? "요청중..." : "로그인 주소 받기"}
+                  text={loading ? "요청중..." : "인증 코드 받기"}
                   large
                   color="blue"
                 />
@@ -162,7 +162,7 @@ const Enter: NextPage = () => {
               {method === "phone" ? (
                 <div>
                   <Button
-                    text={loading ? "요청중..." : "일회용 비밀번호 받기"}
+                    text={loading ? "요청중..." : "인증 코드 받기"}
                     large
                     color="blue"
                   />
