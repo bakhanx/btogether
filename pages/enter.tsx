@@ -81,16 +81,18 @@ const Enter: NextPage = () => {
               className="mt-8 flex flex-col space-y-4"
               onSubmit={tokenHandleSubmit(onTokenValid)}
             >
+              <p className="pt-4">입력하신 메일로 인증코드가 전송되었습니다.</p>
+
               <Input
                 register={tokenRegister("token")}
                 name="token"
-                label="토큰"
+                label="인증 코드"
                 type="number"
                 required
               />
 
               <Button
-                text={tokenLoading ? "요청중..." : "토큰 인증하기"}
+                text={tokenLoading ? "요청중..." : "인증하기"}
                 large
                 color="blue"
               />
