@@ -8,7 +8,7 @@ const Review = () => {
             <h4 className="text-sm font-bold text-gray-800">공구의신</h4>
             {/* 별점 */}
             <div className="flex items-center">
-              {[1, 1, 1, 1, 1].map((_, i) => (
+              {Array(5).fill(0).map((_, i) => (
                 <svg
                   key={i}
                   className="h-5 w-5 text-yellow-400"
