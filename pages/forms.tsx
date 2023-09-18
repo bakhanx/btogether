@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { FieldErrors } from "react-hook-form/dist/types";
 
-interface LoginForm {
+type LoginForm = {
   username: string;
   email: string;
   password: string;
