@@ -2,7 +2,7 @@ import { readFileSync, readdirSync } from "fs";
 import matter from "gray-matter";
 import { NextPage } from "next";
 
-interface InfoProps {
+type InfoProps = {
   name: string;
   address: string;
   ceo: string;
