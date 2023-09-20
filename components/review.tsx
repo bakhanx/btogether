@@ -1,4 +1,7 @@
+import { useState } from "react";
+
 const Review = () => {
+  const [score, setScore] = useState(5.0);
   return (
     <>
       <div className="mt-12">
@@ -8,7 +11,8 @@ const Review = () => {
             <h4 className="text-sm font-bold text-gray-800">공구의신</h4>
             {/* 별점 */}
             <div className="flex items-center">
-              {Array(5).fill(0).map((_, i) => (
+              score
+              {Array(score).fill(0).map((_, i) => (
                 <svg
                   key={i}
                   className="h-5 w-5 text-yellow-400"
