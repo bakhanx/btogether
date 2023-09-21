@@ -28,11 +28,11 @@ const StoryList = () => {
   return (
     <>
       {stories && (
-        <div className="divide space-y-1 divide-y-4 divide-slate-200">
+        <div className="divide  divide-y-4 divide-orange-100 ">
           {stories.map((story) => (
             <div key={story.id}>
               <Link href={`/story/${story.id}`}>
-                <div className="flex cursor-pointer flex-col items-start pt-4">
+                <div className="flex cursor-pointer flex-col items-start pt-4 hover:bg-slate-50">
                   <span className="ml-3.5 flex items-center rounded-full bg-violet-500 px-2.5 py-0.5 text-xs font-bold text-white">
                     일상
                   </span>
