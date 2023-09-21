@@ -4,7 +4,7 @@ const Review = () => {
   const [score, setScore] = useState(5);
   return (
     <>
-      <div className="mt-12">
+      <div className="mt-5">
         <div className="flex items-center space-x-4">
           <div className="h-12 w-12 rounded-full bg-slate-500" />
           <div>

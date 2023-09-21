@@ -92,12 +92,14 @@ const UserInfo = () => {
         </div>
       </div>
 
+      <div className="mt-5 w-full h-4 bg-gradient-to-r to-blue-500 from-purple-500 opacity-20"></div>
+
       {/* 내 히스토리 */}
-      <div className="mt-10 flex justify-around">
+      <div className="mt-2 flex flex-col divide-y-2 ">
         {/* 판매내역 */}
         <Link href="/profile/sale">
-          <div className="flex flex-col items-center">
-            <div className="flex h-14 w-14 items-center justify-center rounded-full bg-blue-400 text-white">
+          <div className="flex items-center py-3 gap-x-2 hover:bg-gray-100">
+            <div className="text-blue-500">
               <svg
                 className="h-6 w-6"
                 fill="none"
@@ -113,16 +115,14 @@ const UserInfo = () => {
                 ></path>
               </svg>
             </div>
-            <span className="text-gray-70 mt-2 text-sm font-medium">
-              판매내역
-            </span>
+            <div className="text-gray text-sm font-medium ">판매내역</div>
           </div>
         </Link>
 
         {/* 구매내역 */}
         <Link href="/profile/purchase">
-          <div className="flex flex-col items-center">
-            <div className="flex h-14 w-14 items-center justify-center rounded-full bg-blue-400 text-white">
+          <div className="flex items-center  py-3 gap-x-2 hover:bg-gray-100">
+            <div className="text-blue-500">
               <svg
                 className="h-6 w-6"
                 fill="none"
@@ -138,16 +138,14 @@ const UserInfo = () => {
                 ></path>
               </svg>
             </div>
-            <span className="text-gray-70 mt-2 text-sm font-medium">
-              구매내역
-            </span>
+            <span className="text-gray text-sm font-medium">구매내역</span>
           </div>
         </Link>
 
         {/* 관심목록 */}
         <Link href="/profile/favorite">
-          <div className="flex flex-col items-center">
-            <div className="flex h-14 w-14 items-center justify-center rounded-full bg-blue-400 text-white">
+          <div className="flex items-center  py-3 gap-x-2 hover:bg-gray-100">
+            <div className="text-blue-500">
               <svg
                 className="h-6 w-6"
                 fill="none"
@@ -163,12 +161,12 @@ const UserInfo = () => {
                 ></path>
               </svg>
             </div>
-            <span className="text-gray-70 mt-2 text-sm font-medium">
-              관심목록
-            </span>
+            <span className="text-sm font-medium">관심목록</span>
           </div>
         </Link>
       </div>
+
+      <div className="mt-2 w-full h-4 bg-gradient-to-r to-blue-500 from-purple-500 opacity-20"></div>
 
       {/* 나에 대한 리뷰 */}
       <Review />
