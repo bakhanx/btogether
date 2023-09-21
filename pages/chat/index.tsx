@@ -23,7 +23,7 @@ const ChatRoomsList = () => {
   return (
     <>
       {chatsData ? (
-        <div className="divide-y-2">
+        <div className="divide-y-4 divide-sky-100">
           {chatsData?.chatRooms?.map((chatRoom) => (
             <Link
               href={`/chat/${chatRoom?.id}/?name=${chatRoom?.purchaser.name}`}

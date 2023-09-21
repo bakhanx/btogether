@@ -38,7 +38,7 @@ const ProductsList = () => {
     <>
       {/* 작성된 게시글 리스트 */}
 
-      <div className="flex flex-col  divide-y-4 divide-blue-50 py-1 ">
+      <div className="flex flex-col  divide-y-4 divide-purple-50 py-1 ">
         {products.map((product) => (
           <Item
             id={product?.id}

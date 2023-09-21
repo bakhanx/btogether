@@ -69,7 +69,7 @@ const UserInfo = () => {
             <div className="translate-y-1">
               <button
                 onClick={onLogout}
-                className="block rounded-md border p-[2px] text-xs font-medium text-gray-700 hover:bg-blue-200"
+                className="block rounded-md border p-[2px] text-xs font-medium text-gray-700 hover:bg-blue-50"
               >
                 로그아웃
                 <svg
@@ -95,7 +95,7 @@ const UserInfo = () => {
       <div className="mt-5 w-full h-4 bg-gradient-to-r to-blue-500 from-purple-500 opacity-20"></div>
 
       {/* 내 히스토리 */}
-      <div className="mt-2 flex flex-col divide-y-2 ">
+      <div className="mt-2 flex flex-col divide-y-2 divide-purple-100">
         {/* 판매내역 */}
         <Link href="/profile/sale">
           <div className="flex items-center py-3 gap-x-2 hover:bg-gray-100">
