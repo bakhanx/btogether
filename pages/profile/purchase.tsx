@@ -7,8 +7,8 @@ import Loading from "@components/loading";
 const Purchase: NextPage = () => {
   return (
     <Layout
-      title="관심 목록"
-      seoTitle="내 관심목록"
+      title="구매내역"
+      seoTitle="내 구매내역"
       canGoBack
       hasTabBar
       pathName="Profile"
