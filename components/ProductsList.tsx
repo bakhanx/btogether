@@ -9,13 +9,13 @@ export interface ProductWithCount extends Product {
     records: number;
     chatRooms: number;
   };
-  sellState: "selling" | "reserve" | "sold"
+  sellState: "selling" | "reserve" | "sold";
 }
 type ProductsResponse = {
   ok: boolean;
   products: ProductWithCount[];
   pages: number;
-}
+};
 
 const getKey = (pageIndex: number, previousPageData: ProductsResponse) => {
   // console.log(pageIndex);
@@ -38,7 +38,7 @@ const ProductsList = () => {
     <>
       {/* 작성된 게시글 리스트 */}
 
-      <div className="flex flex-col space-y-1 divide-y py-1">
+      <div className="flex flex-col  divide-y-4 divide-blue-50 py-1 ">
         {products.map((product) => (
           <Item
             id={product?.id}
