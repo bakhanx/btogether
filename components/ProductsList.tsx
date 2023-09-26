@@ -1,7 +1,7 @@
 import { Product } from "@prisma/client";
 import Item from "./item";
 import useSWRInfinite from "swr/infinite";
-import { useEffect, useRef, useState } from "react";
+import { useEffect } from "react";
 import { usePagination } from "@libs/client/usePagination";
 import { SellingType } from "types/product";
 
