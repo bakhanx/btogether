@@ -1,8 +1,10 @@
 import useUser from "@libs/client/useUser";
 import { useState } from "react";
 
+type MenuType = "Product" | "Story" | "Comment";
+
 export default function Menu(props: {
-  type: "Product" | "Story" | "Comment";
+  type: MenuType;
   writerId: number;
   onDelete: (event: React.MouseEvent<HTMLButtonElement>) => void;
   onModify?: (event: React.MouseEvent<HTMLButtonElement>) => void;
