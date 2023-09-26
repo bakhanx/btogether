@@ -3,13 +3,14 @@ import Item from "./item";
 import useSWRInfinite from "swr/infinite";
 import { useEffect, useRef, useState } from "react";
 import { usePagination } from "@libs/client/usePagination";
+import { SellingType } from "types/product";
 
 export interface ProductWithCount extends Product {
   _count: {
     records: number;
     chatRooms: number;
   };
-  sellState: "selling" | "reserve" | "sold";
+  sellState: SellingType
 }
 type ProductsResponse = {
   ok: boolean;
