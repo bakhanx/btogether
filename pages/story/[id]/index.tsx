@@ -70,6 +70,12 @@ const Top = () => {
     router.query.id ? `/api/stories/${router.query.id}` : null
   );
 
+   // ======================= 스토리 신고 ====================
+   const onReport = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+
+  };
+
   return (
     <div className="fixed top-0 z-10 flex h-12 w-full max-w-screen-lg items-center justify-between bg-blue-300 bg-gradient-to-r  from-pink-500 via-amber-500 to-yellow-500 px-5 text-lg font-medium text-white ">
       {/* 뒤로가기 */}
@@ -98,6 +104,7 @@ const Top = () => {
         writerId={storyData?.story?.userId || 0}
         onDelete={onDelete}
         onModify={onModify}
+        onReport={onReport}
       />
     </div>
   );

@@ -8,6 +8,7 @@ export default function Menu(props: {
   writerId: number;
   onDelete: (event: React.MouseEvent<HTMLButtonElement>) => void;
   onModify?: (event: React.MouseEvent<HTMLButtonElement>) => void;
+  onReport? : (event: React.MouseEvent<HTMLButtonElement>) => void;
 }) {
   const [isOnMenu, setisOnMenu] = useState(false);
 
@@ -68,7 +69,7 @@ export default function Menu(props: {
           ) : (
             // 뷰어 UI
             <div className="py-1">
-              <button className="block w-full py-2 pr-10 text-sm text-red-500">
+              <button onClick={props.onReport} className="block w-full py-2 pr-10 text-sm text-red-500">
                 신고하기
               </button>
             </div>
