@@ -10,7 +10,6 @@ type MenuProps = {
     writerId: number;
     onDelete: (event: React.MouseEvent<HTMLButtonElement>) => void;
     onModify?: (event: React.MouseEvent<HTMLButtonElement>) => void;
-    onReport : (event: React.MouseEvent<HTMLButtonElement>) => void;
   };
 };
 
@@ -56,7 +55,6 @@ export default function TopNav({ menuProps: props }: MenuProps) {
         writerId={props.writerId}
         onDelete={props.onDelete}
         onModify={props.onModify}
-        onReport={props.onReport}
       />
     </div>
   );
