@@ -2,8 +2,13 @@ export default function Report() {
   return (
     <>
       <div className="relative flex justify-center w-full">
-        <div className="center fixed top-48 z-50 flex h-96 w-2/3 max-w-xl items-center justify-center bg-slate-50 opacity-90 text-black border-purple-200 border rounded-md">
-          <div className="flex flex-row w-full justify-around">
+        <div className="center fixed top-48 z-50  h-96 w-2/3 max-w-xl 릳ㅌ  bg-slate-50 opacity-90 text-black border-purple-200 border rounded-md">
+          <div className="flex p-3 border-b-2">
+            <div className="items-center justify-center w-full text-center">신고하기</div>
+            <div className="pr-3">X</div>
+            </div>
+
+          <div className="flex flex-row w-full justify-around p-10">
             <div className="flex flex-col gap-y-4">
               <button className="hover:text-red-700">영리/홍보</button>
               <button className="hover:text-red-700">욕설/비하</button>
