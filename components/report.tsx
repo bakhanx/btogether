@@ -1,6 +1,10 @@
 import Button from "./button";
+import { useForm } from "react-hook-form";
 
-export default function Report() {
+export default function Report(userId: number) {
+  const { register, reset, handleSubmit: reportHandleSubmit } = useForm<any>();
+  const onReportValid = (validForm: any) => {};
+
   return (
     <>
       <div className="relative flex justify-center w-full">
@@ -21,34 +25,36 @@ export default function Report() {
           </div>
 
           <div className="flex flex-row w-full justify-around p-10">
-            <div className="flex flex-col gap-y-4">
-              <button className="hover:text-red-700 focus:text-red-700">
-                욕설/비하
-              </button>
-              <button className="hover:text-red-700 focus:text-red-700">
-                영리/홍보
-              </button>
-              <button className="hover:text-red-700 focus:text-red-700">
-                내용반복(도배)
-              </button>
-              <button className="hover:text-red-700 focus:text-red-700">
-                개인정보노출
-              </button>
-            </div>
-            <div className="flex flex-col gap-y-4">
-              <button className="hover:text-red-700 focus:text-red-700">
-                음란/선정
-              </button>
-              <button className="hover:text-red-700 focus:text-red-700">
-                사기/불법
-              </button>
-              <button className="hover:text-red-700 focus:text-red-700">
-                사재기
-              </button>
-              <button className="hover:text-red-700 focus:text-red-700">
-                기타
-              </button>
-            </div>
+            <form onSubmit={reportHandleSubmit(onReportValid)}>
+              <div className="flex flex-col gap-y-4">
+                <button className="hover:text-red-700 focus:text-red-700">
+                  욕설/비하
+                </button>
+                <button className="hover:text-red-700 focus:text-red-700">
+                  영리/홍보
+                </button>
+                <button className="hover:text-red-700 focus:text-red-700">
+                  내용반복(도배)
+                </button>
+                <button className="hover:text-red-700 focus:text-red-700">
+                  개인정보노출
+                </button>
+              </div>
+              <div className="flex flex-col gap-y-4">
+                <button className="hover:text-red-700 focus:text-red-700">
+                  음란/선정
+                </button>
+                <button className="hover:text-red-700 focus:text-red-700">
+                  사기/불법
+                </button>
+                <button className="hover:text-red-700 focus:text-red-700">
+                  사재기
+                </button>
+                <button className="hover:text-red-700 focus:text-red-700">
+                  기타
+                </button>
+              </div>
+            </form>
           </div>
 
           <button className="w-full bg-red-500 text-white p-2 hover:bg-red-600">
