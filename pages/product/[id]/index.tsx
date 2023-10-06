@@ -41,7 +41,7 @@ const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
 
   // 찜하기
 
-  const onFavoriteClick = () => {
+  const handleFavoriteClick = () => {
     toggleFavorite({});
     if (!productData) return;
     boundMutate(
@@ -66,14 +66,14 @@ const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
   //====================채팅방 =============================
 
   // 채팅방 이동 Modal
-  const onClickChat = () => {
+  const handleChatClick = () => {
     setIsShow(true);
   };
-  const onCancle = () => {
+  const handleCancle = () => {
     setIsShow(false);
   };
   // 방생성 요청
-  const OnCreateChatRoom = () => {
+  const handleCreateChatRoom = () => {
     if (loading) return;
     chatMutate({ id: router.query.id });
   };
@@ -96,7 +96,7 @@ const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
   }, [router, chatData, productData]);
 
   //본인 포스트일 경우
-  const onMoveChatList = () => {
+  const handleMoveChatList = () => {
     router.push(`/chat`);
   };
 
@@ -183,7 +183,7 @@ const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
   }
 
   //===================== 이미지 확대 ===========================
-  const onClickImage = () => {
+  const handleImageClick = () => {
     setIsOnImage(!isOnImage);
     if (isOnImage) {
     }
@@ -245,7 +245,7 @@ const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
       {/* 이미지 확대 */}
       {isOnImage ? (
         <div className="fixed left-0 z-20 flex h-full w-full items-start bg-black">
-          <button className="z-50 m-5 text-white" onClick={onClickImage}>
+          <button className="z-50 m-5 text-white" onClick={handleImageClick}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -289,7 +289,7 @@ const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
       {/* 판매 내용 */}
       <div className="mb-8 ">
         {/* 상품 이미지 */}
-        <div onClick={onClickImage}>
+        <div onClick={handleImageClick}>
           {product?.image ? (
             <div className="relative aspect-square max-h-[512px] w-full">
               <Image
@@ -377,14 +377,14 @@ const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
               {productData?.product?.sellState === "selling" &&
                 (productData?.product?.seller?.id === user?.id ? (
                   <Button
-                    onClick={onMoveChatList}
+                    onClick={handleMoveChatList}
                     large
                     text="채팅 목록"
                     color="blue"
                   />
                 ) : (
                   <Button
-                    onClick={onClickChat}
+                    onClick={handleChatClick}
                     large
                     text="거래하기 (채팅)"
                     color="blue"
@@ -446,13 +446,13 @@ const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
                         <button
                           type="button"
                           className="inline-flex w-full justify-center rounded-md bg-blue-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-600 sm:ml-3 sm:w-auto"
-                          onClick={OnCreateChatRoom}
+                          onClick={handleCreateChatRoom}
                         >
                           이동
                         </button>
                         <button
                           type="button"
-                          onClick={onCancle}
+                          onClick={handleCancle}
                           className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto"
                         >
                           취소
@@ -466,7 +466,7 @@ const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
               {/* 관심버튼 */}
               {product.sellerId !== user?.id && (
                 <button
-                  onClick={onFavoriteClick}
+                  onClick={handleFavoriteClick}
                   className={cls(
                     "flex items-center justify-center rounded-md p-3",
                     productData?.isFavorite
