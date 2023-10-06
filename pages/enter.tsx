@@ -36,11 +36,11 @@ const Enter: NextPage = () => {
     useForm<TokenForm>();
   const [method, setMethod] = useState<"email" | "phone">("email");
 
-  const onEmailClick = () => {
+  const handleEmailForm = () => {
     reset();
     setMethod("email");
   };
-  const onPhoneClick = () => {
+  const handlePhoneForm = () => {
     reset();
     setMethod("phone");
   };
@@ -110,7 +110,7 @@ const Enter: NextPage = () => {
                       ? "border-blue-500 text-blue-400"
                       : "border-transparent text-gray-400 hover:text-gray-400"
                   )}
-                  onClick={onEmailClick}
+                  onClick={handleEmailForm}
                 >
                   이메일 로그인
                 </button>
@@ -121,7 +121,7 @@ const Enter: NextPage = () => {
                       ? "border-blue-500 text-blue-400"
                       : "border-transparent text-gray-400 hover:text-gray-400"
                   )}
-                  onClick={onPhoneClick}
+                  onClick={handlePhoneForm}
                 >
                   번호 로그인
                 </button>
