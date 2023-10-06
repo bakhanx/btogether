@@ -5,7 +5,7 @@ type ButtonProps = {
   text: string;
   [key: string]: any;
   color?: "blue" | "amber";
-}
+};
 
 export default function Button({
   large = false,
@@ -23,8 +23,9 @@ export default function Button({
           ? "bg-blue-400 hover:bg-blue-500 focus:ring-blue-500 "
           : color === "amber"
           ? "bg-amber-400 hover:bg-amber-500 focus:ring-amber-500"
+          : color === "red"
+          ? "bg-red-400 hover:bg-red-500 focus:ring-red-500"
           : " bg-gray-400 hover:cursor-auto focus:ring-0"
-
       )}
     >
       {text}
