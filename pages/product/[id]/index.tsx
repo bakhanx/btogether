@@ -194,7 +194,7 @@ const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
       {/* 유저리스트 */}
       {isOnPurchaser && (
         <div className="relative flex justify-center ">
-          <div className="fixed top-1/4 z-50 flex h-96 w-2/3 max-w-xl   bg-black bg-opacity-60 text-white ">
+          <div className="fixed top-1/2 -translate-y-1/2 z-50 flex h-96 w-2/3 max-w-xl   bg-black bg-opacity-60 text-white ">
             <div className="flex h-full w-full flex-col justify-around">
               <div
                 className="absolute top-2 right-2 cursor-pointer"

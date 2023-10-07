@@ -21,24 +21,26 @@ export default function Menu(props: {
   //   event.preventDefault();
   // };
 
-  const onClickMenu = () => {
+  const handleClickMenu = () => {
     setisOnMenu(!isOnMenu);
   };
-  const onLeaveFocusOut = () => {
+  const handleLeaveFocusOut = () => {
     setTimeout(() => {
       setisOnMenu(false);
     }, 100);
   };
 
-  const handleReoprt = () => {
-    setIsOnReport(!isOnReport);
+  const handleClickReoprt = () => {
+    setIsOnReport(true);
   };
+
 
   return (
     <>
-    
+      {isOnReport ? <Report userId={1}  /> : ""}
+
       <div className="relative right-1">
-        <button onClick={onClickMenu} type="button" onBlur={onLeaveFocusOut}>
+        <button onClick={handleClickMenu} type="button" onBlur={handleLeaveFocusOut}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -79,7 +81,7 @@ export default function Menu(props: {
               // 뷰어 UI
               <div className="py-1">
                 <button
-                  onClick={handleReoprt}
+                  onClick={handleClickReoprt}
                   className="block w-full py-2 pr-10 text-sm text-red-500"
                 >
                   신고하기
@@ -91,9 +93,6 @@ export default function Menu(props: {
           ""
         )}
       </div>
-      
-      {isOnReport ? <Report /> : ""}
-      
     </>
   );
 }
