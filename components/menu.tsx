@@ -1,4 +1,5 @@
 import useUser from "@libs/client/useUser";
+import { useRouter } from "next/router";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 
@@ -14,7 +15,14 @@ export default function Menu(props: {
   const [isOnMenu, setisOnMenu] = useState(false);
 
   const { register, reset, handleSubmit: reportHandleSubmit } = useForm<any>();
-  const onReportValid = (validForm: any) => {};
+  const router = useRouter();
+  const onReportValid = (validForm: any) => {
+    confirm("신고하시겠습니까?");
+    //post
+    router.reload();
+
+  };
+  
   const [isOnReport, setIsOnReport] = useState(false);
 
   const { user } = useUser();
