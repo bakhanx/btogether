@@ -502,7 +502,17 @@ const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
               {relatedProducts.map((product) => (
                 <div key={product.id}>
                   <Link href={`/product/${product.id}`}>
-                    <div className="mb-4 h-56 w-full bg-slate-300" />
+                    {/* <div className="mb-4 h-56 w-full bg-slate-300" /> */}
+                    <div className="w-full aspect-video mb-4 relative">
+                      <Image
+                        className="object-cover focus:cursor-pointer"
+                        quality={90}
+                        priority
+                        fill
+                        alt=""
+                        src={`https://imagedelivery.net/214BxOnlVKSU2amZRZmdaQ/${product?.image}/public`}
+                      />
+                    </div>
                     <h3 className="-mb-1 text-gray-700">{product.name}</h3>
                     <span className="text-sm font-medium text-gray-900">
                       {product.price}원
