@@ -1,6 +1,6 @@
 import useUser from "@libs/client/useUser";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { MouseEventHandler, useState } from "react";
 import { useForm } from "react-hook-form";
 
 type MenuType = "Product" | "Story" | "Comment";
@@ -20,11 +20,10 @@ export default function Menu(props: {
     confirm("신고하시겠습니까?");
     //post
     router.reload();
-
   };
-  
-  const [isOnReport, setIsOnReport] = useState(false);
 
+  const [isOnReport, setIsOnReport] = useState(false);
+  const [reportNum, setReportNum] = useState(0);
   const { user } = useUser();
 
   // const onDelete = (event: any) => {
@@ -42,6 +41,10 @@ export default function Menu(props: {
 
   const handleClickReoprt = () => {
     setIsOnReport(!isOnReport);
+  };
+
+  const handleSetReportNum = (event: React.MouseEvent<HTMLButtonElement>) => {
+    console.log(event);
   };
 
   return (
@@ -70,30 +73,54 @@ export default function Menu(props: {
               <div className="flex flex-col items-center">
                 <div className="flex flex-row w-full justify-around p-5">
                   <div className="flex flex-col gap-y-4">
-                    <button className="hover:text-red-700 focus:text-red-700">
+                    <button
+                      onClick={handleSetReportNum}
+                      className="hover:text-red-700 focus:text-red-700"
+                    >
                       욕설/비하
                     </button>
-                    <button className="hover:text-red-700 focus:text-red-700">
+                    <button
+                      onClick={handleSetReportNum}
+                      className="hover:text-red-700 focus:text-red-700"
+                    >
                       영리/홍보
                     </button>
-                    <button className="hover:text-red-700 focus:text-red-700">
+                    <button
+                      onClick={handleSetReportNum}
+                      className="hover:text-red-700 focus:text-red-700"
+                    >
                       내용반복(도배)
                     </button>
-                    <button className="hover:text-red-700 focus:text-red-700">
+                    <button
+                      onClick={handleSetReportNum}
+                      className="hover:text-red-700 focus:text-red-700"
+                    >
                       개인정보노출
                     </button>
                   </div>
                   <div className="flex flex-col gap-y-4">
-                    <button className="hover:text-red-700 focus:text-red-700">
+                    <button
+                      onClick={handleSetReportNum}
+                      className="hover:text-red-700 focus:text-red-700"
+                    >
                       음란/선정
                     </button>
-                    <button className="hover:text-red-700 focus:text-red-700">
+                    <button
+                      onClick={handleSetReportNum}
+                      className="hover:text-red-700 focus:text-red-700"
+                    >
                       사기/불법
                     </button>
-                    <button className="hover:text-red-700 focus:text-red-700">
+                    <button
+                      onClick={handleSetReportNum}
+                      className="hover:text-red-700 focus:text-red-700"
+                    >
                       사재기
                     </button>
-                    <button className="hover:text-red-700 focus:text-red-700">
+                    <button
+                      onClick={handleSetReportNum}
+                      className="hover:text-red-700 focus:text-red-700"
+                    >
                       기타
                     </button>
                   </div>
