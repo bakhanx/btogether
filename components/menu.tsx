@@ -80,16 +80,16 @@ export default function Menu(props: {
                     {[
                       "욕설/비하",
                       "영리/홍보",
-                      "내용반복(도배)",
+                      "반복(도배)",
                       "개인정보노출",
-                      "음란/선정",
-                      "사기/불법",
-                      "사재기",
-                      "기타",
-                    ].map((cate,i) => (
+                    ].map((cate, i) => (
                       <>
-                        <button onClick={(e)=> handleSetReportNum(i, e)}
-                      className="hover:text-red-700 focus:text-red-700">{cate}</button>
+                        <button
+                          onClick={(e) => handleSetReportNum(i, e)}
+                          className="hover:text-red-700 focus:text-red-700"
+                        >
+                          {cate}
+                        </button>
                       </>
                     ))}
                     {/* <button
@@ -118,7 +118,20 @@ export default function Menu(props: {
                     </button> */}
                   </div>
                   <div className="flex flex-col gap-y-4">
-                    <button
+                    {["음란/선정", "사기/불법", "사재기", "기타"].map(
+                      (cate, i) => (
+                        <>
+                          <button
+                            onClick={(e) => handleSetReportNum(i, e)}
+                            className="hover:text-red-700 focus:text-red-700"
+                          >
+                            {cate}
+                          </button>
+                        </>
+                      )
+                    )}
+
+                    {/* <button
                       onClick={(e) => handleSetReportNum(4, e)}
                       className="hover:text-red-700 focus:text-red-700"
                     >
@@ -141,7 +154,7 @@ export default function Menu(props: {
                       className="hover:text-red-700 focus:text-red-700"
                     >
                       기타
-                    </button>
+                    </button> */}
                   </div>
                 </div>
                 <div className="w-full items-center flex">
