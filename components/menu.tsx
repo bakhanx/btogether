@@ -43,7 +43,10 @@ export default function Menu(props: {
     setIsOnReport(!isOnReport);
   };
 
-  const handleSetReportNum = (num:number, event: React.MouseEvent<HTMLButtonElement> ) => {
+  const handleSetReportNum = (
+    num: number,
+    event: React.MouseEvent<HTMLButtonElement>
+  ) => {
     setReportNum(num);
     console.log(event);
   };
@@ -74,52 +77,67 @@ export default function Menu(props: {
               <div className="flex flex-col items-center">
                 <div className="flex flex-row w-full justify-around p-5">
                   <div className="flex flex-col gap-y-4">
-                    <button
-                      onClick={(e) => handleSetReportNum(0,e)}
+                    {[
+                      "욕설/비하",
+                      "영리/홍보",
+                      "내용반복(도배)",
+                      "개인정보노출",
+                      "음란/선정",
+                      "사기/불법",
+                      "사재기",
+                      "기타",
+                    ].map((cate,i) => (
+                      <>
+                        <button onClick={(e)=> handleSetReportNum(i, e)}
+                      className="hover:text-red-700 focus:text-red-700">{cate}</button>
+                      </>
+                    ))}
+                    {/* <button
+                      onClick={(e) => handleSetReportNum(0, e)}
                       className="hover:text-red-700 focus:text-red-700"
                     >
                       욕설/비하
                     </button>
                     <button
-                      onClick={(e) => handleSetReportNum(1,e)}
+                      onClick={(e) => handleSetReportNum(1, e)}
                       className="hover:text-red-700 focus:text-red-700"
                     >
                       영리/홍보
                     </button>
                     <button
-                      onClick={(e) => handleSetReportNum(2,e)}
+                      onClick={(e) => handleSetReportNum(2, e)}
                       className="hover:text-red-700 focus:text-red-700"
                     >
                       내용반복(도배)
                     </button>
                     <button
-                      onClick={(e) => handleSetReportNum(3,e)}
+                      onClick={(e) => handleSetReportNum(3, e)}
                       className="hover:text-red-700 focus:text-red-700"
                     >
                       개인정보노출
-                    </button>
+                    </button> */}
                   </div>
                   <div className="flex flex-col gap-y-4">
                     <button
-                      onClick={(e) => handleSetReportNum(4,e)}
+                      onClick={(e) => handleSetReportNum(4, e)}
                       className="hover:text-red-700 focus:text-red-700"
                     >
                       음란/선정
                     </button>
                     <button
-                      onClick={(e) => handleSetReportNum(5,e)}
+                      onClick={(e) => handleSetReportNum(5, e)}
                       className="hover:text-red-700 focus:text-red-700"
                     >
                       사기/불법
                     </button>
                     <button
-                      onClick={(e) => handleSetReportNum(6,e)}
+                      onClick={(e) => handleSetReportNum(6, e)}
                       className="hover:text-red-700 focus:text-red-700"
                     >
                       사재기
                     </button>
                     <button
-                      onClick={(e) => handleSetReportNum(7,e)}
+                      onClick={(e) => handleSetReportNum(7, e)}
                       className="hover:text-red-700 focus:text-red-700"
                     >
                       기타
