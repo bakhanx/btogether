@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { FieldErrors } from "react-hook-form/dist/types";
 
@@ -14,10 +13,6 @@ export default function Forms() {
     handleSubmit,
     formState: { errors },
     watch,
-    reset,
-    resetField,
-    setValue,
-    setError,
   } = useForm<LoginForm>({ mode: "onBlur" });
   //   console.log(watch());
 
