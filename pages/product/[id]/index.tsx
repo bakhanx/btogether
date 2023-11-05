@@ -17,7 +17,7 @@ import { ProductResponse } from "types/product";
 const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
   const router = useRouter();
 
-  const { user, isLoading } = useUser();
+  const { user } = useUser();
   const { data: productData, mutate: boundMutate } = useSWR<ProductResponse>(
     router.query.id ? `/api/products/${router.query.id} ` : null
   );
@@ -185,8 +185,6 @@ const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
   //===================== 이미지 확대 ===========================
   const handleImageClick = () => {
     setIsOnImage(!isOnImage);
-    if (isOnImage) {
-    }
   };
 
   return (
