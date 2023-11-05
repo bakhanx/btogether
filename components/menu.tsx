@@ -1,7 +1,9 @@
+import useMutation from "@libs/client/useMutation";
 import useUser from "@libs/client/useUser";
 import { useRouter } from "next/router";
 import { MouseEventHandler, useState } from "react";
 import { useForm } from "react-hook-form";
+import useSWR from "swr";
 
 type MenuType = "Product" | "Story" | "Comment";
 
@@ -13,13 +15,14 @@ export default function Menu(props: {
   // onReport? : (event: React.MouseEvent<HTMLButtonElement>) => void;
 }) {
   const [isOnMenu, setisOnMenu] = useState(false);
-
+  const [reportMutate, { data, loading }] = useMutation("/api/report");
   const { register, reset, handleSubmit: reportHandleSubmit } = useForm<any>();
   const router = useRouter();
-  const onReportValid = (validForm: any) => {
+  const onReportValid = (form: any) => {
     confirm("신고하시겠습니까?");
     //post
-    router.reload();
+    reportMutate(form);
+    // router.reload();
   };
 
   const [isOnReport, setIsOnReport] = useState(false);
