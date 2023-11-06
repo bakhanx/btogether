@@ -18,16 +18,20 @@ export default function Menu(props: {
   const [reportMutate, { data, loading }] = useMutation("/api/report");
   const { register, reset, handleSubmit: reportHandleSubmit } = useForm<any>();
   const router = useRouter();
-  const onReportValid = (form: any) => {
-    confirm("신고하시겠습니까?");
-    //post
-    reportMutate(form);
-    // router.reload();
-  };
 
   const [isOnReport, setIsOnReport] = useState(false);
   const [reportNum, setReportNum] = useState(0);
   const { user } = useUser();
+
+  const onReportValid = (form: any) => {
+    confirm("신고하시겠습니까?");
+    //post
+
+    reportMutate({reportNum : form, postQuery:router.query});
+    // router.reload();
+  };
+
+
 
   // const onDelete = (event: any) => {
   //   event.preventDefault();
