@@ -31,8 +31,6 @@ export default function Menu(props: {
     // router.reload();
   };
 
-
-
   // const onDelete = (event: any) => {
   //   event.preventDefault();
   // };

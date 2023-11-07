@@ -2,7 +2,7 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider        = "prisma-client-js"
+  provider = "prisma-client-js"
   // previewFeatures = ["filteredRelationCount"]
 }
 
@@ -177,4 +177,13 @@ model ChatRoom {
   @@index([productId])
   @@index([purchaserId])
   @@index([sellerId])
+}
+
+model Report {
+  id             Int      @id @default(autoincrement())
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  reportedUserId Int
+  reportNum      Int
+  reportedUrl    String
 }
