@@ -1,18 +1,31 @@
 import { useState } from "react";
+import useSWR from "swr";
+
+type reviewType = {
+  userName: string;
+  score: number;
+  review: string;
+};
 
 const Review = () => {
   const [score, setScore] = useState(5);
+  const { data: reviewData, isLoading } = useSWR<reviewType>(
+    `/api/users/me/reviews`
+  );
+
   return (
     <>
       <div className="mt-5">
         <div className="flex items-center space-x-4">
           <div className="h-12 w-12 rounded-full bg-slate-500" />
           <div>
-            <h4 className="text-sm font-bold text-gray-800">공구의신</h4>
+            <h4 className="text-sm font-bold text-gray-800">
+              {reviewData?.userName || "이름없음"}
+            </h4>
             {/* 별점 */}
             <div className="flex">
               <div className="flex items-center">
-                {Array(score)
+                {Array(reviewData?.score || 5)
                   .fill(0)
                   .map((_, i) => (
                     <svg
@@ -34,6 +47,7 @@ const Review = () => {
         <div className="mt-4 text-sm text-gray-600">
           {/* 리뷰 내용*/}
           <p>
+            {reviewData?.review || ""}
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolore quod
             tenetur nihil illum! Voluptatem doloribus numquam voluptates sed,
             sint eum quos tempore eius similique ipsa earum aspernatur nihil
