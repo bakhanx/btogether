@@ -7,12 +7,11 @@ async function handler(
   res: NextApiResponse<ResponseType>
 ) {
   const {
-    body: { reportNum, postQuery, userId },
+    body: { reportNum, reportedUrl},
   } = req;
 
 //   const report = await client?.report.create({
 //     data: {
-//       userId,
 //       reportNum,
 //       postQuery,
 //     },

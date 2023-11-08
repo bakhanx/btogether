@@ -27,7 +27,7 @@ export default function Menu(props: {
     confirm("신고하시겠습니까?");
     //post
 
-    reportMutate({reportNum : form, postQuery:router.query});
+    reportMutate({reportNum : form, reportedUrl:router.query});
     // router.reload();
   };
 
