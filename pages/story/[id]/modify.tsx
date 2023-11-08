@@ -9,8 +9,6 @@ import { useRouter } from "next/router";
 import useSWR from "swr";
 import { StoryModifyResponse, StoryUploadForm } from "types/story";
 
-
-
 const Modify: NextPage = () => {
   const router = useRouter();
   const {
@@ -22,10 +20,9 @@ const Modify: NextPage = () => {
     `/api/stories/${router.query.id}`
   );
   const [isLoading, setIsLoading] = useState(false);
-  const { data: storyData, isLoading: storyIsLoading } = useSWR<StoryModifyResponse>(
+  const { data: storyData } = useSWR<StoryModifyResponse>(
     `/api/stories/${router.query.id}`
   );
-  console.log(storyData);
 
   const onValid = (form: StoryUploadForm) => {
     setIsLoading(true);
