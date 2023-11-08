@@ -23,7 +23,6 @@ const EditProfile: NextPage = () => {
     setError,
     clearErrors,
     watch,
-
     formState: { errors },
   } = useForm<ProfileEditForm>();
 
