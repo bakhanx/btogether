@@ -1,6 +1,7 @@
 import useMutation from "@libs/client/useMutation";
 import useUser from "@libs/client/useUser";
 import { useRouter } from "next/router";
+import { relative } from "path";
 import { MouseEventHandler, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import useSWR from "swr";
@@ -30,7 +31,7 @@ export default function Menu(props: {
     }
 
     // if (!loading) {
-    //   alert("신고가 완료되었습니다.");
+    //   
     //   setIsOnReport(false);
     // }
     // router.reload();
@@ -39,8 +40,10 @@ export default function Menu(props: {
   useEffect(() => {
     if (data && data.ok) {
       console.log(data);
+      alert("신고가 완료되었습니다.");
+      setIsOnReport(false);
     }
-  }, [data]);
+  }, [data,router]);
 
   // const onDelete = (event: any) => {
   //   event.preventDefault();
