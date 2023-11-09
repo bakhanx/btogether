@@ -17,10 +17,12 @@ async function handler(
 //     },
 //   });
 
-//   res.json({
-//     ok: true,
-//     report,
-//   });
+  res.json({
+    ok: true,
+    reportNum,
+    reportedUrl
+    // report,
+  });
 }
 
 export default withApiSession(

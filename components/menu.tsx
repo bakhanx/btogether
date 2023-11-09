@@ -1,7 +1,7 @@
 import useMutation from "@libs/client/useMutation";
 import useUser from "@libs/client/useUser";
 import { useRouter } from "next/router";
-import { MouseEventHandler, useState } from "react";
+import { MouseEventHandler, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import useSWR from "swr";
 
@@ -23,13 +23,24 @@ export default function Menu(props: {
   const [reportNum, setReportNum] = useState(0);
   const { user } = useUser();
 
-  const onReportValid = (form: any) => {
-    confirm("신고하시겠습니까?");
-    //post
+  const onReportValid = () => {
+    if (confirm("신고하시겠습니까?")) {
+      console.log(reportNum);
+      reportMutate({ reportNum, reportedUrl: router.asPath });
+    }
 
-    reportMutate({reportNum : form, reportedUrl:router.query});
+    // if (!loading) {
+    //   alert("신고가 완료되었습니다.");
+    //   setIsOnReport(false);
+    // }
     // router.reload();
   };
+
+  useEffect(() => {
+    if (data && data.ok) {
+      console.log(data);
+    }
+  }, [data]);
 
   // const onDelete = (event: any) => {
   //   event.preventDefault();
@@ -52,8 +63,9 @@ export default function Menu(props: {
     num: number,
     event: React.MouseEvent<HTMLButtonElement>
   ) => {
+    event.preventDefault();
+    console.log(num);
     setReportNum(num);
-    console.log(event);
   };
 
   return (
@@ -127,7 +139,7 @@ export default function Menu(props: {
                       (cate, i) => (
                         <>
                           <button
-                            onClick={(e) => handleSetReportNum(i, e)}
+                            onClick={(e) => handleSetReportNum(i + 4, e)}
                             className="hover:text-red-700 focus:text-red-700"
                           >
                             {cate}
