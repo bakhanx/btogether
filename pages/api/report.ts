@@ -6,28 +6,40 @@ async function handler(
   req: NextApiRequest,
   res: NextApiResponse<ResponseType>
 ) {
-  const {
-    body: { reportNum, reportedUrl},
-  } = req;
+  if (req.method === "POST") {
+    const {
+      body: { reportNum, reportedUrl },
+    } = req;
 
-//   const report = await client?.report.create({
-//     data: {
-//       reportNum,
-//       postQuery,
-//     },
-//   });
+    //   const report = await client?.report.create({
+    //     data: {
+    //       reportNum,
+    //       postQuery,
+    //     },
+    //   });
 
-  res.json({
-    ok: true,
-    reportNum,
-    reportedUrl
-    // report,
-  });
+    res.json({
+      ok: true,
+      reportNum,
+      reportedUrl,
+      // report,
+    });
+  }
+
+  if (req.method === "GET") {
+    // const report = await client?.report.findMany({
+    //   select: {
+    //     id: true,
+    //     reportNum: true,
+    //     reportedUrl: true,
+    //   },
+    // });
+  }
 }
 
 export default withApiSession(
   withHandler({
-    methods: ["POST"],
+    methods: ["POST", "GET"],
     handler,
   })
 );
