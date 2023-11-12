@@ -31,7 +31,7 @@ export default function Menu(props: {
     }
 
     // if (!loading) {
-    //   
+    //
     //   setIsOnReport(false);
     // }
     // router.reload();
@@ -43,7 +43,7 @@ export default function Menu(props: {
       alert("신고가 완료되었습니다.");
       setIsOnReport(false);
     }
-  }, [data,router]);
+  }, [data, router]);
 
   // const onDelete = (event: any) => {
   //   event.preventDefault();
@@ -112,30 +112,6 @@ export default function Menu(props: {
                         </button>
                       </>
                     ))}
-                    {/* <button
-                      onClick={(e) => handleSetReportNum(0, e)}
-                      className="hover:text-red-700 focus:text-red-700"
-                    >
-                      욕설/비하
-                    </button>
-                    <button
-                      onClick={(e) => handleSetReportNum(1, e)}
-                      className="hover:text-red-700 focus:text-red-700"
-                    >
-                      영리/홍보
-                    </button>
-                    <button
-                      onClick={(e) => handleSetReportNum(2, e)}
-                      className="hover:text-red-700 focus:text-red-700"
-                    >
-                      내용반복(도배)
-                    </button>
-                    <button
-                      onClick={(e) => handleSetReportNum(3, e)}
-                      className="hover:text-red-700 focus:text-red-700"
-                    >
-                      개인정보노출
-                    </button> */}
                   </div>
                   <div className="flex flex-col gap-y-4">
                     {["음란/선정", "사기/불법", "사재기", "기타"].map(
@@ -150,31 +126,6 @@ export default function Menu(props: {
                         </>
                       )
                     )}
-
-                    {/* <button
-                      onClick={(e) => handleSetReportNum(4, e)}
-                      className="hover:text-red-700 focus:text-red-700"
-                    >
-                      음란/선정
-                    </button>
-                    <button
-                      onClick={(e) => handleSetReportNum(5, e)}
-                      className="hover:text-red-700 focus:text-red-700"
-                    >
-                      사기/불법
-                    </button>
-                    <button
-                      onClick={(e) => handleSetReportNum(6, e)}
-                      className="hover:text-red-700 focus:text-red-700"
-                    >
-                      사재기
-                    </button>
-                    <button
-                      onClick={(e) => handleSetReportNum(7, e)}
-                      className="hover:text-red-700 focus:text-red-700"
-                    >
-                      기타
-                    </button> */}
                   </div>
                 </div>
                 <div className="w-full items-center flex">
