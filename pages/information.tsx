@@ -17,9 +17,7 @@ const Information: NextPage<{ infos: InfoProps[] }> = ({ infos }) => {
         <div key={i} className="px-4 py-4">
           <div>상호명 : {info?.name}</div>
           <div>주소 : {info?.address}</div>
-          <div>대표이사 : {info?.ceo}</div>
-          <div>문의번호 : {info?.inquiry}</div>
-          <div>FAX : {info?.fax}</div>
+          <div>대표 : {info?.ceo}</div>
         </div>
       ))}
     </div>
