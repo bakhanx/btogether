@@ -8,16 +8,22 @@ type InfoProps = {
   ceo: string;
   inquiry: string;
   fax: string;
-}
+};
 
 const Information: NextPage<{ infos: InfoProps[] }> = ({ infos }) => {
   return (
     <div>
       {infos?.map((info, i) => (
         <div key={i} className="px-4 py-4">
-          <div>상호명 : {info?.name}</div>
-          <div>주소 : {info?.address}</div>
-          <div>대표 : {info?.ceo}</div>
+          <div className="font-semibold">
+            상호명 :<span className="font-normal">{info?.name}</span>
+          </div>
+          <div className="font-semibold">
+            주소 :<span className="font-normal">{info?.address}</span>
+          </div>
+          <div className="font-semibold">
+            대표 :<span className="font-normal">{info?.ceo}</span>
+          </div>
         </div>
       ))}
     </div>
