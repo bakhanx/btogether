@@ -1,6 +1,7 @@
 import { readFileSync, readdirSync } from "fs";
 import matter from "gray-matter";
 import { NextPage } from "next";
+import Link from "next/link";
 
 type InfoProps = {
   name: string;
@@ -19,7 +20,7 @@ const Information: NextPage<{ infos: InfoProps[] }> = ({ infos }) => {
             상호명 :<span className="font-normal">{info?.name}</span>
           </div>
           <div className="font-semibold">
-            주소 :<span className="font-normal">{info?.address}</span>
+            주소 : <Link href={info?.address}><span className="font-normal">{info?.address}</span></Link>
           </div>
           <div className="font-semibold">
             대표 :<span className="font-normal">{info?.ceo}</span>
