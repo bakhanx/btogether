@@ -28,7 +28,7 @@ const ChatRoomsList = () => {
             <Link
               href={`/chat/${chatRoom?.id}/?name=${chatRoom?.purchaser.name}`}
               key={chatRoom?.id}
-              className="block"
+              className="block hover:bg-gray-50"
             >
               <div className="flex cursor-pointer items-center justify-between">
                 <div className="flex items-center space-x-3 px-4 py-3">
@@ -86,7 +86,7 @@ const ChatRoomsList = () => {
                   </div>
                 </div>
 
-                <div className="relative mr-2 aspect-square w-14 shadow-md">
+                <div className="relative mr-2 aspect-square w-16 shadow-md">
                   {chatRoom?.product?.image ? (
                     <Image
                       src={`https://imagedelivery.net/214BxOnlVKSU2amZRZmdaQ/${chatRoom?.product?.image}/thumbnail`}
