@@ -113,7 +113,7 @@ const ChatRoomsList = () => {
 
 const Chat: NextPage = () => {
   return (
-    <Layout title="채팅" hasTabBar canGoBack seoTitle="채팅" pathName="Chat">
+    <Layout title="채팅" hasTabBar seoTitle="채팅" pathName="Chat">
       <Suspense fallback={<Loading />}>
         <ChatRoomsList />
       </Suspense>

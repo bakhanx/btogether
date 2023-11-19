@@ -31,7 +31,7 @@ export default function TopNav({ menuProps: props }: MenuProps) {
     >
       {/* 뒤로가기 */}
 
-      <button onClick={onBack} className="backdrop-opacity-100">
+      {/* <button onClick={onBack} className="backdrop-opacity-100">
         <svg
           className="h-6 w-6"
           fill="none"
@@ -46,7 +46,7 @@ export default function TopNav({ menuProps: props }: MenuProps) {
             d="M15 19l-7-7 7-7"
           ></path>
         </svg>
-      </button>
+      </button> */}
 
       {/* 메뉴 */}
 

@@ -97,7 +97,6 @@ const Main: NextPage = () => {
   return (
     <Layout
       hasTabBar
-      canGoBack
       title="이웃 스토리"
       seoTitle="이웃 소식"
       pathName="Story"

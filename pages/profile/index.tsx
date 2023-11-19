@@ -177,7 +177,6 @@ const UserInfo = () => {
 const Profile: NextPage = () => {
   return (
     <Layout
-      canGoBack
       title="마이페이지"
       seoTitle="내 프로필"
       hasTabBar
