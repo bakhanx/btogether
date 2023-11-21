@@ -158,7 +158,7 @@ export default function Layout({
                   priority
                   className="mt-3"
                   sizes="1"
-                  alt=""
+                  alt="글쓰기"
                   src="/logo_01_small.png"
                 />
               </div>
