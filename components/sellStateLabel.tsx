@@ -9,7 +9,7 @@ const SellStateLabel = ({ sellState, hideSelling }: sellStateProps) => {
   return (
     <>
       {sellState === "reserve" && (
-        <span className=" mr-1 rounded-sm bg-green-600 p-1 text-xs text-white">
+        <span className=" mr-1 rounded-sm bg-green-700 p-1 text-xs text-white">
           예약중
         </span>
       )}
