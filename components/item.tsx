@@ -37,8 +37,9 @@ export default function Item({
                 fill
                 quality={90}
                 sizes="1"
-                priority
+                priority={true}
                 alt={title}
+                style={{objectFit:"cover"}}
                 src={`https://imagedelivery.net/214BxOnlVKSU2amZRZmdaQ/${image}/thumbnail`}
               />
             </div>
