@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 
-@font-face{
+/* @font-face{
   font-family: 'NotoSansKR';
   font-weight: 400;
   font-style:normal;
@@ -25,7 +25,7 @@
 
 body{
   font-family: 'NotoSansKR'  
-}
+} */
 
 /* hide arrow in input:number */
 @layer utilities {
