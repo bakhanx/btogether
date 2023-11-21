@@ -151,14 +151,14 @@ export default function Layout({
 
           {/* 글쓰기 */}
           {pathName ? (
-            <div className="h-12 w-20">
+            <div className="h-12">
               <div className="relative h-full w-full">
                 <Image
                   fill
                   priority
                   className="mt-3"
                   sizes="1"
-                  alt="글쓰기"
+                  alt=""
                   src="/logo_01_small.png"
                 />
               </div>
