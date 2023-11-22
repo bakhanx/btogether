@@ -33,7 +33,7 @@ const StoryList = () => {
             <div key={story.id}>
               <Link href={`/story/${story.id}`}>
                 <div className="flex cursor-pointer flex-col items-start pt-4 hover:bg-slate-50">
-                  <span className="ml-3.5 flex items-center rounded-full bg-violet-500 px-2.5 py-0.5 text-xs font-bold text-white">
+                  <span className="ml-3.5 flex items-center rounded-full bg-violet-600 px-2.5 py-0.5 text-xs font-bold text-white">
                     일상
                   </span>
                   <div className="text-gray-7100 mt-2 h-16 px-4">
