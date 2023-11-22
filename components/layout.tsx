@@ -100,7 +100,7 @@ export default function Layout({
               className={cls(
                 "flex w-14 flex-col items-center space-y-2 ",
                 router.pathname === "/"
-                  ? "text-blue-500"
+                  ? "text-blue-600"
                   : "transition-colors hover:text-gray-500"
               )}
             >
@@ -127,7 +127,7 @@ export default function Layout({
               className={cls(
                 "flex w-14 flex-col items-center space-y-2  ",
                 router.pathname === "/story"
-                  ? "text-blue-500"
+                  ? "text-blue-600"
                   : "transition-colors hover:text-gray-500"
               )}
             >
@@ -174,7 +174,7 @@ export default function Layout({
               className={cls(
                 "flex w-14 flex-col items-center space-y-2",
                 router.pathname === "/chat"
-                  ? "text-blue-500"
+                  ? "text-blue-600"
                   : "transition-colors hover:text-gray-500"
               )}
             >
@@ -201,7 +201,7 @@ export default function Layout({
               className={cls(
                 "flex w-14 flex-col items-center space-y-2",
                 router.pathname === "/profile"
-                  ? "text-blue-500"
+                  ? "text-blue-600"
                   : "transition-colors hover:text-gray-500"
               )}
             >
