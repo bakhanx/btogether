@@ -40,7 +40,7 @@ const UserInfo = () => {
     <div className="px-4">
       {/* 내 프로필 */}
       <div className="mt-4 flex items-center space-x-3">
-        <Link href="/profile/edit" className="hover:opacity-80">
+        <Link href="/profile/edit" className="hover:opacity-80" aria-label="프로필사진">
           {userData ? (
             userData?.profile?.avatar ? (
               <div className="relative h-16 w-16">
