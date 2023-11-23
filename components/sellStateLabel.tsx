@@ -14,13 +14,13 @@ const SellStateLabel = ({ sellState, hideSelling }: sellStateProps) => {
         </span>
       )}
       {sellState === "sold" && (
-        <span className=" mr-1 rounded-sm bg-gray-500 p-1 text-xs text-white">
+        <span className=" mr-1 rounded-sm bg-gray-600 p-1 text-xs text-white">
           거래완료
         </span>
       )}
 
       {!hideSelling && sellState === "selling" && (
-        <span className=" mr-1 rounded-sm bg-violet-500 p-1 text-xs text-white">
+        <span className=" mr-1 rounded-sm bg-violet-700 p-1 text-xs text-white">
           거래중
         </span>
       )}
