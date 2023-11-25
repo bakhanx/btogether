@@ -471,6 +471,7 @@ const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
                       ? " text-red-500 hover:bg-gray-100 hover:text-gray-500"
                       : " text-gray-400 hover:bg-gray-100 hover:text-red-500"
                   )}
+                  aria-label="관심상품등록"
                 >
                   <svg
                     className="h-6 w-6"

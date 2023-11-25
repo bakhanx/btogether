@@ -31,7 +31,7 @@ export default function TopNav({ menuProps: props }: MenuProps) {
     >
       {/* 뒤로가기 */}
 
-      <button onClick={onBack} className="backdrop-opacity-100">
+      <button onClick={onBack} className="backdrop-opacity-100" aria-label="뒤로가기">
         <svg
           className="h-6 w-6"
           fill="none"

@@ -146,6 +146,7 @@ export default function Menu(props: {
           onClick={handleClickMenu}
           type="button"
           onBlur={handleLeaveFocusOut}
+          aria-label="메뉴"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
