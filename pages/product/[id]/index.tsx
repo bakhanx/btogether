@@ -281,6 +281,7 @@ const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
           writerId: productData?.product?.sellerId || 0,
           onDelete: onDelete,
           onModify: onModify,
+          seoTitle : productData?.product.name || ""
         }}
       />
 

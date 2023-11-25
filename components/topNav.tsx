@@ -1,6 +1,7 @@
 import { useRouter } from "next/router";
 import Menu from "./menu";
 import { cls } from "@libs/client/utils";
+import Head from "next/head";
 
 type MenuType = "Product" | "Comment" | "Story";
 
@@ -8,6 +9,7 @@ type MenuProps = {
   menuProps: {
     type: MenuType;
     writerId: number;
+    seoTitle : string;
     onDelete: (event: React.MouseEvent<HTMLButtonElement>) => void;
     onModify?: (event: React.MouseEvent<HTMLButtonElement>) => void;
   };
@@ -29,9 +31,16 @@ export default function TopNav({ menuProps: props }: MenuProps) {
         "fixed top-0 z-10 flex h-12 w-full max-w-screen-lg  items-center justify-between  px-5 text-lg font-medium text-white"
       )}
     >
+      <Head>
+        <title>{`${props.seoTitle} # 비투게더`}</title>
+      </Head>
       {/* 뒤로가기 */}
 
-      <button onClick={onBack} className="backdrop-opacity-100" aria-label="뒤로가기">
+      <button
+        onClick={onBack}
+        className="backdrop-opacity-100"
+        aria-label="뒤로가기"
+      >
         <svg
           className="h-6 w-6"
           fill="none"
