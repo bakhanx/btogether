@@ -22,6 +22,7 @@ import {
   StoryCommentResponse,
   StoryResponse,
 } from "types/story";
+import Head from "next/head";
 
 // interface StorySSGResponse extends Story {
 //   ok: boolean;
@@ -140,7 +141,9 @@ const Content: NextPage = () => {
   return (
     <>
       {/* 탑 레이아웃 */}
-
+      <Head>
+        <title>{storyData?.story.user.name}님의 스토리</title>
+      </Head>
       <>
         <div className="pt-16">
           {/* 카테고리 */}
