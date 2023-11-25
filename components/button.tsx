@@ -20,12 +20,12 @@ export default function Button({
         "w-full rounded-md border border-transparent px-4 font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2",
         large ? "py-3 text-base" : "py-2 text-sm",
         color === "blue"
-          ? "bg-blue-400 hover:bg-blue-500 focus:ring-blue-500 "
+          ? "bg-blue-500 hover:bg-blue-600 focus:ring-blue-600 "
           : color === "amber"
-          ? "bg-amber-400 hover:bg-amber-500 focus:ring-amber-500"
+          ? "bg-amber-500 hover:bg-amber-600 focus:ring-amber-600"
           : color === "red"
-          ? "bg-red-400 hover:bg-red-500 focus:ring-red-500"
-          : " bg-gray-400 hover:cursor-auto focus:ring-0"
+          ? "bg-red-500 hover:bg-red-600 focus:ring-red-600"
+          : " bg-gray-500 hover:cursor-auto focus:ring-0"
       )}
     >
       {text}
