@@ -44,7 +44,7 @@ export default function Item({
               />
             </div>
           ) : (
-            <div className="h-20 w-20 rounded-md bg-gray-400" />
+            <div className="h-20 w-20 rounded-md bg-gray-500" />
           )}
 
           <div className="flex w-full flex-col justify-between truncate ">

@@ -67,7 +67,7 @@ const Enter: NextPage = () => {
       <title>로그인 # B-together</title>
       <div className="flex flex-col items-center">
         <h3 className=" text-3xl font-bold">B - Together</h3>
-        <h1 className="p-1 text-gray-400">이웃과 함께하는</h1>
+        <h1 className="p-1 text-gray-500">이웃과 함께하는</h1>
         <div className="h-32 w-64">
           <div className="relative h-full w-full">
             <Image fill alt="" src={Logo} priority sizes="1" />
@@ -107,8 +107,8 @@ const Enter: NextPage = () => {
                   className={cls(
                     "border-b-2 pb-4 text-sm font-medium",
                     method === "email"
-                      ? "border-blue-500 text-blue-400"
-                      : "border-transparent text-gray-400 hover:text-gray-400"
+                      ? "border-blue-500 text-blue-500"
+                      : "border-transparent text-gray-500 hover:text-gray-500"
                   )}
                   onClick={handleEmailForm}
                 >
@@ -118,8 +118,8 @@ const Enter: NextPage = () => {
                   className={cls(
                     "border-b-2 pb-4 text-sm font-medium",
                     method === "phone"
-                      ? "border-blue-500 text-blue-400"
-                      : "border-transparent text-gray-400 hover:text-gray-400"
+                      ? "border-blue-500 text-blue-500"
+                      : "border-transparent text-gray-500 hover:text-gray-500"
                   )}
                   onClick={handlePhoneForm}
                 >

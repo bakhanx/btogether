@@ -30,7 +30,7 @@ const Review = () => {
                   .map((_, i) => (
                     <svg
                       key={i}
-                      className="h-5 w-5 text-yellow-400"
+                      className="h-5 w-5 text-yellow-500"
                       xmlns="http://www.w3.org/2000/svg"
                       viewBox="0 0 20 20"
                       fill="currentColor"
