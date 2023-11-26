@@ -71,7 +71,7 @@ const ChatRoomsList = () => {
                           : chatRoom?.seller.name}
                       </span>
                       {/* 시간 */}
-                      <span className="self-start py-2 px-2 text-xs text-gray-400">
+                      <span className="self-start py-2 px-2 text-xs text-gray-500">
                         <DateTime
                           date={chatRoom?.messages.at(-1)?.updatedAt}
                           timeAgo

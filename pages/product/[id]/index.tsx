@@ -470,7 +470,7 @@ const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
                     "flex items-center justify-center rounded-md p-3",
                     productData?.isFavorite
                       ? " text-red-500 hover:bg-gray-100 hover:text-gray-500"
-                      : " text-gray-400 hover:bg-gray-100 hover:text-red-500"
+                      : " text-gray-500 hover:bg-gray-100 hover:text-red-500"
                   )}
                   aria-label="관심상품등록"
                 >

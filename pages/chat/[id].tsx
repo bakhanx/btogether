@@ -148,7 +148,7 @@ const ChatContents = () => {
               className="w-full rounded-md border border-gray-300 p-3  pl-3 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500"
             />
             <div className="absolute inset-y-0 right-6 flex py-1.5">
-              <button className="flex items-center rounded-md bg-blue-400 px-5 text-white focus:ring-2 focus:ring-blue-50 focus:ring-offset-2 ">
+              <button className="flex items-center rounded-md bg-blue-500 px-5 text-white focus:ring-2 focus:ring-blue-50 focus:ring-offset-2 ">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
