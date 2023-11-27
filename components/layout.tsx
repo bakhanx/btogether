@@ -227,7 +227,7 @@ export default function Layout({
       ) : null}
 
       {/* Floating Button */}
-      <div className="fixed bottom-0  z-40 flex w-full max-w-screen-lg ">
+      <div className="fixed bottom-0 z-40 flex max-w-screen-lg w-full justify-end">
         <ScrollToTopButton />
       </div>
     </div>
