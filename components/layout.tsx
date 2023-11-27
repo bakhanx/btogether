@@ -4,6 +4,7 @@ import { cls } from "../libs/client/utils";
 import Head from "next/head";
 import Image from "next/image";
 import FloatingButton from "./floatingButton";
+import ScrollToTopButton from "./scrollToTopButton";
 
 type PathType = "Product" | "Story" | "Chat" | "Profile";
 
@@ -151,7 +152,7 @@ export default function Layout({
 
           {/* 글쓰기 */}
           {pathName ? (
-            <div className="w-20 h-12">
+            <div className="w-22 h-12">
               <div className="relative h-full w-full">
                 <Image
                   fill
@@ -224,6 +225,11 @@ export default function Layout({
           </Link>
         </nav>
       ) : null}
+
+      {/* Floating Button */}
+      <div className="fixed bottom-0  z-40 flex w-full max-w-screen-lg ">
+        <ScrollToTopButton />
+      </div>
     </div>
   );
 }

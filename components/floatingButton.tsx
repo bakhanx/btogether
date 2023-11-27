@@ -6,6 +6,7 @@ type FloatingButton = {
 
 export default function FloatingButton({ pathName }: FloatingButton) {
   return (
+
     <div className="relative bottom-24 z-40 flex max-w-screen-xl   justify-center border-none">
       {pathName === "Product" && (
         <Link href={"product/upload"} aria-label="글쓰기">
@@ -50,5 +51,6 @@ export default function FloatingButton({ pathName }: FloatingButton) {
         </Link>
       )}
     </div>
+  
   );
 }
