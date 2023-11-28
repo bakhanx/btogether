@@ -227,9 +227,11 @@ export default function Layout({
       ) : null}
 
       {/* Floating Button */}
-      <div className="fixed bottom-0 z-40 flex max-w-screen-lg w-full justify-end">
-        <ScrollToTopButton />
-      </div>
+      {pathName === "Product" || pathName === "Story" ? (
+        <div className="fixed bottom-0 z-40 flex max-w-screen-lg w-full justify-end">
+          <ScrollToTopButton />
+        </div>
+      ) : null}
     </div>
   );
 }
