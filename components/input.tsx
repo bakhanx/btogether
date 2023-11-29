@@ -19,6 +19,7 @@ export default function Input({
   required,
   type,
   value,
+  placeholder,
   ...rest
 }: InputProps) {
   return (
@@ -36,6 +37,7 @@ export default function Input({
             {...register}
             required={required}
             type={type}
+            placeholder={placeholder}
             {...rest}
             className="w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-blue-500 focus:placeholder-transparent focus:outline-none focus:ring-blue-500"
           />
@@ -52,6 +54,7 @@ export default function Input({
             required={required}
             value={value}
             type={type}
+            placeholder={placeholder}
             {...rest}
             className="w-full appearance-none rounded-md border border-gray-300 px-3 py-2 pl-7 placeholder-gray-400 shadow-sm focus:border-blue-500 focus:placeholder-transparent focus:outline-none focus:ring-blue-500"
           />
@@ -71,6 +74,7 @@ export default function Input({
             required={required}
             {...register}
             {...rest}
+            placeholder={placeholder}
             className="w-full rounded-md rounded-l-none border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-blue-500 focus:placeholder-transparent focus:outline-none focus:ring-blue-500"
           />
         </div>

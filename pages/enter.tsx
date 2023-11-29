@@ -139,6 +139,7 @@ const Enter: NextPage = () => {
                   label="이메일 주소"
                   type="email"
                   kind="text"
+                  placeholder="btogether@gmail.com"
                   required
                 />
               ) : null}
@@ -149,6 +150,7 @@ const Enter: NextPage = () => {
                   label="휴대전화 번호"
                   type="number"
                   kind="phone"
+                  placeholder="01012345678"
                   required
                 />
               ) : null}
