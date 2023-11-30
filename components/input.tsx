@@ -6,10 +6,10 @@ type InputProps = {
   kind?: "text" | "phone" | "price";
   register: UseFormRegisterReturn;
   type: React.HTMLInputTypeAttribute;
-  required:boolean,
-  value?:string,
+  required: boolean;
+  value?: string;
   [key: string]: any;
-}
+};
 
 export default function Input({
   label,
@@ -44,7 +44,7 @@ export default function Input({
         </div>
       ) : null}
       {kind === "price" ? (
-        <div className="relative flex items-center  rounded-md shadow-sm">
+        <div className="relative flex items-center rounded-md shadow-sm">
           <div className="pointer-events-none absolute left-0 flex items-center justify-center pl-3">
             <span className="text-sm text-gray-500">₩</span>
           </div>

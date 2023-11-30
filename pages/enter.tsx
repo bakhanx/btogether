@@ -119,11 +119,12 @@ const Enter: NextPage = () => {
                     "border-b-2 pb-4 text-sm font-medium",
                     method === "phone"
                       ? "border-blue-500 text-blue-500"
-                      : "border-transparent text-gray-500 hover:text-gray-500"
+                      : "border-transparent text-gray-200 hover:text-gray-200"
                   )}
                   onClick={handlePhoneForm}
+                  disabled
                 >
-                  번호 로그인
+                  번호 로그인 (점검중)
                 </button>
               </div>
             </div>
