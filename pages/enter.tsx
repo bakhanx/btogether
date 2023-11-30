@@ -63,10 +63,11 @@ const Enter: NextPage = () => {
   }, [router, tokenData]);
 
   return (
-    <div className="mt-16 px-4 ">
+    <div className=" px-4 h-screen py-10">
       <title>로그인 # B-together</title>
-      <div className="flex flex-col items-center">
-        <h3 className=" text-3xl font-bold">B - Together</h3>
+
+      <div className="flex flex-col items-center justify-center h-1/3">
+        <h3 className="text-3xl font-bold">B - Together</h3>
         <h1 className="p-1 text-gray-500">이웃과 함께하는 비투게더</h1>
         <div className="h-32 w-64">
           <div className="relative h-full w-full">
@@ -74,14 +75,18 @@ const Enter: NextPage = () => {
           </div>
         </div>
       </div>
-      <div className="mt-5">
+
+      <div className="h-1/3">
         {data?.ok ? (
           <>
             <form
               className="mt-8 flex flex-col space-y-4"
               onSubmit={tokenHandleSubmit(onTokenValid)}
             >
-              <p className="pt-4">입력하신 {method === "phone" ? "번호" : "메일"}로 인증코드가 발송되었습니다.</p>
+              <p className="pt-4">
+                입력하신 {method === "phone" ? "번호" : "메일"}로 인증코드가
+                발송되었습니다.
+              </p>
 
               <Input
                 register={tokenRegister("token")}
@@ -174,6 +179,37 @@ const Enter: NextPage = () => {
             </form>
           </>
         )}
+      </div>
+
+      <div className=" h-1/3 flex items-end ">
+        <footer className="text-xs  text-gray-500 ">
+          <div>
+            <span className="font-bold">대표</span> 박한솔 |{" "}
+            <span className="font-bold">사업자번호</span> 000-00-0000
+          </div>
+          <div>
+            <span className="font-bold">직업정보제공사업 신고번호</span>
+            J00000000000
+          </div>
+          <div>
+            <span className="font-bold">주소</span> 서울특별시 OO구 OOO로 OO길
+            00
+          </div>
+          <div>
+            <span className="font-bold">고객문의</span> bkndev7@gmail.com
+          </div>
+          <div className="flex gap-2 pt-2">
+            <div>
+              <span className="font-bold">이용약관</span>
+            </div>
+            <div>
+              <span className="font-bold">개인정보처리방침</span>
+            </div>
+            {/* <div>
+              <span className="font-bold">위치기반서비스 이용약관</span>
+            </div> */}
+          </div>
+        </footer>
       </div>
     </div>
   );
