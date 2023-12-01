@@ -28,7 +28,7 @@ const StoryList = () => {
   return (
     <>
       {stories && (
-        <div className="divide  divide-y-4 divide-orange-100 ">
+        <div className="divide  divide-y-4 divide-orange-50 ">
           {stories.map((story) => (
             <div key={story.id}>
               <Link href={`/story/${story.id}`}>
