@@ -152,7 +152,7 @@ export default function Layout({
 
           {/* 글쓰기 */}
           {pathName ? (
-            <div className="w-22 h-12">
+            <div className="w-20 h-12">
               <div className="relative h-full w-full">
                 <Image
                   fill
