@@ -141,7 +141,7 @@ const ChatContents = () => {
           onSubmit={handleSubmit(onValid)}
           className="fixed inset-x-0 bottom-0 bg-white py-5"
         >
-          <div className="relative mx-auto flex w-full max-w-screen-xl items-center px-5">
+          <div className="relative mx-auto flex w-full max-w-screen-lg items-center px-5">
             <input
               {...register("message", { required: true })}
               type="text"
