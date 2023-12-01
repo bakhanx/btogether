@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 
 type FloatingButton = {
@@ -6,7 +7,6 @@ type FloatingButton = {
 
 export default function FloatingButton({ pathName }: FloatingButton) {
   return (
-
     <div className="relative bottom-24 z-40 flex max-w-screen-xl   justify-center border-none">
       {pathName === "Product" && (
         <Link href={"product/upload"} aria-label="글쓰기">
@@ -50,7 +50,19 @@ export default function FloatingButton({ pathName }: FloatingButton) {
           </div>
         </Link>
       )}
+
+      {(pathName === "Chat" || pathName === "Profile") && (
+        <div className="bottom-24 flex w-20 h-12">
+          <Image
+            fill
+            priority
+            className="mt-4 rotate-180 hue-rotate-60"
+            sizes="1"
+            alt=""
+            src="/logo_01_small.png"
+          />
+        </div>
+      )}
     </div>
-  
   );
 }
