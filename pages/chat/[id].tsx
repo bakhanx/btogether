@@ -20,7 +20,7 @@ const ProductInfo = () => {
   );
   return (
     <>
-      <div className="fixed z-30 w-full max-w-screen-lg border-b-2 border-b-blue-200 bg-white px-4">
+      <div className="fixed z-30 w-full max-w-screen-lg border-b-2 border-b-blue-100 bg-white px-4">
         <div className="flex items-center p-2">
           <div className="relative h-16 w-16 shadow-md">
             {chatData?.chatRoom?.product?.image ? (
