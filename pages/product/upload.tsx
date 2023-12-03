@@ -11,6 +11,7 @@ import { useRouter } from "next/router";
 import Image from "next/image";
 import { ProductUploadForm, ProductUploadMutation } from "types/product";
 import { PRODUCT } from "constants/product";
+import { cls } from "@libs/client/utils";
 
 const Upload: NextPage = () => {
   const router = useRouter();
@@ -79,8 +80,19 @@ const Upload: NextPage = () => {
     }
   }, [data, router]);
 
+  const [isClick, setIsClick] = useState(false);
+  const handleCategory = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+    console.log(event.currentTarget.value);
+    setIsClick(!isClick);
+  };
   return (
-    <Layout canGoBack title="Upload Product" seoTitle="상품 올리기" pathName="Product" >
+    <Layout
+      canGoBack
+      title="Upload Product"
+      seoTitle="상품 올리기"
+      pathName="Product"
+    >
       <form className="space-y-4 p-4" onSubmit={handleSubmit(onValid)}>
         <div className="flex justify-center">
           {photoPreview ? (
@@ -126,6 +138,43 @@ const Upload: NextPage = () => {
           type="text"
           placeholder="필수 입력"
         />
+        {/* 카테고리 */}
+        <div className="gap-x-2 flex">
+          <button
+            {...register("category")}
+            className={cls(
+              "p-1 border-2",
+              isClick ? "border-blue-500" : "border-gray-400"
+            )}
+            onClick={handleCategory}
+            value={"판매"}
+          >
+            <div>판매</div>
+          </button>
+          <button
+            {...register("category")}
+            className={cls(
+              "p-1 border-2",
+              isClick ? "border-blue-500" : "border-gray-400"
+            )}
+            onClick={handleCategory}
+            value={"나눔"}
+          >
+            <div>나눔</div>
+          </button>
+          <button
+            {...register("category")}
+            className={cls(
+              "p-1 border-2",
+              isClick ? "border-blue-500" : "border-gray-400"
+            )}
+            onClick={handleCategory}
+            value={"모임"}
+          >
+            <div>모임</div>
+          </button>
+        </div>
+
         {/* 가격 */}
         <Input
           register={register("price", {
@@ -160,7 +209,11 @@ const Upload: NextPage = () => {
           placeholder="공지사항 위반 내용 기입 시, 삭제 처리될 수 있습니다."
         />
 
-        <Button text={isLoading ? "등록중..." : "상품 등록하기"} large color="blue" />
+        <Button
+          text={isLoading ? "등록중..." : "상품 등록하기"}
+          large
+          color="blue"
+        />
       </form>
       {}
     </Layout>
