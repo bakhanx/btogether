@@ -35,6 +35,7 @@ export type ProductUploadForm = {
   description: string;
   photo: FileList;
   productId: number;
+  category:string;
 };
 
 export type ProductUploadMutation = {
