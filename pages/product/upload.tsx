@@ -80,12 +80,14 @@ const Upload: NextPage = () => {
     }
   }, [data, router]);
 
-  const [isClick, setIsClick] = useState(false);
-  const handleCategory = (event: React.MouseEvent<HTMLButtonElement>) => {
-    event.preventDefault();
-    console.log(event.currentTarget.value);
-    setIsClick(!isClick);
-  };
+  // 카테고리 선택
+  // const [isClick, setIsClick] = useState(false);
+  // const handleCategory = (event: React.MouseEvent<HTMLButtonElement>) => {
+  //   event.preventDefault();
+  //   console.log(event.currentTarget.value);
+  //   setIsClick(!isClick);
+  // };
+
   return (
     <Layout
       canGoBack
@@ -139,7 +141,7 @@ const Upload: NextPage = () => {
           placeholder="필수 입력"
         />
         {/* 카테고리 */}
-        <div className="gap-x-2 flex">
+        {/* <div className="gap-x-2 flex">
           <button
             {...register("category")}
             className={cls(
@@ -173,7 +175,7 @@ const Upload: NextPage = () => {
           >
             <div>모임</div>
           </button>
-        </div>
+        </div> */}
 
         {/* 가격 */}
         <Input
