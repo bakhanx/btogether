@@ -5,6 +5,8 @@ import Head from "next/head";
 import Image from "next/image";
 import FloatingButton from "./floatingButton";
 import ScrollToTopButton from "./scrollToTopButton";
+import TopLogo from "../public/images/logo/logo_04.png"
+import BottomLogo from "../public/images/logo/logo_01_small.png"
 
 type PathType = "Product" | "Story" | "Chat" | "Profile";
 
@@ -77,7 +79,7 @@ export default function Layout({
         {mainTitle ? (
           <div className="flex items-center gap-x-2 text-xl">
             <div className="relative h-[24px] w-[148px]">
-              <Image alt="" src="/logo_04.png" sizes="1" fill />
+              <Image alt="" src={TopLogo} sizes="1" fill />
             </div>
           </div>
         ) : null}
@@ -160,7 +162,7 @@ export default function Layout({
                   className="mt-3"
                   sizes="1"
                   alt=""
-                  src="/logo_01_small.png"
+                  src={BottomLogo}
                 />
               </div>
               <FloatingButton pathName={pathName} />
