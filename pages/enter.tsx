@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form";
 import Button from "@components/button";
 import useMutation from "@libs/client/useMutation";
 import { useRouter } from "next/router";
-import Logo from "../public/logo_01_small.png";
+import Logo from "../public/images/logo/logo_01_small.png";
 
 import Image from "next/image";
 import { EnterForm, MutationResult, TokenForm } from "types/enter";
