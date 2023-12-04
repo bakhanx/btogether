@@ -168,6 +168,8 @@ const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
     sellStateMutate({ sellState: stateType, purchaserId: selectedUserId });
     // router.reload();
   };
+ 
+
   //========================================================================
 
   if (router.isFallback) {
@@ -189,7 +191,7 @@ const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
   };
 
   return (
-    <>
+    <div className="flex justify-center">
       {/* 유저리스트 */}
       {isOnPurchaser && (
         <div className="relative flex justify-center ">
@@ -287,18 +289,18 @@ const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
       />
 
       {/* 판매 내용 */}
-      <div className="mb-8 ">
+      <div className="mt-16 px-4 max-w-screen-md w-full">
         {/* 상품 이미지 */}
         <div onClick={handleImageClick}>
-          <div className="relative aspect-square max-h-[512px] w-full">
-            {!product?.image ? (
+          <div className="w-full">
+            {product?.image ? (
               <Image
-                className="object-cover focus:cursor-pointer"
+                className="object-cover focus:cursor-pointer rounded-lg"
                 quality={90}
                 priority
-                width={1024}
-                height={512}
-                fill
+                // blurData를 위한 w,h 명시
+                width={768}
+                height={0}
                 src={`https://imagedelivery.net/214BxOnlVKSU2amZRZmdaQ/${product?.image}/public`}
                 placeholder="blur"
                 blurDataURL={SKELETON.IMAGE}
@@ -306,7 +308,7 @@ const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
 
               />
             ) : (
-              <Image fill alt="" src={SKELETON.IMAGE} />
+              <Image width={768} height={0} alt="" src={SKELETON.IMAGE} />
             )}
           </div>
         </div>
@@ -530,7 +532,7 @@ const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
   //===============================================================
 };
