@@ -13,6 +13,7 @@ import { useEffect, useState } from "react";
 import TopNav from "@components/topNav";
 import DateTime from "@components/datetime";
 import { ProductResponse } from "types/product";
+import { SKELETON } from "constants/skeleton";
 
 const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
   const router = useRouter();
@@ -281,7 +282,7 @@ const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
           writerId: productData?.product?.sellerId || 0,
           onDelete: onDelete,
           onModify: onModify,
-          seoTitle : productData?.product.name || ""
+          seoTitle: productData?.product.name || "",
         }}
       />
 
@@ -289,20 +290,25 @@ const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
       <div className="mb-8 ">
         {/* 상품 이미지 */}
         <div onClick={handleImageClick}>
-          {product?.image ? (
-            <div className="relative aspect-square max-h-[512px] w-full">
+          <div className="relative aspect-square max-h-[512px] w-full">
+            {!product?.image ? (
               <Image
                 className="object-cover focus:cursor-pointer"
                 quality={90}
                 priority
+                width={1024}
+                height={512}
                 fill
-                alt=""
                 src={`https://imagedelivery.net/214BxOnlVKSU2amZRZmdaQ/${product?.image}/public`}
+                placeholder="blur"
+                blurDataURL={SKELETON.IMAGE}
+                alt=""
+
               />
-            </div>
-          ) : (
-            <div className="h-96 bg-slate-500" />
-          )}
+            ) : (
+              <Image fill alt="" src={SKELETON.IMAGE} />
+            )}
+          </div>
         </div>
 
         <div className="px-4 py-4">
