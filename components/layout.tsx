@@ -78,8 +78,8 @@ export default function Layout({
         {/* 메인 타이틀 */}
         {mainTitle ? (
           <div className="flex items-center gap-x-2 text-xl">
-            <div className="relative h-[24px] w-[148px]">
-              <Image alt="" src={TopLogo} sizes="1" fill />
+            <div className="h-[24px] w-[148px]">
+              <Image alt="" src={TopLogo} width={148} height={0} />
             </div>
           </div>
         ) : null}
@@ -164,10 +164,10 @@ export default function Layout({
             <div className="w-20 h-12">
               <div className="relative h-full w-full">
                 <Image
-                  fill
+                  width={80}
+                  height={0}
                   priority
                   className="mt-3"
-                  sizes="1"
                   alt=""
                   src={BottomLogo}
                 />
