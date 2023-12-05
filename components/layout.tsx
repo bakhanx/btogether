@@ -101,7 +101,7 @@ export default function Layout({
 
       {/* 하단 탭 */}
       {hasTabBar ? (
-        <nav className="fixed bottom-0 z-30 flex w-full max-w-screen-md  justify-between border-t bg-gray-50 px-5 pb-5 pt-3 text-xs text-gray-600">
+        <nav className="fixed bottom-0 z-30 flex w-full max-w-screen-md  justify-between border-t bg-gray-50 px-5 pb-5 pt-5 text-xs text-gray-600">
           {/* Link 하위에 a태그 사용시 Link에 legacyBehavior 추가 */}
 
           {/* 홈 */}

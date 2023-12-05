@@ -53,7 +53,7 @@ export default function FloatingButton({ pathName }: FloatingButton) {
       )}
 
       {(pathName === "Chat" || pathName === "Profile") && (
-        <div className="relative top-6 flex w-20 h-12">
+        <div className="relative top-1 flex w-20 h-12">
           <Image
             fill
             priority
