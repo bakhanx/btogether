@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import BottomLogo from '../public/images/logo/logo_01_small.png'
 
 type FloatingButton = {
   pathName: "Product" | "Story" | "Chat" | "Profile";
@@ -52,14 +53,14 @@ export default function FloatingButton({ pathName }: FloatingButton) {
       )}
 
       {(pathName === "Chat" || pathName === "Profile") && (
-        <div className="bottom-24 flex w-20 h-12">
+        <div className="relative top-6 flex w-20 h-12">
           <Image
             fill
             priority
             className="mt-4 rotate-180 hue-rotate-60"
             sizes="1"
             alt=""
-            src="/logo_01_small.png"
+            src={BottomLogo}
           />
         </div>
       )}
