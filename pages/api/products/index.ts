@@ -116,7 +116,7 @@ async function handler(
         record,
       });
     }
-    // res.revalidate(`/`);
+    res.revalidate("/");
   }
 }
 
