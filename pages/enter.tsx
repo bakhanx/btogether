@@ -1,6 +1,6 @@
 import Input from "@components/input";
 import { cls } from "@libs/client/utils";
-import { NextPage } from "next";
+import { GetStaticProps, NextPage } from "next";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import Button from "@components/button";
@@ -10,21 +10,6 @@ import Logo from "../public/images/logo/logo_01_small.png";
 
 import Image from "next/image";
 import { EnterForm, MutationResult, TokenForm } from "types/enter";
-
-// const Alert = lazy(
-//   (): any =>
-//     new Promise((resolve) =>
-//       setTimeout(() => resolve(import("@components/alert")), 3000)
-//     )
-// );
-
-// const Alert = dynamic(
-//   () : any =>
-//     new Promise((resolve)  =>
-//       setTimeout(() => resolve(import("@components/alert")), 3000)
-//     ),
-//   { ssr: false,suspense:true,  loading: () => <span>로딩중</span> }
-// );
 
 const Enter: NextPage = () => {
   const [enter, { loading, data }] =
@@ -63,24 +48,24 @@ const Enter: NextPage = () => {
   }, [router, tokenData]);
 
   return (
-    <div className=" px-4 h-screen py-10">
+    <div className="max-w-screen-md px-4 flex flex-col justify-between mx-auto">
       <title>로그인 # B-together</title>
 
-      <div className="flex flex-col items-center justify-center h-1/3">
+      <div className="flex flex-col mt-28  items-center object-center ">
         <h3 className="text-3xl font-bold">B - Together</h3>
         <h1 className="p-1 text-gray-500">이웃과 함께하는 비투게더</h1>
-        <div className="h-32 w-64">
-          <div className="relative h-full w-full">
-            <Image fill alt="" src={Logo} priority sizes="1" />
+        <div className="w-[50%] aspect-video mt-4">
+          <div className="relative w-full h-full">
+            <Image  fill alt="" sizes="368px" src={Logo} priority={true} />
           </div>
         </div>
       </div>
 
-      <div className="h-1/3">
+      <div className="mt-8">
         {data?.ok ? (
           <>
             <form
-              className="mt-8 flex flex-col space-y-4"
+              className="flex flex-col space-y-4"
               onSubmit={tokenHandleSubmit(onTokenValid)}
             >
               <p className="pt-4">
@@ -181,7 +166,7 @@ const Enter: NextPage = () => {
         )}
       </div>
 
-      <div className=" h-1/3 flex items-end ">
+      <div className="flex mt-28 ">
         <footer className="text-xs  text-gray-500 ">
           <div>
             <span className="font-bold">대표</span> 박한솔 |{" "}
