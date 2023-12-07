@@ -31,7 +31,7 @@ export default function Item({
         {/* title,price */}
         <div className="flex space-x-4">
           {image ? (
-            <div className="relative aspect-square w-40">
+            <div className="relative aspect-square w-36">
               <Image
                 className="rounded-md object-cover"
                 fill
@@ -39,7 +39,6 @@ export default function Item({
                 sizes="1"
                 priority={true}
                 alt={title}
-                style={{objectFit:"cover"}}
                 src={`https://imagedelivery.net/214BxOnlVKSU2amZRZmdaQ/${image}/thumbnail`}
               />
             </div>

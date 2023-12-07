@@ -33,14 +33,16 @@ const Home: NextPage<ProductsResponse> = ({ products }) => {
   const [productList, setProductList] = useState(products);
   const { data, setSize } = useSWRInfinite<ProductsResponse>(getKey);
 
-  useEffect(() => {
-    setProductList(data ? data.map((item) => item.products).flat() : []);
-  }, [data]);
-
   const page = usePagination();
   useEffect(() => {
     setSize(page);
   }, [page, setSize]);
+
+  useEffect(() => {
+    if(page > 1){
+      setProductList(data ? data.map((item) => item.products).flat() : []);
+    }
+  }, [data,page]);
 
   return (
     <>
