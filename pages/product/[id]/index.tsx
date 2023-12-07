@@ -296,15 +296,16 @@ const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
       <div className="mt-16 px-4 max-w-screen-md w-full">
         {/* 상품 이미지 */}
         <div onClick={handleImageClick}>
-          <div className="w-full h-[552px]">
+          <div className="w-full h-auto">
             {product?.image ? (
               <Image
                 className="object-cover focus:cursor-pointer rounded-lg"
                 quality={90}
                 priority={true}
                 // blurData를 위한 w,h 명시
-                width={768}
-                height={0}
+                width={736}
+                height={552}
+                // style={{ width: "100%", height: "auto" }}
                 src={`https://imagedelivery.net/214BxOnlVKSU2amZRZmdaQ/${product?.image}/public`}
                 placeholder="blur"
                 blurDataURL={SKELETON.IMAGE}
