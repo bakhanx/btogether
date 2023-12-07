@@ -13,7 +13,9 @@ type ItemProps = {
   hearts: number;
   image: string;
   sellState: SellingType;
-}
+};
+
+// const DynamicDateTime: any = dynamic(() => import("./datetime"))
 
 export default function Item({
   title,
@@ -25,6 +27,7 @@ export default function Item({
   time,
   sellState,
 }: ItemProps) {
+
   return (
     <Link href={`/product/${id}`}>
       <div className="cursor-pointer justify-between px-4 py-2 hover:bg-slate-50">

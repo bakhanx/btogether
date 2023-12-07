@@ -14,12 +14,17 @@ import TopNav from "@components/topNav";
 import DateTime from "@components/datetime";
 import { ProductResponse } from "types/product";
 import { SKELETON } from "constants/skeleton";
+import Loading from "@components/loading";
 
 const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
   const router = useRouter();
 
   const { user } = useUser();
-  const { data: productData, mutate: boundMutate } = useSWR<ProductResponse>(
+  const {
+    data: productData,
+    mutate: boundMutate,
+    isLoading,
+  } = useSWR<ProductResponse>(
     router.query.id ? `/api/products/${router.query.id} ` : null
   );
   const [sellStateMutate] = useMutation(
@@ -168,7 +173,6 @@ const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
     sellStateMutate({ sellState: stateType, purchaserId: selectedUserId });
     // router.reload();
   };
- 
 
   //========================================================================
 
@@ -180,7 +184,7 @@ const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
         title="로딩중..."
         pathName="Product"
       >
-        <div className="text-center">Loading...</div>
+        <Loading />
       </Layout>
     );
   }
@@ -292,12 +296,12 @@ const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
       <div className="mt-16 px-4 max-w-screen-md w-full">
         {/* 상품 이미지 */}
         <div onClick={handleImageClick}>
-          <div className="w-full">
+          <div className="w-full h-[552px]">
             {product?.image ? (
               <Image
                 className="object-cover focus:cursor-pointer rounded-lg"
                 quality={90}
-                priority
+                priority={true}
                 // blurData를 위한 w,h 명시
                 width={768}
                 height={0}
@@ -305,10 +309,9 @@ const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
                 placeholder="blur"
                 blurDataURL={SKELETON.IMAGE}
                 alt=""
-
               />
             ) : (
-              <Image width={768} height={0} alt="" src={SKELETON.IMAGE} />
+              <div className="w-full bg-gray-300 rounded-lg" />
             )}
           </div>
         </div>
@@ -323,6 +326,8 @@ const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
                 height={48}
                 alt=""
                 src={`https://imagedelivery.net/214BxOnlVKSU2amZRZmdaQ/${product?.seller.avatar}/avatar`}
+                blurDataURL={SKELETON.IMAGE}
+                placeholder="blur"
               />
             ) : (
               <div className="h-12 w-12 rounded-full bg-slate-300" />
@@ -403,7 +408,7 @@ const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
               {productData?.product?.sellState === "sold" && (
                 <Button large text="거래완료된 상품입니다" />
               )}
-
+              {isLoading && <Button large text="거래 준비중..." />}
               {/* 거래하기 PopUp */}
               <div
                 className={cls("relative z-10", isShow ? "show" : "hidden")}
@@ -515,8 +520,11 @@ const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
                       <Image
                         className="object-cover focus:cursor-pointer"
                         quality={90}
-                        priority
-                        fill
+                        width={384}
+                        height={0}
+                        loading="lazy"
+                        blurDataURL={SKELETON.IMAGE}
+                        placeholder="blur"
                         alt=""
                         src={`https://imagedelivery.net/214BxOnlVKSU2amZRZmdaQ/${product?.image}/public`}
                       />

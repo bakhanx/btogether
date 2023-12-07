@@ -9,6 +9,7 @@ import { SellingType } from "types/product";
 import { GetStaticProps, NextPage } from "next";
 import client from "@libs/server/client";
 
+
 export interface ProductWithCount extends Product {
   _count: {
     records: number;
