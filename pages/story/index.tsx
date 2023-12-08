@@ -21,7 +21,6 @@ const Story: NextPage<StoryListResponse> = ({ stories }) => {
   const [storyList, setStoryList] = useState(stories);
 
   const page = usePagination();
-  const router = useRouter();
   useEffect(() => {
     setSize(page);
   }, [page, setSize]);
