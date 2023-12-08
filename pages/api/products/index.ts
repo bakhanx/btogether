@@ -55,7 +55,7 @@ async function handler(
     if (productId) {
       const updateProduct = await client.product.update({
         where: {
-          id: productId,
+          id: Number(productId),
         },
         data: {
           name,
@@ -71,7 +71,8 @@ async function handler(
         },
       });
 
-      res.revalidate('/');
+      await res.revalidate('/');
+      await res.revalidate(`/product/${productId}`);
 
       res.json({
         ok: true,
@@ -118,7 +119,7 @@ async function handler(
         record,
       });
     }
-    res.revalidate("/");
+    await res.revalidate("/");
   }
 }
 
