@@ -76,7 +76,7 @@ const Upload: NextPage = () => {
 
   useEffect(() => {
     if (data?.ok) {
-      router.push(`/product/${data.product.id}`);
+      router.replace(`/product/${data.product.id}`);
     }
   }, [data, router]);
 
