@@ -7,6 +7,8 @@ import useSWRInfinite from "swr/infinite";
 import Loading from "@components/loading";
 import { usePagination } from "@libs/client/usePagination";
 import { StoryListResponse } from "types/story";
+import { useRouter } from "next/router";
+import client from "@libs/server/client";
 
 const getKey = (pageIndex: number, previousPageData: StoryListResponse) => {
   if (pageIndex === 0) return `/api/stories?page=1`;
@@ -14,12 +16,12 @@ const getKey = (pageIndex: number, previousPageData: StoryListResponse) => {
   return `/api/stories?page=${pageIndex + 1}`;
 };
 
-const Story = ({ stories }: StoryListResponse) => {
+const Story: NextPage<StoryListResponse> = ({ stories }) => {
   const { data, setSize } = useSWRInfinite<StoryListResponse>(getKey);
   const [storyList, setStoryList] = useState(stories);
 
   const page = usePagination();
-
+  const router = useRouter();
   useEffect(() => {
     setSize(page);
   }, [page, setSize]);
@@ -99,7 +101,7 @@ const Story = ({ stories }: StoryListResponse) => {
 };
 
 export const getStaticProps: GetStaticProps = async () => {
-  const stories = await client?.story.findMany({
+  const stories = await client.story.findMany({
     include: {
       user: {
         select: {

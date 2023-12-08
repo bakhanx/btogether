@@ -23,6 +23,7 @@ import {
   StoryResponse,
 } from "types/story";
 import Head from "next/head";
+import client from "@libs/server/client";
 
 interface StorySSGResponse extends StoryResponse {
   user: {
@@ -351,7 +352,7 @@ const StoryDetail: NextPage<StorySSGResponse> = ({ story }) => {
               d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
             ></path>
           </svg>
-          <span>좋아요 {storyData?.story._count?.likes}</span>
+          <span>좋아요 {storyData?.story._count?.likes || 0}</span>
         </button>
 
         {/* 댓글 */}
@@ -371,7 +372,7 @@ const StoryDetail: NextPage<StorySSGResponse> = ({ story }) => {
             ></path>
           </svg>
 
-          <span>댓글 {storyData?.story?._count?.comments}</span>
+          <span>댓글 {storyData?.story?._count?.comments || 0}</span>
         </span>
       </div>
 
@@ -388,7 +389,7 @@ export const getStaticPaths: GetStaticPaths = () => {
 };
 
 export const getStaticProps: GetStaticProps = async (context) => {
-  const story = await client?.story.findUnique({
+  const story = await client.story.findUnique({
     where: {
       id: Number(context?.params?.id),
     },
