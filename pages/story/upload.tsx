@@ -27,7 +27,7 @@ const Upload: NextPage = () => {
 
   useEffect(() => {
     if (data && data.ok) {
-      router.push(`/story/${data.story.id}`);
+      router.replace(`/story/${data.story.id}`);
     }
   }, [router, data]);
 
