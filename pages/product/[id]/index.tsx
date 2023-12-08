@@ -131,7 +131,7 @@ const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
   useEffect(() => {
     if (deleteData?.ok) {
       alert("삭제가 완료되었습니다.");
-      router.push("/");
+      router.replace("/");
     }
   }, [deleteData, router]);
 
@@ -288,7 +288,7 @@ const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
           writerId: productData?.product?.sellerId || 0,
           onDelete: onDelete,
           onModify: onModify,
-          seoTitle: productData?.product.name || "",
+          seoTitle: productData?.product?.name || "",
         }}
       />
 

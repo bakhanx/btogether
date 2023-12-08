@@ -115,7 +115,8 @@ const Modify: NextPage = () => {
 
   useEffect(() => {
     if (data?.ok && data.updateProduct) {
-      router.push(`/product/${router.query.id}`);
+      alert('수정이 완료되었습니다.')
+      router.replace(`/product/${router.query.id}`);
     }
   }, [data, router]);
 
