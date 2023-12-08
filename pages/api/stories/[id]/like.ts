@@ -58,6 +58,8 @@ async function handler(
     });
   }
 
+  await res.revalidate('/story');
+
   res.json({
     ok: true,
   });

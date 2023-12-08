@@ -46,10 +46,14 @@ async function handler(
         },
       });
 
+      res.revalidate('/story')
+
       res.json({
         ok: true,
         createComment,
       });
+
+
     }
 
     if (commentId) {
@@ -58,11 +62,16 @@ async function handler(
           id: Number(commentId),
         },
       });
+
+      res.revalidate('/story')
+
       res.json({
         ok: true,
         deleteComment,
       });
     }
+
+
   }
 
   if (req.method === "GET") {
