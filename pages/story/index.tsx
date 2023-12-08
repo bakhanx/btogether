@@ -1,35 +1,40 @@
-import { NextPage } from "next";
+import { GetStaticProps, NextPage } from "next";
 import Link from "next/link";
 import Layout from "@components/layout";
 import DateTime from "@components/datetime";
-import { Suspense, useEffect } from "react";
+import { useEffect, useState } from "react";
 import useSWRInfinite from "swr/infinite";
 import Loading from "@components/loading";
 import { usePagination } from "@libs/client/usePagination";
 import { StoryListResponse } from "types/story";
 
 const getKey = (pageIndex: number, previousPageData: StoryListResponse) => {
-  // console.log(pageIndex);
   if (pageIndex === 0) return `/api/stories?page=1`;
   if (pageIndex + 1 > previousPageData.pages) return null;
   return `/api/stories?page=${pageIndex + 1}`;
 };
 
-const StoryList = () => {
-  const { data, setSize } = useSWRInfinite<StoryListResponse>(getKey, {
-    suspense: true,
-  });
-  const stories = data ? data.map((item) => item.stories).flat() : [];
+const Story = ({ stories }: StoryListResponse) => {
+  const { data, setSize } = useSWRInfinite<StoryListResponse>(getKey);
+  const [storyList, setStoryList] = useState(stories);
+
   const page = usePagination();
+
   useEffect(() => {
     setSize(page);
   }, [page, setSize]);
 
+  useEffect(() => {
+    if (page > 1) {
+      setStoryList(data ? data.map((item) => item.stories).flat() : []);
+    }
+  }, [page, data]);
+
   return (
-    <>
-      {stories && (
+    <Layout hasTabBar title="이웃 스토리" seoTitle="이웃 소식" pathName="Story">
+      {storyList && (
         <div className="divide  divide-y-4 divide-orange-50 ">
-          {stories.map((story) => (
+          {storyList.map((story) => (
             <div key={story.id}>
               <Link href={`/story/${story.id}`}>
                 <div className="flex cursor-pointer flex-col items-start pt-4 hover:bg-slate-50">
@@ -89,78 +94,37 @@ const StoryList = () => {
           ))}
         </div>
       )}
-    </>
-  );
-};
-
-const Main: NextPage = () => {
-  return (
-    <Layout
-      hasTabBar
-      title="이웃 스토리"
-      seoTitle="이웃 소식"
-      pathName="Story"
-    >
-      <Suspense fallback={<Loading />}>
-        <StoryList />
-      </Suspense>
     </Layout>
   );
 };
 
-// const Page: NextPage = () => {
-//   return (
-//     <SWRConfig
-//       value={{
-//         suspense: true,
-//       }}
-//     >
-//       <Main />
-//     </SWRConfig>
-//   );
-// };
+export const getStaticProps: GetStaticProps = async () => {
+  const stories = await client?.story.findMany({
+    include: {
+      user: {
+        select: {
+          id: true,
+          name: true,
+        },
+      },
 
-// export const getServerSideProps: GetServerSideProps = async () => {
-//   const stories = await client.story.findMany({
+      _count: {
+        select: {
+          comments: true,
+          likes: true,
+        },
+      },
+    },
+    orderBy: {
+      updatedAt: "desc",
+    },
+    take: 8,
+  });
+  return {
+    props: {
+      stories: JSON.parse(JSON.stringify(stories)),
+    },
+  };
+};
 
-//     orderBy: {
-//       updatedAt: "desc",
-//     },
-//     take:8
-//   });
-//   return {
-//     props: {
-//       stories: JSON.parse(JSON.stringify(stories)),
-//     },
-//   };
-// };
-
-// export const getStaticProps: GetStaticProps = async () => {
-//   const stories = await client?.story.findMany({
-//     include: {
-//       user: {
-//         select: {
-//           id: true,
-//           name: true,
-//         },
-//       },
-
-//       _count: {
-//         select: {
-//           comments: true,
-//           likes: true,
-//         },
-//       },
-//     },
-//     orderBy: {
-//       updatedAt: "desc",
-//     },
-//   });
-//   return {
-//     props: {
-//       stories: JSON.parse(JSON.stringify(stories)),
-//     },
-//   };
-// };
-
-export default Main;
+export default Story;
