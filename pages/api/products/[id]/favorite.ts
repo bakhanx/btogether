@@ -56,7 +56,7 @@ async function handler(
     });
   }
 
-  res.revalidate(`/product/${id}`);
+  // await res.revalidate(`/product/${id}`);
 
   res.json({
     ok: true,

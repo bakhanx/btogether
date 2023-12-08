@@ -46,7 +46,7 @@ async function handler(
         },
       });
 
-      res.revalidate('/story')
+      await res.revalidate('/story')
 
       res.json({
         ok: true,
@@ -63,7 +63,7 @@ async function handler(
         },
       });
 
-      res.revalidate('/story')
+      await res.revalidate('/story')
 
       res.json({
         ok: true,
