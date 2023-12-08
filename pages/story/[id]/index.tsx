@@ -46,18 +46,12 @@ const Comments = () => {
   };
   const { data, setSize, mutate, isLoading } =
     useSWRInfinite<StoryCommentListResponse>(getKey);
-  const comments = data ? data.map((item) => item.story.comments).flat() : [];
+  const comments = data ? data.map((item) => item.story?.comments).flat() : [];
   const page = usePagination();
   useEffect(() => {
     setSize(page);
   }, [page, setSize]);
-
-  const { user } = useUser();
   const { mutate: globalMutate } = useSWRConfig();
-  // const { data: commentsData, mutate } = useSWR<CommentsResponse>(
-  //   router.query.id ? `/api/stories/${router.query.id}/comment` : null,
-  //   { suspense: true }
-  // );
   const [comment, { data: commentData, loading: commentLoading }] =
     useMutation<StoryCommentResponse>(
       `/api/stories/${router.query.id}/comment`
@@ -167,8 +161,8 @@ const Comments = () => {
                 </div>
 
                 <Menu
-                  writerId={comment.userId}
-                  onDelete={(e) => onDeleteComment(comment.id, e)}
+                  writerId={comment?.userId}
+                  onDelete={(e) => onDeleteComment(comment?.id, e)}
                   type="Comment"
                 />
               </div>
@@ -248,7 +242,7 @@ const StoryDetail: NextPage<StorySSGResponse> = ({ story }) => {
   return (
     <>
       <Head>
-        <title>{story?.user?.name}님의 스토리</title>
+        <title>{`${story?.user?.name}님의 스토리`}</title>
       </Head>
 
       {/* Top */}
