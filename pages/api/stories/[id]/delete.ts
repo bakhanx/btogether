@@ -1,6 +1,7 @@
 import withHandler, { ResponseType } from "@libs/server/withHandler";
 import { withApiSession } from "@libs/server/withSession";
 import { NextApiRequest, NextApiResponse } from "next";
+import client from "@libs/server/client";
 
 async function handler(
   req: NextApiRequest,
@@ -23,6 +24,9 @@ async function handler(
         id: Number(id),
       },
     });
+
+    await res.revalidate('/story');
+
     res.json({
       ok: true,
       deleteStroy,
