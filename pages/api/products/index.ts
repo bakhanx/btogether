@@ -71,6 +71,8 @@ async function handler(
         },
       });
 
+      res.revalidate('/');
+
       res.json({
         ok: true,
         updateProduct,
