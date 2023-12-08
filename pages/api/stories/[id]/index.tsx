@@ -10,26 +10,28 @@ async function handler(
   const {
     query: { id },
     session: { user },
-    body:{content}
+    body: { content },
   } = req;
 
-  
-  if(req.method ==="POST"){
+  if (req.method === "POST") {
     const updateStory = await client.story.update({
-      where:{
-        id:Number(id)
+      where: {
+        id: Number(id),
       },
-      data:{
-        content
-      }
-    })
+      data: {
+        content,
+      },
+    });
+
+    await res.revalidate("/story");
+
     res.json({
-      ok:true,
-      updateStory
-    })
+      ok: true,
+      updateStory,
+    });
   }
 
-  if(req.method === "GET"){
+  if (req.method === "GET") {
     const story = await client.story.findUnique({
       where: {
         id: Number(id),
@@ -42,7 +44,7 @@ async function handler(
             avatar: true,
           },
         },
-  
+
         _count: {
           select: {
             likes: true,
@@ -51,7 +53,7 @@ async function handler(
         },
       },
     });
-  
+
     const isLike = Boolean(
       await client.like.findFirst({
         where: {
@@ -63,15 +65,13 @@ async function handler(
         },
       })
     );
-  
+
     res.json({
       ok: true,
       story,
       isLike,
     });
   }
-
-
 }
 
 export default withApiSession(
