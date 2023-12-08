@@ -99,7 +99,8 @@ const Story: NextPage<StoryListResponse> = ({ stories }) => {
   );
 };
 
-export const getStaticProps: GetStaticProps = async () => {
+export const getStaticProps: GetStaticProps = async (context) => {
+  console.log("revalidate : '/story'");
   const stories = await client.story.findMany({
     include: {
       user: {
