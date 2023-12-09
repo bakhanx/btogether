@@ -8,6 +8,7 @@ import { usePagination } from "@libs/client/usePagination";
 import { SellingType } from "types/product";
 import { GetStaticProps, NextPage } from "next";
 import client from "@libs/server/client";
+import ScrollToTopButton from "@components/scrollToTopButton";
 
 
 export interface ProductWithCount extends Product {
@@ -65,6 +66,8 @@ const Home: NextPage<ProductsResponse> = ({ products }) => {
             ></Item>
           ))}
         </div>
+        {/* Floating Button */}
+        <ScrollToTopButton hasBottomTab/>
       </Layout>
     </>
   );

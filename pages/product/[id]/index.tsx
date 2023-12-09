@@ -15,6 +15,7 @@ import DateTime from "@components/datetime";
 import { ProductResponse } from "types/product";
 import { SKELETON } from "constants/skeleton";
 import Loading from "@components/loading";
+import ScrollToTopButton from "@components/scrollToTopButton";
 
 const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
   const router = useRouter();
@@ -541,6 +542,9 @@ const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
           </div>
         </div>
       </div>
+
+      {/* Floating Button */}
+      <ScrollToTopButton />
     </div>
   );
   //===============================================================

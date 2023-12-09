@@ -8,6 +8,7 @@ import { Suspense, useEffect, useState } from "react";
 import Loading from "@components/loading";
 import { ChatRoomListResponse } from "types/chat";
 import { UserResponse } from "types/user";
+import ScrollToTopButton from "@components/scrollToTopButton";
 
 // 상대 user 의 아바타, 아이디, 채팅내용.
 
@@ -107,6 +108,7 @@ const ChatRoomsList = () => {
       ) : (
         <div className="text-center">Loading...</div>
       )}
+      <ScrollToTopButton hasBottomTab />
     </>
   );
 };
