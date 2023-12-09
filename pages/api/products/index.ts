@@ -61,7 +61,7 @@ async function handler(
           name,
           price: +price.replaceAll(",", ""),
           description,
-          image: photoId && photoId,
+          image: photoId && Number(photoId),
           seller: {
             connect: {
               id: user?.id,

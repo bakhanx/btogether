@@ -126,6 +126,7 @@ async function handler(
     });
   }
 
+  await res.revalidate('/');
   res.json({
     ok: true,
   });
