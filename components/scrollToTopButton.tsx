@@ -1,13 +1,13 @@
 import { cls } from "@libs/client/utils";
 
-export default function ScrollToTopButton({ hasBottomTab = true }) {
+export default function ScrollToTopButton({ hasBottomTab = false }) {
   const scrollToTop = () => {
     window.scrollTo(0, 0);
   };
   return (
     <div
       className={cls(
-        hasBottomTab ? "bottom-28" : "bottom-28",
+        hasBottomTab ? "bottom-28" : "bottom-8",
         "fixed right-6 border-none"
       )}
     >
