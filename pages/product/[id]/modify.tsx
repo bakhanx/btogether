@@ -9,7 +9,11 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import Image from "next/image";
 import useSWR from "swr";
-import { ProductResponse, ProductUploadForm, ProductUploadResponse } from "types/product";
+import {
+  ProductResponse,
+  ProductUploadForm,
+  ProductUploadResponse,
+} from "types/product";
 import { PRODUCT } from "constants/product";
 
 const Modify: NextPage = () => {
@@ -115,7 +119,7 @@ const Modify: NextPage = () => {
 
   useEffect(() => {
     if (data?.ok && data.updateProduct) {
-      alert('수정이 완료되었습니다.')
+      alert("수정이 완료되었습니다.");
       router.replace(`/product/${router.query.id}`);
     }
   }, [data, router]);

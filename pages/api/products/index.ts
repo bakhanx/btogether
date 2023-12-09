@@ -61,8 +61,7 @@ async function handler(
           name,
           price: +price.replaceAll(",", ""),
           description,
-          image: photoId ? photoId : "",
-
+          image: photoId && photoId,
           seller: {
             connect: {
               id: user?.id,
@@ -120,6 +119,7 @@ async function handler(
       });
     }
     await res.revalidate("/");
+    await res.revalidate(`/product/${productId}`);
   }
 }
 
