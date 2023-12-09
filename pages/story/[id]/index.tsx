@@ -24,6 +24,7 @@ import {
 } from "types/story";
 import Head from "next/head";
 import client from "@libs/server/client";
+import ScrollToTopButton from "@components/scrollToTopButton";
 
 interface StorySSGResponse extends StoryResponse {
   user: {
@@ -276,101 +277,102 @@ const StoryDetail: NextPage<StorySSGResponse> = ({ story }) => {
         />
       </div>
 
-      {/* 탑 레이아웃 */}
-      <div className="pt-16">
-        {/* 카테고리 */}
-        <span className="ml-4 items-center rounded-full bg-gray-100 px-2.5 py-0.5 text-xs font-medium text-gray-800">
-          후기
-        </span>
+      <div className="max-w-screen-md mx-auto">
+        {/* 탑 레이아웃 */}
+        <div className="pt-16">
+          {/* 카테고리 */}
+          <span className="ml-4 items-center rounded-full bg-gray-100 px-2.5 py-0.5 text-xs font-medium text-gray-800">
+            후기
+          </span>
 
-        {/* 작성자 프로필 */}
-        <Link href={`/users/profile/${story?.user?.id}`}>
-          <div className="mt-4 mb-3 flex cursor-pointer items-center space-x-3 border-b px-4 pb-3">
-            {story?.user?.avatar ? (
-              <div className="relative h-14 w-14">
-                <Image
-                  src={`https://imagedelivery.net/214BxOnlVKSU2amZRZmdaQ/${story?.user?.avatar}/avatar`}
-                  alt=""
-                  sizes="1"
-                  priority
-                  fill
-                  className="rounded-full"
-                />
+          {/* 작성자 프로필 */}
+          <Link href={`/users/profile/${story?.user?.id}`}>
+            <div className="mt-4 mb-3 flex cursor-pointer items-center space-x-3 border-b px-4 pb-3">
+              {story?.user?.avatar ? (
+                <div className="relative h-14 w-14">
+                  <Image
+                    src={`https://imagedelivery.net/214BxOnlVKSU2amZRZmdaQ/${story?.user?.avatar}/avatar`}
+                    alt=""
+                    sizes="1"
+                    priority
+                    fill
+                    className="rounded-full"
+                  />
+                </div>
+              ) : (
+                <div className="h-14 w-14 rounded-full bg-slate-500" />
+              )}
+              <div>
+                <p className="text-sm font-medium text-gray-700">
+                  {story?.user?.name}
+                </p>
+                <p className="text-xs font-medium text-gray-500">
+                  View profile &rarr;
+                </p>
               </div>
-            ) : (
-              <div className="h-14 w-14 rounded-full bg-slate-500" />
-            )}
-            <div>
-              <p className="text-sm font-medium text-gray-700">
-                {story?.user?.name}
-              </p>
-              <p className="text-xs font-medium text-gray-500">
-                View profile &rarr;
-              </p>
+            </div>
+          </Link>
+
+          {/* 내용 */}
+          <div className="mt-2 px-4">
+            <div className="py-5">
+              <span>{story?.content}</span>
+            </div>
+            <div className="text-xs text-gray-500 ">
+              <DateTime date={story?.updatedAt} />
             </div>
           </div>
-        </Link>
-
-        {/* 내용 */}
-        <div className="mt-2 px-4">
-          <div className="py-5">
-            <span>{story?.content}</span>
-          </div>
-          <div className="text-xs text-gray-500 ">
-            <DateTime date={story?.updatedAt} />
-          </div>
         </div>
-      </div>
-
-      {/*  좋아요 / 댓글*/}
-      <div className="mt-3 flex w-full justify-start space-x-5 border-t px-4 py-2.5">
-        {/* 좋아요 */}
-        <button
-          onClick={onLikeClick}
-          className={cls(
-            "flex items-center space-x-2 text-sm",
-            storyData?.isLike ? "text-green-600" : "text-black"
-          )}
-        >
-          <svg
-            className="h-5 w-5"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-            xmlns="http://www.w3.org/2000/svg"
+        {/*  좋아요 / 댓글*/}
+        <div className="mt-3 flex w-full justify-start space-x-5 border-t px-4 py-2.5">
+          {/* 좋아요 */}
+          <button
+            onClick={onLikeClick}
+            className={cls(
+              "flex items-center space-x-2 text-sm",
+              storyData?.isLike ? "text-green-600" : "text-black"
+            )}
           >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-            ></path>
-          </svg>
-          <span>좋아요 {storyData?.story._count?.likes || 0}</span>
-        </button>
+            <svg
+              className="h-5 w-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+              ></path>
+            </svg>
+            <span>좋아요 {storyData?.story._count?.likes || 0}</span>
+          </button>
 
-        {/* 댓글 */}
-        <span className="flex items-center space-x-2 text-sm">
-          <svg
-            className="h-5 w-5"
-            fill="none"
-            stroke="orange"
-            viewBox="0 0 24 24"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
-            ></path>
-          </svg>
+          {/* 댓글 */}
+          <span className="flex items-center space-x-2 text-sm">
+            <svg
+              className="h-5 w-5"
+              fill="none"
+              stroke="orange"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
+              ></path>
+            </svg>
 
-          <span>댓글 {storyData?.story?._count?.comments || 0}</span>
-        </span>
+            <span>댓글 {storyData?.story?._count?.comments || 0}</span>
+          </span>
+        </div>
+        <Comments />
+        <ScrollToTopButton hasBottomTab={false}/>
       </div>
-
-      <Comments />
     </>
   );
 };
