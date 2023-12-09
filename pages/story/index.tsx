@@ -9,6 +9,7 @@ import { usePagination } from "@libs/client/usePagination";
 import { StoryListResponse } from "types/story";
 import { useRouter } from "next/router";
 import client from "@libs/server/client";
+import ScrollToTopButton from "@components/scrollToTopButton";
 
 const getKey = (pageIndex: number, previousPageData: StoryListResponse) => {
   if (pageIndex === 0) return `/api/stories?page=1`;
@@ -95,6 +96,8 @@ const Story: NextPage<StoryListResponse> = ({ stories }) => {
           ))}
         </div>
       )}
+      {/* Floating Button */}
+        <ScrollToTopButton hasBottomTab/>
     </Layout>
   );
 };
