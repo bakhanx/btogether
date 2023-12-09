@@ -234,7 +234,6 @@ const Modify: NextPage = () => {
           color="blue"
         />
       </form>
-      {}
     </Layout>
   );
 };
