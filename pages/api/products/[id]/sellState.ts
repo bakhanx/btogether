@@ -127,6 +127,7 @@ async function handler(
   }
 
   await res.revalidate('/');
+  await res.revalidate(`/product/${id}`)
   res.json({
     ok: true,
   });
