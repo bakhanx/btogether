@@ -34,6 +34,7 @@ interface StorySSGResponse extends StoryResponse {
   };
 }
 
+// 댓글
 const Comments = () => {
   const router = useRouter();
   const getKey = (
@@ -156,7 +157,7 @@ const Comments = () => {
                     {comment?.user?.name}
                   </span>
                   <span className="block text-xs text-gray-500 ">
-                    <DateTime date={comment?.updatedAt} />
+                    <DateTime date={comment?.createdAt} />
                   </span>
                   <p className="mt-2 text-gray-700">{comment?.comment}</p>
                 </div>
@@ -177,6 +178,7 @@ const Comments = () => {
   );
 };
 
+// 메인
 const StoryDetail: NextPage<StorySSGResponse> = ({ story }) => {
   const router = useRouter();
   const onBack = () => {
@@ -319,7 +321,7 @@ const StoryDetail: NextPage<StorySSGResponse> = ({ story }) => {
               <span>{story?.content}</span>
             </div>
             <div className="text-xs text-gray-500 ">
-              <DateTime date={story?.updatedAt} />
+              <DateTime date={story?.createdAt} />
             </div>
           </div>
         </div>

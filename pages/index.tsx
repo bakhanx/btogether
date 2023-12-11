@@ -58,7 +58,7 @@ const Home: NextPage<ProductsResponse> = ({ products }) => {
               image={product?.image}
               key={product?.id}
               title={product?.name}
-              time={product?.updatedAt}
+              time={product?.createdAt}
               price={product?.price}
               hearts={product?._count?.records || 0}
               comments={product?._count?.chatRooms || 0}

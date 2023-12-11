@@ -321,13 +321,13 @@ const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
         <div className="px-4 py-4">
           {/* Profile */}
           <div className="flex cursor-pointer items-center space-x-3 border-t border-b py-3">
-            {product?.seller.avatar ? (
+            {productData?.product?.seller.avatar ? (
               <Image
                 className="h-12 w-12 rounded-full"
                 width={48}
                 height={48}
                 alt=""
-                src={`https://imagedelivery.net/214BxOnlVKSU2amZRZmdaQ/${product?.seller.avatar}/avatar`}
+                src={`https://imagedelivery.net/214BxOnlVKSU2amZRZmdaQ/${productData?.product?.seller.avatar}/avatar`}
                 blurDataURL={SKELETON.IMAGE}
                 placeholder="blur"
               />
@@ -337,10 +337,10 @@ const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
 
             <div>
               <p className="text-sm font-medium text-gray-700">
-                {product?.seller.name}
+                {productData?.product?.seller.name}
               </p>
 
-              <Link href={`/users/profile/${product?.seller.name}`}>
+              <Link href={`/users/profile/${productData?.product?.seller.name}`}>
                 <p className="text-xs font-medium text-gray-500">
                   프로필 보기 &rarr;
                 </p>
@@ -376,7 +376,7 @@ const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
               {product?.name}
             </h1>
             <div className="mt-1 text-slate-500">
-              <DateTime date={product?.updatedAt} timeAgo />
+              <DateTime date={product?.createdAt} timeAgo />
             </div>
             <span className="mt-3 block text-2xl text-gray-900">
               {product?.price.toLocaleString()}원
