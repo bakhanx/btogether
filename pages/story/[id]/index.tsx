@@ -180,7 +180,7 @@ const Comments = () => {
 const StoryDetail: NextPage<StorySSGResponse> = ({ story }) => {
   const router = useRouter();
   const onBack = () => {
-    router.back();
+    router.push('/story', undefined, { unstable_skipClientCache:true})
   };
   // =====================스토리 삭제 ===================
   const [deleteMutation, { data: deleteData, loading: deleteLoading }] =
@@ -347,7 +347,7 @@ const StoryDetail: NextPage<StorySSGResponse> = ({ story }) => {
                 d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
               ></path>
             </svg>
-            <span>좋아요 {storyData?.story._count?.likes || 0}</span>
+            <span>좋아요 {storyData?.story?._count?.likes || 0}</span>
           </button>
 
           {/* 댓글 */}

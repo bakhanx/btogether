@@ -32,7 +32,7 @@ const Modify: NextPage = () => {
 
   useEffect(() => {
     if (data?.ok && data?.updateStory) {
-      router.replace(`/story/${storyData?.story?.id}`);
+      router.replace(`/story/${storyData?.story?.id}`, undefined, {unstable_skipClientCache:true});
     }
   }, [router, data, storyData]);
 
