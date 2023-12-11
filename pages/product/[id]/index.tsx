@@ -28,7 +28,7 @@ const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
   } = useSWR<ProductResponse>(
     router.query.id ? `/api/products/${router.query.id} ` : null
   );
-  const [sellStateMutate] = useMutation(
+  const [sellStateMutate, {data: sellStateData}] = useMutation(
     `/api/products/${router.query.id}/sellState`
   );
 
@@ -172,9 +172,14 @@ const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
 
   const confirmSelectedUser = () => {
     sellStateMutate({ sellState: stateType, purchaserId: selectedUserId });
-    // router.reload();
   };
 
+  useEffect(()=>{
+    if(sellStateData && sellStateData?.ok) {
+      alert('변경이 완료되었습니다.');
+      router.reload();
+    }
+  })
   //========================================================================
 
   if (router.isFallback) {
