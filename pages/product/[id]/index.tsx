@@ -176,8 +176,7 @@ const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
 
   useEffect(()=>{
     if(sellStateData && sellStateData?.ok) {
-      alert('변경이 완료되었습니다.');
-      router.reload();
+      confirm('변경이 완료되었습니다.');
     }
   })
   //========================================================================
