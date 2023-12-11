@@ -102,8 +102,10 @@ async function handler(
               id: Number(id),
             },
           },
-        },
+        },        
       });
+
+      await res.revalidate('/');
 
       res.json({
         ok: true,
