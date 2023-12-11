@@ -78,6 +78,7 @@ async function handler(
         },
       });
     }
+
     if (name !== currentUser?.name) {
       await client.user.update({
         where: {
@@ -110,6 +111,9 @@ async function handler(
         },
       });
     }
+
+    res.revalidate('/')
+    res.revalidate('/story')
 
     res.json({ ok: true });
   }
