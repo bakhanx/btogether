@@ -342,7 +342,7 @@ const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
 
             <div>
               <p className="text-sm font-medium text-gray-700">
-                {productData?.product?.seller.name}
+                {productData?.product?.seller.name || ""}
               </p>
 
               <Link href={`/users/profile/${productData?.product?.seller.name}`}>

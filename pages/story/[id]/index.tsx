@@ -288,12 +288,12 @@ const StoryDetail: NextPage<StorySSGResponse> = ({ story }) => {
           </span>
 
           {/* 작성자 프로필 */}
-          <Link href={`/users/profile/${story?.user?.id}`}>
+          <Link href={`/users/profile/${storyData?.story?.user?.id}`}>
             <div className="mt-4 mb-3 flex cursor-pointer items-center space-x-3 border-b px-4 pb-3">
-              {story?.user?.avatar ? (
+              {storyData?.story?.user?.avatar ? (
                 <div className="relative h-14 w-14">
                   <Image
-                    src={`https://imagedelivery.net/214BxOnlVKSU2amZRZmdaQ/${story?.user?.avatar}/avatar`}
+                    src={`https://imagedelivery.net/214BxOnlVKSU2amZRZmdaQ/${storyData?.story?.user?.avatar}/avatar`}
                     alt=""
                     sizes="1"
                     priority
@@ -306,7 +306,7 @@ const StoryDetail: NextPage<StorySSGResponse> = ({ story }) => {
               )}
               <div>
                 <p className="text-sm font-medium text-gray-700">
-                  {story?.user?.name}
+                  {storyData?.story?.user?.name || ""}
                 </p>
                 <p className="text-xs font-medium text-gray-500">
                   View profile &rarr;
