@@ -196,7 +196,7 @@ const StoryDetail: NextPage<StorySSGResponse> = ({ story }) => {
   useEffect(() => {
     if (deleteData?.ok) {
       alert("스토리 삭제가 완료되었습니다.");
-      router.push("/story");
+      router.replace("/story", undefined, {unstable_skipClientCache:true});
     }
   }, [deleteData, router]);
 

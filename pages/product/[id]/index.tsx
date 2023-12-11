@@ -132,7 +132,7 @@ const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
   useEffect(() => {
     if (deleteData?.ok) {
       alert("삭제가 완료되었습니다.");
-      router.replace("/");
+      router.replace("/", undefined, {unstable_skipClientCache:true});
     }
   }, [deleteData, router]);
 

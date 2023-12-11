@@ -120,7 +120,7 @@ const Modify: NextPage = () => {
   useEffect(() => {
     if (data?.ok && data.updateProduct) {
       alert("수정이 완료되었습니다.");
-      router.replace(`/product/${router.query.id}`);
+      router.replace(`/product/${router.query.id}`, undefined, {unstable_skipClientCache:true});
     }
   }, [data, router]);
 

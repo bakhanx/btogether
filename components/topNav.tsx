@@ -18,7 +18,7 @@ type MenuProps = {
 export default function TopNav({ menuProps: props }: MenuProps) {
   const router = useRouter();
   const onBack = () => {
-    router.back();
+    router.push('/',undefined, {unstable_skipClientCache:true});
   };
   return (
     <div
