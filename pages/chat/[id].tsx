@@ -5,13 +5,14 @@ import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
 import useSWR from "swr";
 import { Message } from "@prisma/client";
-import { Suspense, useEffect, useRef } from "react";
+import { Suspense, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Loading from "@components/loading";
 import SellStateLabel from "@components/sellStateLabel";
 import { ChatRoomResponse } from "types/chat";
 import { UserResponse } from "types/user";
 import { SellingType } from "types/product";
+import useUser from "@libs/client/useUser";
 
 const ProductInfo = () => {
   const router = useRouter();
@@ -174,10 +175,25 @@ const ChatContents = () => {
 
 const ChatDetail = () => {
   const router = useRouter();
+  const { user } = useUser();
+  const { data: chatData } = useSWR<ChatRoomResponse>(
+    `/api/chats/${router.query.id}`
+  );
+  const [chatRoomName, setChatRoomName] = useState("");
+  useEffect(() => {
+    if (chatData) {
+      if (chatData?.chatRoom.sellerId === user?.id) {
+        setChatRoomName(chatData?.chatRoom?.purchaser.name);
+      } else {
+        setChatRoomName(chatData?.chatRoom.seller.name);
+      }
+    }
+  }, [chatData, user]);
+
   return (
     <Layout
-      title={`${router.query.name}님과의 대화`}
-      seoTitle={`${router.query.name}`}
+      title={`${chatRoomName}님과의 대화`}
+      seoTitle={`${chatRoomName}`}
       canGoBack
       pathName="Chat"
     >
@@ -189,39 +205,40 @@ const ChatDetail = () => {
   );
 };
 
-// export const getServerSideProps: GetServerSideProps = withSsrSession(
-//   async ({ req, query }: NextPageContext) => {
-//     const chatRoom = await client.chatRoom.findUnique({
-//       where: {
-//         id: Number(query?.id),
-//       },
-//       include: {
-//         purchaser: true,
-//         seller: true,
-//         product: {
-//           select: {
-//             name: true,
-//             price: true,
-//             image: true,
-//             sellState: true,
-//           },
-//         },
-//         messages: true,
-//       },
-//     });
-//     const profile = await client.user.findUnique({
-//       where: {
-//         id: req?.session?.user?.id,
-//       },
-//     });
+/* ==================== SSR =====================
+export const getServerSideProps: GetServerSideProps = withSsrSession(
+  async ({ req, query }: NextPageContext) => {
+    const chatRoom = await client.chatRoom.findUnique({
+      where: {
+        id: Number(query?.id),
+      },
+      include: {
+        purchaser: true,
+        seller: true,
+        product: {
+          select: {
+            name: true,
+            price: true,
+            image: true,
+            sellState: true,
+          },
+        },
+        messages: true,
+      },
+    });
+    const profile = await client.user.findUnique({
+      where: {
+        id: req?.session?.user?.id,
+      },
+    });
 
-//     return {
-//       props: {
-//         chatRoom: JSON.parse(JSON.stringify(chatRoom)),
-//         profile: JSON.parse(JSON.stringify(profile)),
-//       },
-//     };
-//   }
-// );
-
+    return {
+      props: {
+        chatRoom: JSON.parse(JSON.stringify(chatRoom)),
+        profile: JSON.parse(JSON.stringify(profile)),
+      },
+    };
+  }
+);
+*/
 export default ChatDetail;
