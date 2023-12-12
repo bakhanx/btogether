@@ -27,7 +27,7 @@ const ChatRoomsList = () => {
         <div className="divide-y-4 divide-gray-100">
           {chatsData?.chatRooms?.map((chatRoom) => (
             <Link
-              href={`/chat/${chatRoom?.id}/?name=${chatRoom?.purchaser.name}`}
+              href={`/chat/${chatRoom?.id}`}
               key={chatRoom?.id}
               className="block hover:bg-gray-50"
             >
