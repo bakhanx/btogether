@@ -44,7 +44,7 @@ const Story: NextPage<StoryListResponse> = ({ stories }) => {
                     일상
                   </span>
                   <div className="text-gray-7100 mt-2 h-16 px-4">
-                    <span className="line-clamp-2">{story.content}</span>
+                    <span className="line-clamp-2 whitespace-pre-line">{story.content}</span>
                   </div>
                   <div className=" mt-5 flex w-full items-center justify-between px-4 text-sm font-medium text-gray-500">
                     <span>{story.user?.name}</span>

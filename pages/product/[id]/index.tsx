@@ -385,7 +385,7 @@ const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
             <span className="mt-3 block text-2xl text-gray-900">
               {product?.price.toLocaleString()}원
             </span>
-            <p className=" my-6 text-gray-700">{product?.description}</p>
+            <p className=" my-6 text-gray-700 whitespace-pre-line">{product?.description}</p>
             <div className="my-3 flex gap-x-3 text-sm text-slate-500">
               <div>채팅 · {productData?.product?._count?.chatRooms || 0}</div>
               <div>관심 · {productData?.product?._count?.records || 0}</div>
