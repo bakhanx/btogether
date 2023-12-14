@@ -108,7 +108,7 @@ const Comments = () => {
       {/* 댓글 작성란 */}
 
       <div className="px-4">
-        <form onSubmit={handleSubmit(onValid, onInvalid)}>
+        <form onSubmit={handleSubmit(onValid, onInvalid)} >
           <TextArea
             register={register("comment", {
               required: true,
@@ -159,7 +159,7 @@ const Comments = () => {
                   <span className="block text-xs text-gray-500 ">
                     <DateTime date={comment?.createdAt} />
                   </span>
-                  <p className="mt-2 text-gray-700">{comment?.comment}</p>
+                  <p className="mt-2 text-gray-700 whitespace-pre-line">{comment?.comment}</p>
                 </div>
 
                 <Menu
@@ -317,7 +317,7 @@ const StoryDetail: NextPage<StorySSGResponse> = ({ story }) => {
 
           {/* 내용 */}
           <div className="mt-2 px-4">
-            <div className="py-5">
+            <div className="py-5 whitespace-pre-line">
               <span>{story?.content}</span>
             </div>
             <div className="text-xs text-gray-500 ">
