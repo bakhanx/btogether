@@ -76,7 +76,9 @@ const Upload: NextPage = () => {
 
   useEffect(() => {
     if (data?.ok) {
-      router.replace(`/product/${data.product.id}`, undefined, {unstable_skipClientCache:true});
+      router.replace(`/product/${data.product.id}`, undefined, {
+        unstable_skipClientCache: true,
+      });
     }
   }, [data, router]);
 
@@ -96,17 +98,21 @@ const Upload: NextPage = () => {
       pathName="Product"
     >
       <form className="space-y-4 p-4" onSubmit={handleSubmit(onValid)}>
-        <div className="flex justify-center">
-          {photoPreview ? (
-            <Image
-              className="flex h-48 w-auto rounded-md"
-              src={photoPreview}
-              alt=""
-              width={280}
-              height={80}
-            ></Image>
-          ) : (
-            <label className="flex h-48 w-full cursor-pointer items-center justify-center rounded-md border-2 border-dashed border-gray-300 text-gray-600 hover:border-blue-500 hover:text-blue-500">
+        <div className="flex items-center justify-center">
+          <div className="absolute -z-50 h-96 aspect-video w-10/12 max-w-screen-sm">
+            {photoPreview && (
+              <Image
+                className="flex rounded-md object-contain"
+                src={photoPreview}
+                alt=""
+                fill
+                quality={90}
+              />
+            )}
+          </div>
+
+          <label className="flex h-96 w-full cursor-pointer items-center justify-center rounded-md border-2 border-dashed border-gray-300 text-gray-600 hover:border-blue-500 hover:text-blue-500">
+            {!photoPreview && (
               <svg
                 className="h-12 w-12"
                 stroke="currentColor"
@@ -121,16 +127,16 @@ const Upload: NextPage = () => {
                   strokeLinejoin="round"
                 />
               </svg>
-
-              <input
-                {...register("photo")}
-                accept="image/*"
-                className="hidden"
-                type="file"
-              />
-            </label>
-          )}
+            )}
+            <input
+              {...register("photo")}
+              accept="image/*"
+              className="hidden"
+              type="file"
+            />
+          </label>
         </div>
+
         {/* 제목 */}
         <Input
           register={register("name", { required: true })}
