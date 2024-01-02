@@ -10,7 +10,7 @@ async function handler(
   const { token } = req.body;
   const foundToken = await client.token.findUnique({
     where: {
-      payload: token,
+      payload: String(token),
     },
   });
   if (!foundToken) return res.status(404).end();

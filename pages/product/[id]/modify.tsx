@@ -120,7 +120,9 @@ const Modify: NextPage = () => {
   useEffect(() => {
     if (data?.ok && data.updateProduct) {
       alert("수정이 완료되었습니다.");
-      router.replace(`/product/${router.query.id}`, undefined, {unstable_skipClientCache:true});
+      router.replace(`/product/${router.query.id}`, undefined, {
+        unstable_skipClientCache: true,
+      });
     }
   }, [data, router]);
 
@@ -132,7 +134,7 @@ const Modify: NextPage = () => {
       pathName="Product"
     >
       <form className="space-y-4 p-4" onSubmit={handleSubmit(onValid)}>
-      <div className="flex items-center justify-center">
+        <div className="flex items-center justify-center">
           <div className="absolute -z-50 h-96 aspect-video w-10/12 max-w-screen-sm">
             {photoPreview && (
               <Image
@@ -145,7 +147,7 @@ const Modify: NextPage = () => {
             )}
           </div>
 
-          <label className="fflex h-96 w-full cursor-pointer items-center justify-center rounded-md border-2 border-dashed border-gray-300 text-gray-600 hover:border-blue-500 hover:text-blue-500">
+          <label className="flex h-96 w-full cursor-pointer items-center justify-center rounded-md border-2 border-dashed border-gray-300 text-gray-600 hover:border-blue-500 hover:text-blue-500">
             {!photoPreview && (
               <svg
                 className="h-12 w-12"

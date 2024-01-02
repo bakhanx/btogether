@@ -11,13 +11,17 @@ import Logo from "../public/images/logo/logo_01_small.png";
 import Image from "next/image";
 import { EnterForm, MutationResult, TokenForm } from "types/enter";
 
+interface guestMutationResult extends MutationResult {
+  token? : string
+}
+
 const Enter: NextPage = () => {
   const [enter, { loading, data }] =
-    useMutation<MutationResult>("/api/users/enter");
+    useMutation<guestMutationResult>("/api/users/enter");
   const [confirmToken, { loading: tokenLoading, data: tokenData }] =
     useMutation<MutationResult>("/api/users/confirm");
   const { register, reset, handleSubmit } = useForm<EnterForm>();
-  const { register: tokenRegister, handleSubmit: tokenHandleSubmit } =
+  const { register: tokenRegister, handleSubmit: tokenHandleSubmit, setValue } =
     useForm<TokenForm>();
   const [method, setMethod] = useState<"email" | "phone">("email");
 
@@ -38,6 +42,13 @@ const Enter: NextPage = () => {
     confirmToken(validForm);
   };
   const router = useRouter();
+
+  useEffect(()=>{
+    if(data?.ok && data?.token){
+      console.log(data?.token);
+      setValue("token", Number(data.token));
+    }
+  },[data, setValue])
 
   useEffect(() => {
     console.log(tokenData);
@@ -79,6 +90,7 @@ const Enter: NextPage = () => {
                 label="인증 코드"
                 type="number"
                 required
+                
               />
 
               <Button
