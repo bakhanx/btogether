@@ -27,7 +27,11 @@ export default function Menu(props: {
   const onReportValid = () => {
     if (confirm("신고하시겠습니까?")) {
       console.log(reportNum);
-      reportMutate({ reportNum, reportedUrl: router.asPath });
+      console.log(router.asPath);
+      reportMutate({
+        reportNum,
+        reportedUrl: router.asPath,
+      });
     }
 
     // if (!loading) {
