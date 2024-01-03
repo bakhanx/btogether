@@ -1,10 +1,16 @@
+import DateTime from "@components/datetime";
 import Link from "next/link";
 import useSWR from "swr";
 
-type reportType = {
-  reportNum: number;
-  reportedUrl: string;
-  updatedAt: string;
+type ReportResponse = {
+  ok: boolean;
+  report: {
+    id: number;
+    reportNum: number;
+    reportedUrl: string;
+    updatedAt: Date;
+    reportedUserId: number;
+  }[];
 };
 
 const REPORT_CATE = [
@@ -19,21 +25,30 @@ const REPORT_CATE = [
 ];
 
 const Admin = () => {
-  const { data: reportData, isLoading } = useSWR<reportType[]>(`api/report`);
+  const { data: reportData, isLoading } = useSWR<ReportResponse>(`api/report`);
 
   return (
     <>
       <div className="p-2">관리자 페이지</div>
-      {reportData?.map((data) => {
+      {reportData?.report.map((data) => {
         return (
           <>
             <div className="p-2">
-              <div>신고내용 : {REPORT_CATE[data?.reportNum]}</div>
-              <div>
-                신고경로 :{" "}
-                <Link href={`${data?.reportedUrl}`}>{data?.reportedUrl}</Link>
+              <div className="text-lg font-bold">
+                <DateTime date={data?.updatedAt} />
               </div>
-              <div>신고날짜 : {data?.updatedAt}</div>
+              <div className="">
+                <div>신고자id : {data?.reportedUserId}</div>
+                <div>신고내용 : {REPORT_CATE[data?.reportNum]}</div>
+                <div>
+                  신고경로 :{" "}
+                  <span className="underline text-blue-700">
+                    <Link href={`${data?.reportedUrl}`}>
+                      {data?.reportedUrl}
+                    </Link>
+                  </span>
+                </div>
+              </div>
             </div>
           </>
         );
