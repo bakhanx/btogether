@@ -1,39 +1,39 @@
 import withHandler, { ResponseType } from "@libs/server/withHandler";
 import { withApiSession } from "@libs/server/withSession";
 import { NextApiRequest, NextApiResponse } from "next";
+import client from "@libs/server/client";
 
 async function handler(
   req: NextApiRequest,
   res: NextApiResponse<ResponseType>
 ) {
-  if (req.method === "POST") {
-    const {
-      body: { reportNum, reportedUrl },
-    } = req;
+  const {
+    session: { user },
+    body: { reportNum, reportedUrl },
+  } = req;
 
-    //   const report = await client?.report.create({
-    //     data: {
-    //       reportNum,
-    //       postQuery,
-    //     },
-    //   });
+  if (req.method === "POST") {
+    const report = await client.report.create({
+      data:{
+        reportedUrl : String(reportedUrl),
+        reportedUserId: user?.id || 0,
+        reportNum : Number(reportNum)
+      }
+    })
 
     res.json({
       ok: true,
-      reportNum,
-      reportedUrl,
-      // report,
+      report,
     });
   }
 
   if (req.method === "GET") {
-    // const report = await client?.report.findMany({
-    //   select: {
-    //     id: true,
-    //     reportNum: true,
-    //     reportedUrl: true,
-    //   },
-    // });
+    const report = await client.report.findMany({});
+
+    res.json({
+      ok: true,
+      report,
+    });
   }
 }
 
