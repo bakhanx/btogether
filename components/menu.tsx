@@ -8,9 +8,11 @@ import useSWR from "swr";
 
 type MenuType = "Product" | "Story" | "Comment";
 
+
 export default function Menu(props: {
   type: MenuType;
   writerId: number;
+  content : string;
   onDelete: (event: React.MouseEvent<HTMLButtonElement>) => void;
   onModify?: (event: React.MouseEvent<HTMLButtonElement>) => void;
   // onReport? : (event: React.MouseEvent<HTMLButtonElement>) => void;
@@ -29,8 +31,11 @@ export default function Menu(props: {
       console.log(reportNum);
       console.log(router.asPath);
       reportMutate({
-        reportNum,
         reportedUrl: router.asPath,
+        reportedUserId : props.writerId,
+        reportNum,
+        content : props.content,
+        reportType: props.type,
       });
     }
 
