@@ -28,7 +28,7 @@ const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
   } = useSWR<ProductResponse>(
     router.query.id ? `/api/products/${router.query.id} ` : null
   );
-  const [sellStateMutate, {data: sellStateData}] = useMutation(
+  const [sellStateMutate, { data: sellStateData }] = useMutation(
     `/api/products/${router.query.id}/sellState`
   );
 
@@ -132,7 +132,7 @@ const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
   useEffect(() => {
     if (deleteData?.ok) {
       alert("삭제가 완료되었습니다.");
-      router.replace("/", undefined, {unstable_skipClientCache:true});
+      router.replace("/", undefined, { unstable_skipClientCache: true });
     }
   }, [deleteData, router]);
 
@@ -174,11 +174,11 @@ const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
     sellStateMutate({ sellState: stateType, purchaserId: selectedUserId });
   };
 
-  useEffect(()=>{
-    if(sellStateData && sellStateData?.ok) {
-      confirm('변경이 완료되었습니다.');
+  useEffect(() => {
+    if (sellStateData && sellStateData?.ok) {
+      confirm("변경이 완료되었습니다.");
     }
-  })
+  });
   //========================================================================
 
   if (router.isFallback) {
@@ -294,6 +294,7 @@ const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
           onDelete: onDelete,
           onModify: onModify,
           seoTitle: productData?.product?.name || "",
+          content: productData?.product?.name || "",
         }}
       />
 
@@ -344,7 +345,9 @@ const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
                 {productData?.product?.seller.name || ""}
               </p>
 
-              <Link href={`/users/profile/${productData?.product?.seller.name}`}>
+              <Link
+                href={`/users/profile/${productData?.product?.seller.name}`}
+              >
                 <p className="text-xs font-medium text-gray-500">
                   프로필 보기 &rarr;
                 </p>
@@ -385,7 +388,9 @@ const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
             <span className="mt-3 block text-2xl text-gray-900">
               {product?.price.toLocaleString()}원
             </span>
-            <p className=" my-6 text-gray-700 whitespace-pre-line">{product?.description}</p>
+            <p className=" my-6 text-gray-700 whitespace-pre-line">
+              {product?.description}
+            </p>
             <div className="my-3 flex gap-x-3 text-sm text-slate-500">
               <div>채팅 · {productData?.product?._count?.chatRooms || 0}</div>
               <div>관심 · {productData?.product?._count?.records || 0}</div>
