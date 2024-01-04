@@ -7,9 +7,13 @@ type ReportResponse = {
   report: {
     id: number;
     reportNum: number;
+    reportUserId : number,
+    reportedUserId: number;
     reportedUrl: string;
     updatedAt: Date;
-    reportedUserId: number;
+    content : string,
+    reportType : string,
+    isCheck : boolean,
   }[];
 };
 
@@ -38,16 +42,20 @@ const Admin = () => {
                 <DateTime date={data?.updatedAt} />
               </div>
               <div className="">
-                <div>신고자id : {data?.reportedUserId}</div>
-                <div>신고내용 : {REPORT_CATE[data?.reportNum]}</div>
+                <div>신고한 사람 : {data?.reportUserId}</div>
+                <div>신고받은 사람 : {data?.reportedUserId}</div>
+                <div>사유 : {REPORT_CATE[data?.reportNum]}</div>
+                <div>내용 : {data?.content}</div>
+                <div>유형 : {data?.reportType}</div>
                 <div>
-                  신고경로 :{" "}
+                  경로 :{" "}
                   <span className="underline text-blue-700">
                     <Link href={`${data?.reportedUrl}`}>
                       {data?.reportedUrl}
                     </Link>
                   </span>
                 </div>
+                <div>조치 여부 : {data?.isCheck ? "yes" : "no"}</div>
               </div>
             </div>
           </>
