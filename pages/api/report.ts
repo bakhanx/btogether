@@ -9,17 +9,20 @@ async function handler(
 ) {
   const {
     session: { user },
-    body: { reportNum, reportedUrl },
+    body: { reportNum, reportedUrl, reportedUserId, content, reportType },
   } = req;
 
   if (req.method === "POST") {
     const report = await client.report.create({
-      data:{
-        reportedUrl : String(reportedUrl),
-        reportedUserId: user?.id || 0,
-        reportNum : Number(reportNum)
-      }
-    })
+      data: {
+        reportedUrl: String(reportedUrl),
+        reportUserId: user?.id || 0,
+        reportedUserId: reportedUserId || 0,
+        reportNum: Number(reportNum),
+        content,
+        reportType,
+      },
+    });
 
     res.json({
       ok: true,
