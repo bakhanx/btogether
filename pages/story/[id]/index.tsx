@@ -166,6 +166,7 @@ const Comments = () => {
                   writerId={comment?.userId}
                   onDelete={(e) => onDeleteComment(comment?.id, e)}
                   type="Comment"
+                  content={comment?.comment}
                 />
               </div>
             </div>
@@ -276,6 +277,7 @@ const StoryDetail: NextPage<StorySSGResponse> = ({ story }) => {
           writerId={story?.userId || 0}
           onDelete={onDelete}
           onModify={onModify}
+          content={story?.content}
         />
       </div>
 
