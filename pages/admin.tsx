@@ -38,11 +38,6 @@ const Admin = () => {
     `api/admin/deleteTokens`
   );
 
-  useEffect(() => {
-    console.log(delMutation);
-    console.log(data);
-  }, [data, delMutation]);
-
   const handleDeleteTokens = () => {
     if (!loading) {
       delMutation({});
@@ -63,7 +58,7 @@ const Admin = () => {
       </div>
 
       <div className="text-2xl pt-20">신고 리스트</div>
-      {reportData?.report.map((data, index) => {
+      {!isLoading && reportData?.report.map((data, index) => {
         return (
           <>
             <div className="p-2" key={index}>
