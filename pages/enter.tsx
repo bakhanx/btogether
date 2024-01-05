@@ -12,7 +12,7 @@ import Image from "next/image";
 import { EnterForm, MutationResult, TokenForm } from "types/enter";
 
 interface guestMutationResult extends MutationResult {
-  token? : string
+  token?: string;
 }
 
 const Enter: NextPage = () => {
@@ -21,8 +21,14 @@ const Enter: NextPage = () => {
   const [confirmToken, { loading: tokenLoading, data: tokenData }] =
     useMutation<MutationResult>("/api/users/confirm");
   const { register, reset, handleSubmit } = useForm<EnterForm>();
-  const { register: tokenRegister, handleSubmit: tokenHandleSubmit, setValue } =
-    useForm<TokenForm>();
+  const {
+    register: tokenRegister,
+    handleSubmit: tokenHandleSubmit,
+    setValue,
+    setError,
+    clearErrors,
+    formState: { errors },
+  } = useForm<TokenForm>();
   const [method, setMethod] = useState<"email" | "phone">("email");
 
   const handleEmailForm = () => {
@@ -35,28 +41,29 @@ const Enter: NextPage = () => {
   };
   const onValid = (validForm: EnterForm) => {
     if (loading) return;
+    clearErrors();
     enter(validForm);
   };
   const onTokenValid = (validForm: TokenForm) => {
+    clearErrors();
     if (tokenLoading) return;
     confirmToken(validForm);
   };
   const router = useRouter();
 
-  useEffect(()=>{
-    if(data?.ok && data?.token){
-      console.log(data?.token);
+  useEffect(() => {
+    if (data?.ok && data?.token) {
       setValue("token", Number(data.token));
     }
-  },[data, setValue])
+  }, [data, setValue]);
 
   useEffect(() => {
-    console.log(tokenData);
-    console.log();
     if (tokenData?.ok) {
       router.push("/");
+    } else if (!tokenData?.isFound) {
+      setError("token", { message: "올바르지 않은 코드입니다." });
     }
-  }, [router, tokenData]);
+  }, [router, tokenData, setError]);
 
   return (
     <div className="max-w-screen-md px-4 flex flex-col justify-between mx-auto">
@@ -67,7 +74,7 @@ const Enter: NextPage = () => {
         <h1 className="p-1 text-gray-500">이웃과 함께하는 비투게더</h1>
         <div className="w-[50%] aspect-video mt-4">
           <div className="relative w-full h-full">
-            <Image  fill alt="" sizes="368px" src={Logo} priority={true} />
+            <Image fill alt="" sizes="368px" src={Logo} priority={true} />
           </div>
         </div>
       </div>
@@ -83,14 +90,13 @@ const Enter: NextPage = () => {
                 입력하신 {method === "phone" ? "번호" : "메일"}로 인증코드가
                 발송되었습니다.
               </p>
-
+              <div className="text-red-600">{errors.token?.message}</div>
               <Input
                 register={tokenRegister("token")}
                 name="token"
                 label="인증 코드"
                 type="number"
                 required
-                
               />
 
               <Button
