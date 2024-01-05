@@ -13,7 +13,12 @@ async function handler(
       payload: String(token),
     },
   });
-  if (!foundToken) return res.status(404).end();
+  // if (!foundToken) return res.status(404).end();
+  if (!foundToken)
+    return res.json({
+      ok: false,
+      isFound: false,
+    });
 
   req.session.user = {
     id: foundToken.userId,
@@ -28,6 +33,7 @@ async function handler(
   });
   res.json({
     ok: true,
+    isFound: true,
   });
 }
 
@@ -35,6 +41,6 @@ export default withApiSession(
   withHandler({
     methods: ["POST"],
     handler,
-    isPrivate:false,
+    isPrivate: false,
   })
 );
