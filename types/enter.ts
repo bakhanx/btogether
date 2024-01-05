@@ -7,4 +7,5 @@ export type TokenForm = {
 };
 export type MutationResult = {
   ok: boolean;
+  isFound? : boolean;
 };
