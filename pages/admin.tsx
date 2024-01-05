@@ -53,13 +53,16 @@ const Admin = () => {
     <>
       <div className="p-2">관리자 페이지</div>
 
-      <button
-        className="border bg-blue-500 text-white rounded-md p-3 hover:bg-blue-600 "
-        onClick={handleDeleteTokens}
-      >
-        오래된 토큰 제거
-      </button>
+      <div className="pt-10">
+        <button
+          className="border bg-blue-500 text-white rounded-md p-3 hover:bg-blue-600 "
+          onClick={handleDeleteTokens}
+        >
+          오래된 토큰 제거
+        </button>
+      </div>
 
+      <div className="text-2xl pt-20">신고 리스트</div>
       {reportData?.report.map((data, index) => {
         return (
           <>
