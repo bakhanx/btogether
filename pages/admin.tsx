@@ -1,5 +1,8 @@
+import Button from "@components/button";
 import DateTime from "@components/datetime";
+import useMutation from "@libs/client/useMutation";
 import Link from "next/link";
+import { useEffect } from "react";
 import useSWR from "swr";
 
 type ReportResponse = {
@@ -7,13 +10,13 @@ type ReportResponse = {
   report: {
     id: number;
     reportNum: number;
-    reportUserId : number,
+    reportUserId: number;
     reportedUserId: number;
     reportedUrl: string;
     updatedAt: Date;
-    content : string,
-    reportType : string,
-    isCheck : boolean,
+    content: string;
+    reportType: string;
+    isCheck: boolean;
   }[];
 };
 
@@ -31,17 +34,40 @@ const REPORT_CATE = [
 const Admin = () => {
   const { data: reportData, isLoading } = useSWR<ReportResponse>(`api/report`);
 
+  const [delMutation, { data, loading }] = useMutation(
+    `api/admin/deleteTokens`
+  );
+
+  useEffect(() => {
+    console.log(delMutation);
+    console.log(data);
+  }, [data, delMutation]);
+
+  const handleDeleteTokens = () => {
+    if (!loading) {
+      delMutation({});
+    }
+  };
+
   return (
     <>
       <div className="p-2">관리자 페이지</div>
-      {reportData?.report.map((data) => {
+
+      <button
+        className="border bg-blue-500 text-white rounded-md p-3 hover:bg-blue-600 "
+        onClick={handleDeleteTokens}
+      >
+        오래된 토큰 제거
+      </button>
+
+      {reportData?.report.map((data, index) => {
         return (
           <>
-            <div className="p-2">
+            <div className="p-2" key={index}>
               <div className="text-lg font-bold">
                 <DateTime date={data?.updatedAt} />
               </div>
-              <div className="">
+              <div>
                 <div>신고한 사람 : {data?.reportUserId}</div>
                 <div>신고받은 사람 : {data?.reportedUserId}</div>
                 <div>사유 : {REPORT_CATE[data?.reportNum]}</div>
