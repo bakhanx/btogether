@@ -15,6 +15,7 @@ import {
   ProductUploadResponse,
 } from "types/product";
 import { PRODUCT } from "constants/product";
+import CategoryButton, { ProductCategory } from "@components/categoryButton";
 
 const Modify: NextPage = () => {
   const router = useRouter();
@@ -28,9 +29,10 @@ const Modify: NextPage = () => {
   } = useForm<ProductUploadForm>({ mode: "onBlur" });
   const [uploadProduct, { loading, data }] =
     useMutation<ProductUploadResponse>("/api/products");
-  const { data: productData } = useSWR<ProductResponse>(
-    router.query.id ? `/api/products/${router.query.id}` : ""
-  );
+  const { data: productData, isLoading: productIsLoading } =
+    useSWR<ProductResponse>(
+      router.query.id ? `/api/products/${router.query.id}` : ""
+    );
 
   const photo = watch("photo");
   const price = watch("price");
@@ -39,6 +41,9 @@ const Modify: NextPage = () => {
   const [photoPreview, setPhotoPreview] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isChangePhoto, setIsChangePhoto] = useState(false);
+
+  // 카테고리 선택
+  const [cate, setCate] = useState<ProductCategory>("Product");
 
   // ================ 사진 ========================
   useEffect(() => {
@@ -60,11 +65,12 @@ const Modify: NextPage = () => {
 
   const handleParsePrice = () => {
     let value = getValues("price");
-    console.log(value);
-    const numValue = value?.replaceAll(",", "");
-    value = numValue?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    setParsePrice(value);
-    setValue("price", value);
+    if (value !== "0") {
+      const numValue = value?.replaceAll(",", "");
+      value = numValue?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      setParsePrice(value);
+      setValue("price", value);
+    }
   };
 
   // ==================================================
@@ -77,10 +83,25 @@ const Modify: NextPage = () => {
       setValue("price", String(productData?.product?.price));
       handleParsePrice();
       setValue("description", productData?.product?.description);
+      setValue("category", productData?.product.category);
     }
   }, [setValue, productData]);
 
   // ====================================================
+
+  const handleCategory = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+    setCate(event.currentTarget.value as ProductCategory);
+
+    if (parsePrice === "") {
+      setValue("price", "");
+    }
+
+    if (event.currentTarget.value === "Free") {
+      setValue("price", "0");
+      setParsePrice("");
+    }
+  };
 
   const onValid = async ({
     photo,
@@ -88,6 +109,7 @@ const Modify: NextPage = () => {
     price,
     description,
     productId,
+    category,
   }: ProductUploadForm) => {
     setIsLoading(true);
     if (loading) return;
@@ -111,9 +133,16 @@ const Modify: NextPage = () => {
         description,
         photoId: id,
         productId: router.query.id,
+        category : cate,
       });
     } else {
-      uploadProduct({ name, price, description, productId: router.query.id });
+      uploadProduct({
+        name,
+        price,
+        description,
+        productId: router.query.id,
+        category : cate,
+      });
     }
   };
 
@@ -126,6 +155,12 @@ const Modify: NextPage = () => {
     }
   }, [data, router]);
 
+  useEffect(() => {
+    if (productData && !data?.ok) {
+      setCate(productData?.product.category);
+    }
+  }, [setCate, productData, data]);
+
   return (
     <Layout
       canGoBack
@@ -133,109 +168,139 @@ const Modify: NextPage = () => {
       seoTitle="상품 수정하기"
       pathName="Product"
     >
-      <form className="space-y-4 p-4" onSubmit={handleSubmit(onValid)}>
-        <div className="flex items-center justify-center">
-          <div className="absolute -z-50 h-96 aspect-video w-10/12 max-w-screen-sm">
-            {photoPreview && (
-              <Image
-                className="flex rounded-md object-contain"
-                src={photoPreview}
-                alt=""
-                fill
-                quality={90}
+      {!productIsLoading ? (
+        <form className="space-y-4 p-4" onSubmit={handleSubmit(onValid)}>
+          <div className="flex items-center justify-center">
+            <div className="absolute -z-50 h-96 aspect-video w-10/12 max-w-screen-sm">
+              {photoPreview && (
+                <Image
+                  className="flex rounded-md object-contain"
+                  src={photoPreview}
+                  alt=""
+                  fill
+                  quality={90}
+                />
+              )}
+            </div>
+
+            <label className="flex h-96 w-full cursor-pointer items-center justify-center rounded-md border-2 border-dashed border-gray-300 text-gray-600 hover:border-blue-500 hover:text-blue-500">
+              {!photoPreview && (
+                <svg
+                  className="h-12 w-12"
+                  stroke="currentColor"
+                  fill="none"
+                  viewBox="0 0 48 48"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02"
+                    strokeWidth={2}
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              )}
+
+              <input
+                {...register("photo")}
+                accept="image/*"
+                className="hidden"
+                type="file"
               />
-            )}
+            </label>
+          </div>
+          {/* 제목 */}
+          <Input
+            register={register("name", {
+              required: { value: true, message: "제목 필수입력" },
+            })}
+            required
+            label="제목"
+            name="name"
+            type="text"
+          />
+          <span className="text-red-500">
+            {errors?.name ? errors?.name?.message : ""}
+          </span>
+
+          {/* 카테고리 */}
+
+          <div className="gap-x-2 flex">
+            <CategoryButton
+              text="상품"
+              onClick={handleCategory}
+              value="Product"
+              category={cate}
+              color="blue"
+            />
+            <CategoryButton
+              text="나눔"
+              onClick={handleCategory}
+              value="Free"
+              category={cate}
+              color="blue"
+            />
+            <CategoryButton
+              text="모임"
+              onClick={handleCategory}
+              value="Gather"
+              category={cate}
+              color="blue"
+            />
           </div>
 
-          <label className="flex h-96 w-full cursor-pointer items-center justify-center rounded-md border-2 border-dashed border-gray-300 text-gray-600 hover:border-blue-500 hover:text-blue-500">
-            {!photoPreview && (
-              <svg
-                className="h-12 w-12"
-                stroke="currentColor"
-                fill="none"
-                viewBox="0 0 48 48"
-                aria-hidden="true"
-              >
-                <path
-                  d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02"
-                  strokeWidth={2}
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            )}
+          {/* 가격 */}
+          <Input
+            register={register("price", {
+              required: { value: true, message: "가격 필수입력" },
+              maxLength: {
+                value: PRODUCT.MAX_PRICE_NUMBER,
+                message: "고가 물품은 판매할 수 없습니다.",
+              },
+              pattern: {
+                value: /^[0-9,]+$/,
+                message: "숫자만 입력하세요",
+              },
+              onBlur() {
+                handleParsePrice();
+              },
+            })}
+            onFocus={() => {
+              setValue("price", parsePrice.replaceAll(",", ""));
+            }}
+            required
+            label="가격 (선택사항)"
+            name="price"
+            placeholder="0"
+            type="text"
+            kind="price"
+            defaultValue={parsePrice}
+            disabled={cate === "Free" ? true : false}
+          />
+          {/* 1억이상 입력 시 에러 */}
+          <div className="text-red-500">
+            {errors?.price ? errors?.price?.message : ""}
+          </div>
+          {/* 내용  */}
+          <TextArea
+            register={register("description", {
+              required: { value: true, message: "내용 필수입력" },
+            })}
+            required
+            name="description"
+            label="내용"
+          />
+          <span className="text-red-500">
+            {errors?.description ? errors?.description?.message : ""}
+          </span>
 
-            <input
-              {...register("photo")}
-              accept="image/*"
-              className="hidden"
-              type="file"
-            />
-          </label>
-        </div>
-        {/* 제목 */}
-        <Input
-          register={register("name", {
-            required: { value: true, message: "제목 필수입력" },
-          })}
-          required
-          label="제목"
-          name="name"
-          type="text"
-        />
-        <span className="text-red-500">
-          {errors?.name ? errors?.name?.message : ""}
-        </span>
-
-        {/* 가격 */}
-        <Input
-          register={register("price", {
-            required: { value: true, message: "가격 필수입력" },
-            maxLength: {
-              value: PRODUCT.MAX_PRICE_NUMBER,
-              message: "고가 물품은 판매할 수 없습니다.",
-            },
-            pattern: {
-              value: /^[0-9,]+$/,
-              message: "숫자만 입력하세요",
-            },
-            onBlur() {
-              handleParsePrice();
-            },
-          })}
-          onFocus={() => {
-            setValue("price", parsePrice.replaceAll(",", ""));
-          }}
-          required
-          label="가격 (선택사항)"
-          name="price"
-          type="text"
-          kind="price"
-          defaultValue={parsePrice}
-        />
-        {/* 1억이상 입력 시 에러 */}
-        <div className="text-red-500">
-          {errors?.price ? errors?.price?.message : ""}
-        </div>
-        {/* 내용  */}
-        <TextArea
-          register={register("description", {
-            required: { value: true, message: "내용 필수입력" },
-          })}
-          required
-          name="description"
-          label="내용"
-        />
-        <span className="text-red-500">
-          {errors?.description ? errors?.description?.message : ""}
-        </span>
-
-        <Button
-          text={isLoading ? "수정중..." : "상품 수정하기"}
-          large
-          color="blue"
-        />
-      </form>
+          <Button
+            text={isLoading ? "수정중..." : "상품 수정하기"}
+            large
+            color="blue"
+          />
+        </form>
+      ) : null}
     </Layout>
   );
 };
