@@ -16,6 +16,8 @@ import { ProductResponse } from "types/product";
 import { SKELETON } from "constants/skeleton";
 import Loading from "@components/loading";
 import ScrollToTopButton from "@components/scrollToTopButton";
+import CategoryLabel from "@components/categoryLabel";
+import SellStateLabel from "@components/sellStateLabel";
 
 const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
   const router = useRouter();
@@ -357,25 +359,22 @@ const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
 
           {/* Content */}
           <div className="mt-5">
-            <div className="pb-2">
+            <div className="pb-5">
+              <CategoryLabel category={product.category} large/>
               {product.sellerId === user?.id ? (
                 <select
                   id="sellState"
-                  className=" rounded-lg border border-gray-300 bg-violet-700 p-1 py-2 text-sm text-white shadow-md "
+                  className=" rounded-sm border border-gray-300 bg-cyan-600 p-3 text-sm text-white shadow-md "
                   onChange={handleStateChange}
                   defaultValue={product.sellState}
                 >
                   {/* <option selected></option> */}
-                  <option value="selling">거래중</option>
+                  <option value="selling" >진행중</option>
                   <option value="reserve">예약중</option>
-                  <option value="sold">거래완료</option>
+                  <option value="sold">완료</option>
                 </select>
               ) : (
-                <span className="inline-block rounded-lg bg-violet-700 p-5 py-2 text-sm text-white shadow-md">
-                  {product.sellState === "selling" && "판매중"}
-                  {product.sellState === "reserve" && "예약중"}
-                  {product.sellState === "sold" && "판매완료"}
-                </span>
+                <SellStateLabel sellState={product.sellState} large/>
               )}
             </div>
 
