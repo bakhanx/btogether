@@ -62,8 +62,9 @@ model Product {
   name        String
   price       Int
   description String     @db.MediumText
-  records     Record[]
+  records     Record[]  
   chatRooms   ChatRoom[]
+  category    Category  @default(Gather)
 
   @@index([sellerId])
   @@index([purchaserId])
@@ -78,6 +79,7 @@ model Story {
   content   String    @db.MediumText
   comments  Comment[]
   likes     Like[]
+  category  String    @default("Story")
 
   @@index([userId])
 }
@@ -138,11 +140,17 @@ model Record {
   @@index([productId])
 }
 
+enum Category {
+  Product
+  Free
+  Gather
+}
+
 enum Kind {
-  Purchase
-  Favorite
   Sale
+  Purchase
   Reserve
+  Favorite
 }
 
 model Message {
