@@ -3,6 +3,8 @@ import Link from "next/link";
 import DateTime from "./datetime";
 import SellStateLabel from "./sellStateLabel";
 import { SellingType } from "types/product";
+import { Category } from "@prisma/client";
+import CategoryLabel from "./categoryLabel";
 
 type ItemProps = {
   title: string;
@@ -13,6 +15,7 @@ type ItemProps = {
   hearts: number;
   image: string;
   sellState: SellingType;
+  category: Category;
 };
 
 // const DynamicDateTime: any = dynamic(() => import("./datetime"))
@@ -26,8 +29,8 @@ export default function Item({
   image,
   time,
   sellState,
+  category,
 }: ItemProps) {
-
   return (
     <Link href={`/product/${id}`}>
       <div className="cursor-pointer justify-between px-4 py-2 hover:bg-slate-50">
@@ -36,7 +39,7 @@ export default function Item({
           {image ? (
             <div className="relative aspect-square w-36">
               <Image
-                className="rounded-md object-cover"
+                className="rounded-md object-cover "
                 fill
                 quality={90}
                 sizes="1"
@@ -44,6 +47,13 @@ export default function Item({
                 alt={title}
                 src={`https://imagedelivery.net/214BxOnlVKSU2amZRZmdaQ/${image}/thumbnail`}
               />
+              {sellState === "sold" ? (
+                <div className="absolute bg-black w-full h-full opacity-70 text-white flex  justify-center items-center">
+                  완료
+                </div>
+              ) : (
+                ""
+              )}
             </div>
           ) : (
             <div className="h-20 w-20 rounded-md bg-gray-500" />
@@ -52,14 +62,16 @@ export default function Item({
           <div className="flex w-full flex-col justify-between truncate ">
             <div className="flex flex-col">
               <div className="flex items-center">
-                <SellStateLabel sellState={sellState} hideSelling />
+                <CategoryLabel category={category} hideLabel />
                 <span className="truncate text-lg ">{title}</span>
               </div>
               <span className="truncate pt-1 text-sm text-gray-500">
                 <DateTime date={time} timeAgo />
               </span>
+
               <span className="pt-1 text-sm font-medium">
-                {price.toLocaleString()}원
+                <SellStateLabel sellState={sellState} hideLabel />
+                {category !== "Free" ? `${price.toLocaleString()}원` : ""}
               </span>
             </div>
             {/* 댓글, 좋아요 */}
