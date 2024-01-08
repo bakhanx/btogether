@@ -5,6 +5,7 @@ import SellStateLabel from "./sellStateLabel";
 import { SellingType } from "types/product";
 import { Category } from "@prisma/client";
 import CategoryLabel from "./categoryLabel";
+import { cls } from "@libs/client/utils";
 
 type ItemProps = {
   title: string;
@@ -48,7 +49,7 @@ export default function Item({
                 src={`https://imagedelivery.net/214BxOnlVKSU2amZRZmdaQ/${image}/thumbnail`}
               />
               {sellState === "sold" ? (
-                <div className="absolute bg-black w-full h-full opacity-70 text-white flex  justify-center items-center">
+                <div className="absolute bg-black w-full h-full opacity-70 text-white flex  justify-center items-center rounded-md">
                   완료
                 </div>
               ) : (
@@ -59,11 +60,18 @@ export default function Item({
             <div className="h-20 w-20 rounded-md bg-gray-500" />
           )}
 
-          <div className="flex w-full flex-col justify-between truncate ">
+          <div className="flex w-full flex-col justify-between truncate">
             <div className="flex flex-col">
               <div className="flex items-center">
                 <CategoryLabel category={category} hideLabel />
-                <span className="truncate text-lg ">{title}</span>
+                <span
+                  className={cls(
+                    "truncate text-lg",
+                    sellState === "sold" ? "line-through" : ""
+                  )}
+                >
+                  {title}
+                </span>
               </div>
               <span className="truncate pt-1 text-sm text-gray-500">
                 <DateTime date={time} timeAgo />
