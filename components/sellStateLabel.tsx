@@ -4,47 +4,36 @@ import { SellingType } from "types/product";
 export type sellStateProps = {
   sellState: SellingType;
   hideLabel?: boolean;
+  large?: boolean;
 };
 
 enum parseSellType {
-  "selling" = "판매중",
-  "sold" = "판매완료",
+  "selling" = "진행중",
+  "sold" = "완료",
   "reserve" = "예약중",
 }
 
-const SellStateLabel = ({ sellState, hideLabel }: sellStateProps) => {
+const SellStateLabel = ({ sellState, hideLabel, large }: sellStateProps) => {
   return (
     <>
-        <span
-          className={cls(
-            "mr-1 rounded-full p-[3px] text-[10px] leading-4 text-white font-bold",
-            sellState === "selling"
-              ? "bg-blue-700 hidden"
-              : sellState === "sold"
-              ? "bg-orange-500 hidden"
-              : sellState === "reserve"
-              ? "bg-purple-600 "
-              : ""
-          )}
-        >
-          {parseSellType[sellState]}
-        </span>
-      {/* {sellState === "reserve" && (
-        <span className=" mr-1 rounded-sm bg-green-700 p-1 text-xs text-white">
-          예약중
-        </span>
-      )}
-      {! hideLabel && sellState === "sold" && (
-        <span className=" mr-1 rounded-sm bg-gray-600 p-1 text-xs text-white">
-          완료
-        </span>
-      )}
-
-      {!hideLabel && sellState === "selling" && (
-        <span className=" mr-1 rounded-sm bg-violet-700 p-1 text-xs text-white">
-          진행중
-        </span>
-      )} */}
+      <span
+        className={cls(
+          "mr-1  leading-4 text-white",
+          sellState === "selling"
+            ? "bg-violet-500 "
+            : sellState === "sold"
+            ? "bg-gray-500 "
+            : sellState === "reserve"
+            ? "bg-rose-700 "
+            : "",
+          large === true
+            ? "p-3 text-sm rounded-sm "
+            : "p-[3px] text-[10px] rounded-full",
+          !large && sellState !== "reserve" ? "hidden" : ""
+        )}
+      >
+        {parseSellType[sellState]}
+      </span>
     </>
   );
 };
