@@ -47,7 +47,7 @@ async function handler(
   }
   if (req.method === "POST") {
     const {
-      body: { name, price, description, photoId, productId },
+      body: { name, price, description, photoId, productId, category },
       session: { user },
     } = req;
 
@@ -67,10 +67,11 @@ async function handler(
               id: user?.id,
             },
           },
+          category,
         },
       });
 
-      await res.revalidate('/');
+      await res.revalidate("/");
       await res.revalidate(`/product/${productId}`);
 
       res.json({
@@ -87,12 +88,13 @@ async function handler(
           price: +price.replaceAll(",", ""),
           description,
           image: photoId ? photoId : "",
-
+          // category,
           seller: {
             connect: {
               id: user?.id,
             },
           },
+          category,
         },
       });
 
