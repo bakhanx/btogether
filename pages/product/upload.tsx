@@ -12,6 +12,7 @@ import Image from "next/image";
 import { ProductUploadForm, ProductUploadMutation } from "types/product";
 import { PRODUCT } from "constants/product";
 import { cls } from "@libs/client/utils";
+import CategoryButton, { ProductCategory } from "@components/categoryButton";
 
 const Upload: NextPage = () => {
   const router = useRouter();
@@ -19,8 +20,9 @@ const Upload: NextPage = () => {
     register,
     handleSubmit,
     watch,
-    formState: { errors },
-    setError,
+    formState: { errors,  },
+    setValue,
+
   } = useForm<ProductUploadForm>({ mode: "onChange" });
   const [uploadProduct, { loading, data }] =
     useMutation<ProductUploadMutation>("/api/products");
@@ -68,9 +70,9 @@ const Upload: NextPage = () => {
           body: form,
         })
       ).json();
-      uploadProduct({ name, price, description, photoId: id });
+      uploadProduct({ name, price, description, photoId: id, category });
     } else {
-      uploadProduct({ name, price, description });
+      uploadProduct({ name, price, description, category });
     }
   };
 
@@ -82,13 +84,19 @@ const Upload: NextPage = () => {
     }
   }, [data, router]);
 
+  
+
   // 카테고리 선택
-  // const [isClick, setIsClick] = useState(false);
-  // const handleCategory = (event: React.MouseEvent<HTMLButtonElement>) => {
-  //   event.preventDefault();
-  //   console.log(event.currentTarget.value);
-  //   setIsClick(!isClick);
-  // };
+  const [category, setCategory] = useState<ProductCategory>("Product");
+
+  const handleCategory = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+    setValue("price", "")
+    setCategory(event.currentTarget.value as ProductCategory);
+    if(event.currentTarget.value === "Free"){
+      setValue("price", "0", {shouldTouch:false});
+    }
+  };
 
   return (
     <Layout
@@ -147,41 +155,32 @@ const Upload: NextPage = () => {
           placeholder="필수 입력"
         />
         {/* 카테고리 */}
-        {/* <div className="gap-x-2 flex">
-          <button
-            {...register("category")}
-            className={cls(
-              "p-1 border-2",
-              isClick ? "border-blue-500" : "border-gray-400"
-            )}
+
+        <div className="gap-x-2 flex">
+          <CategoryButton
+            text="상품"
             onClick={handleCategory}
-            value={"판매"}
-          >
-            <div>판매</div>
-          </button>
-          <button
-            {...register("category")}
-            className={cls(
-              "p-1 border-2",
-              isClick ? "border-blue-500" : "border-gray-400"
-            )}
+            value="Product"
+            category={category}
+            color="blue"
+          />
+          <CategoryButton
+            text="나눔"
             onClick={handleCategory}
-            value={"나눔"}
-          >
-            <div>나눔</div>
-          </button>
-          <button
-            {...register("category")}
-            className={cls(
-              "p-1 border-2",
-              isClick ? "border-blue-500" : "border-gray-400"
-            )}
+            value="Free"
+            category={category}
+            color="blue"
+          />
+          <CategoryButton
+            text="모임"
             onClick={handleCategory}
-            value={"모임"}
-          >
-            <div>모임</div>
-          </button>
-        </div> */}
+            value="Gather"
+            category={category}
+            color="blue"
+          />
+
+         
+        </div>
 
         {/* 가격 */}
         <Input
@@ -203,6 +202,7 @@ const Upload: NextPage = () => {
           type="text"
           kind="price"
           value={parsePrice}
+          disabled={category === "Free" ? true : false}
         />
         {/* 1억이상 입력 시 에러 */}
         <div className="text-red-500">
