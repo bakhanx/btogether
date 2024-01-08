@@ -63,7 +63,7 @@ export default function Item({
           <div className="flex w-full flex-col justify-between truncate">
             <div className="flex flex-col">
               <div className="flex items-center">
-                <CategoryLabel category={category} hideLabel />
+                <CategoryLabel category={category} />
                 <span
                   className={cls(
                     "truncate text-lg",
@@ -78,7 +78,7 @@ export default function Item({
               </span>
 
               <span className="pt-1 text-sm font-medium">
-                <SellStateLabel sellState={sellState} hideLabel />
+                <SellStateLabel sellState={sellState} />
                 {category !== "Free" ? `${price.toLocaleString()}원` : ""}
               </span>
             </div>
