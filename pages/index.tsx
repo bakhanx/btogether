@@ -51,7 +51,7 @@ const Home: NextPage<ProductsResponse> = ({ products }) => {
       {/* 작성된 게시글 리스트 */}
       <Layout hasTabBar mainTitle seoTitle="이웃과 함께하는" pathName="Product">
         <Slogan />
-        <div className="flex flex-col  divide-y-4 divide-purple-50 py-1 ">
+        <div className="flex flex-col  divide-y-4 divide-purple-50 py-1">
           {productList.map((product) => (
             <Item
               id={product?.id}
@@ -63,7 +63,9 @@ const Home: NextPage<ProductsResponse> = ({ products }) => {
               hearts={product?._count?.records || 0}
               comments={product?._count?.chatRooms || 0}
               sellState={product?.sellState}
-            ></Item>
+              category={product?.category}
+
+            />
           ))}
         </div>
         {/* Floating Button */}
