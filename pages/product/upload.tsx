@@ -20,9 +20,8 @@ const Upload: NextPage = () => {
     register,
     handleSubmit,
     watch,
-    formState: { errors,  },
+    formState: { errors },
     setValue,
-
   } = useForm<ProductUploadForm>({ mode: "onChange" });
   const [uploadProduct, { loading, data }] =
     useMutation<ProductUploadMutation>("/api/products");
@@ -84,17 +83,15 @@ const Upload: NextPage = () => {
     }
   }, [data, router]);
 
-  
-
   // 카테고리 선택
   const [category, setCategory] = useState<ProductCategory>("Product");
 
   const handleCategory = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
-    setValue("price", "")
+    setValue("price", "");
     setCategory(event.currentTarget.value as ProductCategory);
-    if(event.currentTarget.value === "Free"){
-      setValue("price", "0", {shouldTouch:false});
+    if (event.currentTarget.value === "Free") {
+      setValue("price", "0", { shouldTouch: false });
     }
   };
 
@@ -159,27 +156,25 @@ const Upload: NextPage = () => {
         <div className="gap-x-2 flex">
           <CategoryButton
             text="상품"
+            color="blue"
             onClick={handleCategory}
             value="Product"
             category={category}
-            color="blue"
           />
           <CategoryButton
             text="나눔"
+            color="orange"
             onClick={handleCategory}
             value="Free"
             category={category}
-            color="blue"
           />
           <CategoryButton
             text="모임"
+            color="green"
             onClick={handleCategory}
             value="Gather"
             category={category}
-            color="blue"
           />
-
-         
         </div>
 
         {/* 가격 */}
