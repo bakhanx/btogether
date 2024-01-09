@@ -9,7 +9,6 @@ import useMutation from "@libs/client/useMutation";
 import { cls } from "@libs/client/utils";
 import { useEffect } from "react";
 import Image from "next/image";
-import useUser from "@libs/client/useUser";
 import DateTime from "@components/datetime";
 import Menu from "@components/menu";
 import Loading from "@components/loading";
@@ -25,6 +24,8 @@ import {
 import Head from "next/head";
 import client from "@libs/server/client";
 import ScrollToTopButton from "@components/scrollToTopButton";
+import CategoryLabel from "@components/categoryLabel";
+import { StoryCategory } from "@components/categoryButton";
 
 interface StorySSGResponse extends StoryResponse {
   user: {
@@ -108,7 +109,7 @@ const Comments = () => {
       {/* 댓글 작성란 */}
 
       <div className="px-4">
-        <form onSubmit={handleSubmit(onValid, onInvalid)} >
+        <form onSubmit={handleSubmit(onValid, onInvalid)}>
           <TextArea
             register={register("comment", {
               required: true,
@@ -116,7 +117,9 @@ const Comments = () => {
             name="comment"
             placeholder="댓글을 입력해주세요."
             required
+            color="amber"
           />
+          <div className="py-1" />
           <Button
             text={commentLoading ? "잠시만 기다려주세요..." : "댓글 달기"}
             color="amber"
@@ -159,7 +162,9 @@ const Comments = () => {
                   <span className="block text-xs text-gray-500 ">
                     <DateTime date={comment?.createdAt} />
                   </span>
-                  <p className="mt-2 text-gray-700 whitespace-pre-line">{comment?.comment}</p>
+                  <p className="mt-2 text-gray-700 whitespace-pre-line">
+                    {comment?.comment}
+                  </p>
                 </div>
 
                 <Menu
@@ -183,7 +188,7 @@ const Comments = () => {
 const StoryDetail: NextPage<StorySSGResponse> = ({ story }) => {
   const router = useRouter();
   const onBack = () => {
-    router.push('/story', undefined, { unstable_skipClientCache:true})
+    router.push("/story", undefined, { unstable_skipClientCache: true });
   };
   // =====================스토리 삭제 ===================
   const [deleteMutation, { data: deleteData, loading: deleteLoading }] =
@@ -199,7 +204,7 @@ const StoryDetail: NextPage<StorySSGResponse> = ({ story }) => {
   useEffect(() => {
     if (deleteData?.ok) {
       alert("스토리 삭제가 완료되었습니다.");
-      router.replace("/story", undefined, {unstable_skipClientCache:true});
+      router.replace("/story", undefined, { unstable_skipClientCache: true });
     }
   }, [deleteData, router]);
 
@@ -285,9 +290,10 @@ const StoryDetail: NextPage<StorySSGResponse> = ({ story }) => {
         {/* 탑 레이아웃 */}
         <div className="pt-16">
           {/* 카테고리 */}
-          <span className="ml-4 items-center rounded-full bg-gray-100 px-2.5 py-0.5 text-xs font-medium text-gray-800">
-            후기
-          </span>
+          <CategoryLabel
+            category={story?.category as StoryCategory}
+            routeType="Story"
+          />
 
           {/* 작성자 프로필 */}
           <Link href={`/users/profile/${storyData?.story?.user?.id}`}>
@@ -375,7 +381,7 @@ const StoryDetail: NextPage<StorySSGResponse> = ({ story }) => {
           </span>
         </div>
         <Comments />
-        <ScrollToTopButton hasBottomTab={false}/>
+        <ScrollToTopButton hasBottomTab={false} />
       </div>
     </>
   );
