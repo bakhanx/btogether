@@ -10,7 +10,7 @@ async function handler(
   const {
     query: { id },
     session: { user },
-    body: { content },
+    body: { content, cate },
   } = req;
 
   if (req.method === "POST") {
@@ -20,12 +20,12 @@ async function handler(
       },
       data: {
         content,
+        category: cate,
       },
     });
 
     await res.revalidate(`/story/${id}`);
     await res.revalidate("/story");
-    
 
     res.json({
       ok: true,
