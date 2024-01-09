@@ -14,7 +14,7 @@ const Favorite: NextPage = () => {
       pathName="Profile"
     >
       <Suspense fallback={<Loading />}>
-        <MyProductList kind="Favorite"/>
+        <MyProductList kind="Favorite" category={"Product"} />
       </Suspense>
     </Layout>
   );
