@@ -7,29 +7,44 @@ import useMutation from "@libs/client/useMutation";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { StoryUploadForm, StoryUploadResponse } from "types/story";
+import CategoryButton, {
+  ProductCategory,
+  StoryCategory,
+} from "@components/categoryButton";
 
 const Upload: NextPage = () => {
   const router = useRouter();
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm<StoryUploadForm>({ mode: "onSubmit" });
   const [storyMutate, { data, loading }] =
     useMutation<StoryUploadResponse>("/api/stories");
   const [isLoading, setIsLoading] = useState(false);
 
-  const onValid = (form: StoryUploadForm) => {
+  const onValid = ({content}: StoryUploadForm) => {
     setIsLoading(true);
     if (loading) return;
-    storyMutate(form);
+    storyMutate({ content, category });
   };
 
   useEffect(() => {
     if (data && data.ok) {
-      router.replace(`/story/${data.story.id}`, undefined, {unstable_skipClientCache:true});
+      router.replace(`/story/${data.story.id}`, undefined, {
+        unstable_skipClientCache: true,
+      });
     }
   }, [router, data]);
+
+  // 카테고리 선택
+  const [category, setCategory] = useState<StoryCategory>("Daily");
+
+  const handleCategory = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+    setCategory(event.currentTarget.value as StoryCategory);
+  };
 
   return (
     <Layout
@@ -38,6 +53,39 @@ const Upload: NextPage = () => {
       seoTitle="스토리 쓰기"
       pathName="Story"
     >
+      {/* 카테고리 */}
+
+      <div className="p-4 gap-x-2 flex">
+        <CategoryButton
+          text="일상"
+          onClick={handleCategory}
+          value="Daily"
+          category={category}
+          color="violet"
+        />
+        <CategoryButton
+          text="후기"
+          onClick={handleCategory}
+          value="Review"
+          category={category}
+          color="green"
+        />
+        <CategoryButton
+          text="정보"
+          onClick={handleCategory}
+          value="Info"
+          category={category}
+          color="blue"
+        />
+        <CategoryButton
+          text="질문"
+          onClick={handleCategory}
+          value="Ask"
+          category={category}
+          color="orange"
+        />{" "}
+      </div>
+
       <form onSubmit={handleSubmit(onValid)} className="space-y-4 p-4">
         <TextArea
           register={register("content", {
