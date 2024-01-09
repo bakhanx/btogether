@@ -361,7 +361,7 @@ const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
           {/* Content */}
           <div className="mt-5">
             <div className="pb-5">
-              <CategoryLabel category={product.category} large />
+              <CategoryLabel routeType="Product" category={product.category} large />
               {product.sellerId === user?.id ? (
                 <select
                   id="sellState"
