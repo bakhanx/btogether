@@ -181,7 +181,6 @@ const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
       confirm("변경이 완료되었습니다.");
       router.reload();
     }
-    
   });
   //========================================================================
 
@@ -207,8 +206,8 @@ const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
     <div className="flex justify-center">
       {/* 유저리스트 */}
       {isOnPurchaser && (
-        <div className="relative flex justify-center ">
-          <div className="fixed top-1/2 -translate-y-1/2 z-50 flex h-96 w-2/3 max-w-xl   bg-black bg-opacity-60 text-white ">
+        <div className="">
+          <div className="fixed z-50 flex inset-0 m-auto h-96 w-2/3 max-w-xl   bg-black bg-opacity-60 text-white ">
             <div className="flex h-full w-full flex-col justify-around">
               <div
                 className="absolute top-2 right-2 cursor-pointer"
@@ -327,7 +326,7 @@ const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
           </div>
         </div>
 
-        <div className="px-4 py-4">
+        <div className="py-4">
           {/* Profile */}
           <div className="flex cursor-pointer items-center space-x-3 border-t border-b py-3">
             {productData?.product?.seller.avatar ? (
@@ -362,7 +361,7 @@ const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
           {/* Content */}
           <div className="mt-5">
             <div className="pb-5">
-              <CategoryLabel category={product.category} large/>
+              <CategoryLabel category={product.category} large />
               {product.sellerId === user?.id ? (
                 <select
                   id="sellState"
@@ -371,12 +370,12 @@ const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
                   defaultValue={product.sellState}
                 >
                   {/* <option selected></option> */}
-                  <option value="selling" >진행중</option>
+                  <option value="selling">진행중</option>
                   <option value="reserve">예약중</option>
                   <option value="sold">완료</option>
                 </select>
               ) : (
-                <SellStateLabel sellState={product.sellState} large/>
+                <SellStateLabel sellState={product.sellState} large />
               )}
             </div>
 
@@ -521,7 +520,7 @@ const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
           {/* 유사 상품 추천 */}
           <div className="py-4">
             <h2 className="text-2xl font-bold text-gray-900">
-              관련된 상품 추천
+              관련된 게시글 추천
             </h2>
             <div className=" mt-6 grid grid-cols-2 gap-4">
               {relatedProducts.map((product) => (
