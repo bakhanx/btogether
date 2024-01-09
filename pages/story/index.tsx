@@ -4,12 +4,12 @@ import Layout from "@components/layout";
 import DateTime from "@components/datetime";
 import { useEffect, useState } from "react";
 import useSWRInfinite from "swr/infinite";
-import Loading from "@components/loading";
 import { usePagination } from "@libs/client/usePagination";
 import { StoryListResponse } from "types/story";
-import { useRouter } from "next/router";
 import client from "@libs/server/client";
 import ScrollToTopButton from "@components/scrollToTopButton";
+import CategoryLabel from "@components/categoryLabel";
+import { StoryCategory } from "@components/categoryButton";
 
 const getKey = (pageIndex: number, previousPageData: StoryListResponse) => {
   if (pageIndex === 0) return `/api/stories?page=1`;
@@ -40,11 +40,14 @@ const Story: NextPage<StoryListResponse> = ({ stories }) => {
             <div key={story.id}>
               <Link href={`/story/${story.id}`}>
                 <div className="flex cursor-pointer flex-col items-start pt-4 hover:bg-slate-50">
-                  <span className="ml-3.5 flex items-center rounded-full bg-violet-600 px-2.5 py-0.5 text-xs font-bold text-white">
-                    일상
-                  </span>
+                  <CategoryLabel
+                    category={story.category as StoryCategory}
+                    routeType="Story"
+                  />
                   <div className="text-gray-7100 mt-2 h-16 px-4">
-                    <span className="line-clamp-2 whitespace-pre-line">{story.content}</span>
+                    <span className="line-clamp-2 whitespace-pre-line">
+                      {story.content}
+                    </span>
                   </div>
                   <div className=" mt-5 flex w-full items-center justify-between px-4 text-sm font-medium text-gray-500">
                     <span>{story.user?.name}</span>
@@ -97,7 +100,7 @@ const Story: NextPage<StoryListResponse> = ({ stories }) => {
         </div>
       )}
       {/* Floating Button */}
-        <ScrollToTopButton hasBottomTab/>
+      <ScrollToTopButton hasBottomTab />
     </Layout>
   );
 };
