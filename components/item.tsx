@@ -63,7 +63,7 @@ export default function Item({
           <div className="flex w-full flex-col justify-between truncate">
             <div className="flex flex-col">
               <div className="flex items-center">
-                <CategoryLabel category={category} />
+                <CategoryLabel category={category} routeType="Product"/>
                 <span
                   className={cls(
                     "truncate text-lg",
