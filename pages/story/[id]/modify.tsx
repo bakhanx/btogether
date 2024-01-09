@@ -8,6 +8,8 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import useSWR from "swr";
 import { StoryModifyResponse, StoryUploadForm } from "types/story";
+import CategoryButton, { StoryCategory } from "@components/categoryButton";
+import { Story } from "@prisma/client";
 
 const Modify: NextPage = () => {
   const router = useRouter();
@@ -23,18 +25,32 @@ const Modify: NextPage = () => {
   const { data: storyData } = useSWR<StoryModifyResponse>(
     `/api/stories/${router.query.id}`
   );
+  const [cate, setCate] = useState<StoryCategory>("Daily");
 
-  const onValid = (form: StoryUploadForm) => {
+  const onValid = ({ content }: StoryUploadForm) => {
     setIsLoading(true);
     if (loading) return;
-    storyMutate(form);
+    storyMutate({ content, cate });
   };
 
   useEffect(() => {
     if (data?.ok && data?.updateStory) {
-      router.replace(`/story/${storyData?.story?.id}`, undefined, {unstable_skipClientCache:true});
+      router.replace(`/story/${storyData?.story?.id}`, undefined, {
+        unstable_skipClientCache: true,
+      });
     }
   }, [router, data, storyData]);
+
+  useEffect(() => {
+    if (storyData && !data?.ok) {
+      setCate(storyData?.story?.category as StoryCategory);
+    }
+  }, [setCate, storyData, data]);
+
+  const handleCategory = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+    setCate(event.currentTarget.value as StoryCategory);
+  };
 
   return (
     <Layout
@@ -43,6 +59,38 @@ const Modify: NextPage = () => {
       seoTitle="스토리 수정하기"
       pathName="Story"
     >
+      {/* 카테고리 */}
+
+      <div className="p-4 gap-x-2 flex">
+        <CategoryButton
+          text="일상"
+          onClick={handleCategory}
+          value="Daily"
+          category={cate}
+          color="violet"
+        />
+        <CategoryButton
+          text="후기"
+          onClick={handleCategory}
+          value="Review"
+          category={cate}
+          color="green"
+        />
+        <CategoryButton
+          text="정보"
+          onClick={handleCategory}
+          value="Info"
+          category={cate}
+          color="blue"
+        />
+        <CategoryButton
+          text="질문"
+          onClick={handleCategory}
+          value="Ask"
+          category={cate}
+          color="orange"
+        />{" "}
+      </div>
       <form onSubmit={handleSubmit(onValid)} className="space-y-4 p-4">
         <TextArea
           register={register("content", {
@@ -51,6 +99,7 @@ const Modify: NextPage = () => {
           })}
           required
           defaultValue={storyData?.story?.content}
+          color="amber"
         />
 
         <span className="text-red-500">{errors.content?.message}</span>
