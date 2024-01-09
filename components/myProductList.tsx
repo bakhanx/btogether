@@ -7,10 +7,14 @@ type KindType = {
   kind: "Favorite" | "Sale" | "Purchase";
 };
 
+export type CategoryType = "Product" | "Free" | "Gather" ;
+
+export interface KindWithCategory extends KindType {
+  category: CategoryType;
+}
 type ProductResponse = {
   [key: string]: Record[];
 };
-
 type Record = {
   id: number;
   product: ProductWithCount;
@@ -22,9 +26,9 @@ interface ProductWithCount extends Product {
   };
 }
 
-const MyProductList = ({ kind }: KindType) => {
+const MyProductList = ({ kind, category }: KindWithCategory) => {
   const { data } = useSWR<ProductResponse>(
-    `/api/users/me/records?kind=${kind}`,
+    `/api/users/me/records?kind=${kind}&category=${category}`,
     { suspense: true }
   );
   return (
@@ -41,6 +45,7 @@ const MyProductList = ({ kind }: KindType) => {
             hearts={record?.product._count.records}
             comments={record?.product._count.chatRooms}
             sellState={record?.product.sellState as SellingType}
+            category={record?.product.category}
           />
         ))}
       </div>
