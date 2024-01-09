@@ -79,7 +79,7 @@ model Story {
   content   String    @db.MediumText
   comments  Comment[]
   likes     Like[]
-  category  String    @default("Story")
+  category  String    @default("Daily")
 
   @@index([userId])
 }
