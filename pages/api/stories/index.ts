@@ -31,7 +31,7 @@ async function handler(
         },
       },
       orderBy: {
-        updatedAt: "desc",
+        createdAt: "desc",
       },
       take: TAKE,
       skip: SKIP,
@@ -48,13 +48,14 @@ async function handler(
 
   if (req.method === "POST") {
     const {
-      body: { content },
+      body: { content, category },
       session: { user },
     } = req;
 
     const story = await client.story.create({
       data: {
         content,
+        category,
         user: {
           connect: {
             id: user?.id,
