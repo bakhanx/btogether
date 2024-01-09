@@ -30,23 +30,6 @@ const CategoryLabel = ({ category, large = false }: CategoryProps) => {
       >
         {parseCategory[category]}
       </span>
-
-      {/* {category === "Product" && (
-        <span className=" mr-1 rounded-sm bg-green-700 p-1 text-xs text-white">
-          판매
-        </span>
-      )}
-      {category === "Free" && (
-        <span className=" mr-1 rounded-sm bg-gray-600 p-1 text-xs text-white">
-          나눔
-        </span>
-      )}
-
-      {category === "Gather" && (
-        <span className=" mr-1 rounded-sm bg-violet-700 p-1 text-xs text-white">
-          모임
-        </span>
-      )} */}
     </>
   );
 };
