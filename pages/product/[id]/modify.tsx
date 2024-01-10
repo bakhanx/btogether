@@ -238,14 +238,14 @@ const Modify: NextPage = () => {
               onClick={handleCategory}
               value="Free"
               category={cate}
-              color="blue"
+              color="orange"
             />
             <CategoryButton
               text="모임"
               onClick={handleCategory}
               value="Gather"
               category={cate}
-              color="blue"
+              color="green"
             />
           </div>
 
