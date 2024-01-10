@@ -10,6 +10,7 @@ import useSWR from "swr";
 import { StoryModifyResponse, StoryUploadForm } from "types/story";
 import CategoryButton, { StoryCategory } from "@components/categoryButton";
 import { Story } from "@prisma/client";
+import { StoryCategoryList } from "constants/category";
 
 const Modify: NextPage = () => {
   const router = useRouter();
@@ -25,7 +26,7 @@ const Modify: NextPage = () => {
   const { data: storyData } = useSWR<StoryModifyResponse>(
     `/api/stories/${router.query.id}`
   );
-  const [cate, setCate] = useState<StoryCategory>("Daily");
+  const [cate, setCate] = useState<StoryCategory>("Ask");
 
   const onValid = ({ content }: StoryUploadForm) => {
     setIsLoading(true);
@@ -62,7 +63,18 @@ const Modify: NextPage = () => {
       {/* 카테고리 */}
 
       <div className="p-4 gap-x-2 flex">
-        <CategoryButton
+        {StoryCategoryList.map((ele, index) => (
+          <CategoryButton
+            key={index}
+            text={ele.text}
+            onClick={handleCategory}
+            category={cate}
+            color={ele.color}
+            value={ele.category as any}
+          />
+        ))}
+
+        {/* <CategoryButton
           text="일상"
           onClick={handleCategory}
           value="Daily"
@@ -89,7 +101,7 @@ const Modify: NextPage = () => {
           value="Ask"
           category={cate}
           color="orange"
-        />{" "}
+        /> */}
       </div>
       <form onSubmit={handleSubmit(onValid)} className="space-y-4 p-4">
         <TextArea
