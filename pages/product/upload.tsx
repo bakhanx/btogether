@@ -6,13 +6,12 @@ import TextArea from "@components/textarea";
 import { useForm } from "react-hook-form";
 import useMutation from "@libs/client/useMutation";
 import { useEffect, useState } from "react";
-import { Product } from "@prisma/client";
 import { useRouter } from "next/router";
 import Image from "next/image";
 import { ProductUploadForm, ProductUploadMutation } from "types/product";
 import { PRODUCT } from "constants/product";
-import { cls } from "@libs/client/utils";
 import CategoryButton, { ProductCategory } from "@components/categoryButton";
+import { ProductCategoryList } from "constants/category";
 
 const Upload: NextPage = () => {
   const router = useRouter();
@@ -89,9 +88,10 @@ const Upload: NextPage = () => {
   const handleCategory = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
     setValue("price", "");
+
     setCategory(event.currentTarget.value as ProductCategory);
     if (event.currentTarget.value === "Free") {
-      setValue("price", "0", { shouldTouch: false });
+      setValue("price", "0");
     }
   };
 
@@ -154,7 +154,17 @@ const Upload: NextPage = () => {
         {/* 카테고리 */}
 
         <div className="gap-x-2 flex">
-          <CategoryButton
+          {ProductCategoryList.map((ele, index) => (
+            <CategoryButton
+              key={index}
+              text={ele.text}
+              onClick={handleCategory}
+              category={category as any}
+              color={ele.color}
+              value={ele.category as any}
+            />
+          ))}
+          {/* <CategoryButton
             text="상품"
             color="blue"
             onClick={handleCategory}
@@ -174,7 +184,7 @@ const Upload: NextPage = () => {
             onClick={handleCategory}
             value="Gather"
             category={category}
-          />
+          /> */}
         </div>
 
         {/* 가격 */}
