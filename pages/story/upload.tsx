@@ -7,24 +7,21 @@ import useMutation from "@libs/client/useMutation";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { StoryUploadForm, StoryUploadResponse } from "types/story";
-import CategoryButton, {
-  ProductCategory,
-  StoryCategory,
-} from "@components/categoryButton";
+import CategoryButton, { StoryCategory } from "@components/categoryButton";
+import {StoryCategoryList} from '../../constants/category'
 
 const Upload: NextPage = () => {
   const router = useRouter();
   const {
     register,
     handleSubmit,
-    setValue,
     formState: { errors },
   } = useForm<StoryUploadForm>({ mode: "onSubmit" });
   const [storyMutate, { data, loading }] =
     useMutation<StoryUploadResponse>("/api/stories");
   const [isLoading, setIsLoading] = useState(false);
 
-  const onValid = ({content}: StoryUploadForm) => {
+  const onValid = ({ content }: StoryUploadForm) => {
     setIsLoading(true);
     if (loading) return;
     storyMutate({ content, category });
@@ -56,7 +53,18 @@ const Upload: NextPage = () => {
       {/* 카테고리 */}
 
       <div className="p-4 gap-x-2 flex">
-        <CategoryButton
+        {StoryCategoryList.map((ele, index) => (
+          <CategoryButton
+            key={index}
+            text={ele.text}
+            onClick={handleCategory}
+            category={category as any}
+            color={ele.color}
+            value={ele.category as any}
+          />
+        ))}
+
+        {/* <CategoryButton
           text="일상"
           onClick={handleCategory}
           value="Daily"
@@ -64,13 +72,15 @@ const Upload: NextPage = () => {
           color="violet"
         />
         <CategoryButton
+         
           text="후기"
           onClick={handleCategory}
           value="Review"
           category={category}
-          color="green"
+          color={"green"}
         />
         <CategoryButton
+          
           text="정보"
           onClick={handleCategory}
           value="Info"
@@ -78,12 +88,13 @@ const Upload: NextPage = () => {
           color="blue"
         />
         <CategoryButton
+          
           text="질문"
           onClick={handleCategory}
           value="Ask"
           category={category}
           color="orange"
-        />{" "}
+        /> */}
       </div>
 
       <form onSubmit={handleSubmit(onValid)} className="space-y-4 p-4">
