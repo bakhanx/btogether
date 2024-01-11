@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 
 export const usePagination = () => {
-  const [isloading, setIsLoading] = useState(false);
   const [page, setPage] = useState(1);
   const handleScroll = () => {
     const scrollHeight = document.documentElement.scrollHeight;
