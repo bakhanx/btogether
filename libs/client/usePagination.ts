@@ -24,7 +24,7 @@ export const usePagination = () => {
         setPage((prev) => prev + 1);
         setIsLoading(false);
         console.log(page);
-      }, 10);
+      }, 300);
     }
   }, [isLoading, page]);
 
