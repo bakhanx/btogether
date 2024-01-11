@@ -3,6 +3,10 @@
 @tailwind utilities;
 
 
+body {
+  overscroll-behavior-y: contain;
+}
+
 /* @font-face{
   font-family: 'NotoSansKR';
   font-weight: 400;
