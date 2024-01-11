@@ -124,7 +124,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
       },
     },
     orderBy: {
-      updatedAt: "desc",
+      createdAt: "desc",
     },
     take: 8,
   });
