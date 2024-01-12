@@ -129,10 +129,10 @@ const Comments = () => {
       </div>
       {/* 댓글 리스트 */}
       <div className="px-2 py-3">
-        <div className="pl-2 text-sm">
+        {/* <div className="pl-2 text-sm">
           <button onClick={handleLatest}>최신순</button>
           <button onClick={handleOldest}>오래된순</button>
-        </div>
+        </div> */}
 
         {!isLoading ? (
           comments.map((comment) => (
