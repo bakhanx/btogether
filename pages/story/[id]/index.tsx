@@ -121,7 +121,7 @@ const Comments = () => {
           />
           <div className="py-1" />
           <Button
-            text={commentLoading ? "잠시만 기다려주세요..." : "댓글 달기"}
+            text={commentLoading ? "잠시만 기다려주세요..." : "댓글 등록"}
             color="amber"
             large
           />
