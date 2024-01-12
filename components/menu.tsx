@@ -1,18 +1,15 @@
 import useMutation from "@libs/client/useMutation";
 import useUser from "@libs/client/useUser";
 import { useRouter } from "next/router";
-import { relative } from "path";
-import { MouseEventHandler, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import useSWR from "swr";
 
 type MenuType = "Product" | "Story" | "Comment";
-
 
 export default function Menu(props: {
   type: MenuType;
   writerId: number;
-  content : string;
+  content: string;
   onDelete: (event: React.MouseEvent<HTMLButtonElement>) => void;
   onModify?: (event: React.MouseEvent<HTMLButtonElement>) => void;
   // onReport? : (event: React.MouseEvent<HTMLButtonElement>) => void;
@@ -32,9 +29,9 @@ export default function Menu(props: {
       console.log(router.asPath);
       reportMutate({
         reportedUrl: router.asPath,
-        reportedUserId : props.writerId,
+        reportedUserId: props.writerId,
         reportNum,
-        content : props.content,
+        content: props.content,
         reportType: props.type,
       });
     }
@@ -83,69 +80,72 @@ export default function Menu(props: {
   return (
     <>
       {isOnReport ? (
-        <div className="flex justify-center">
-          <div className=" fixed z-50 top-1/2 -translate-y-1/2 w-3/4 max-w-xl bg-white bg-opacity-90 text-black border-purple-200 border rounded-md text-base">
-            <div className="flex p-3 border-b-2">
-              <div className="items-center justify-center w-full text-center">
-                신고하기
+        <>
+          <div className="fixed left-0 top-0  w-screen h-full bg-black bg-opacity-60 z-10" />
+          <div className="flex justify-center">
+            <div className=" fixed z-50 w-3/4 max-w-xl m-auto inset-0 h-96 bg-white bg-opacity-90 text-black border-purple-200 border rounded-md text-base">
+              <div className="flex p-3 border-b-2">
+                <div className="items-center justify-center w-full text-center">
+                  신고하기
+                </div>
+                <button onClick={handleClickReoprt} className="pr-3">
+                  X
+                </button>
               </div>
-              <button onClick={handleClickReoprt} className="pr-3">
-                X
-              </button>
-            </div>
 
-            <div className="border-b-2 p-2">
-              <div className="flex">
-                <div className="text-gray-600 w-14">작성자</div>
-                <span>:</span>
-                <div className="ml-2">asd***</div>
+              <div className="border-b-2 p-2">
+                <div className="flex">
+                  <div className="text-gray-600 w-14">작성자</div>
+                  <span>:</span>
+                  <div className="ml-2">asd***</div>
+                </div>
               </div>
-            </div>
 
-            <form onSubmit={reportHandleSubmit(onReportValid)}>
-              <div className="flex flex-col items-center">
-                <div className="flex flex-row w-full justify-around p-5">
-                  <div className="flex flex-col gap-y-4">
-                    {[
-                      "욕설/비하",
-                      "영리/홍보",
-                      "반복(도배)",
-                      "개인정보노출",
-                    ].map((cate, i) => (
-                      <>
-                        <button
-                          onClick={(e) => handleSetReportNum(i, e)}
-                          className="hover:text-red-700 focus:text-red-700"
-                        >
-                          {cate}
-                        </button>
-                      </>
-                    ))}
-                  </div>
-                  <div className="flex flex-col gap-y-4">
-                    {["음란/선정", "사기/불법", "사재기", "기타"].map(
-                      (cate, i) => (
+              <form onSubmit={reportHandleSubmit(onReportValid)}>
+                <div className="flex flex-col items-center">
+                  <div className="flex flex-row w-full justify-around p-5">
+                    <div className="flex flex-col gap-y-4">
+                      {[
+                        "욕설/비하",
+                        "영리/홍보",
+                        "반복(도배)",
+                        "개인정보노출",
+                      ].map((cate, i) => (
                         <>
                           <button
-                            onClick={(e) => handleSetReportNum(i + 4, e)}
+                            onClick={(e) => handleSetReportNum(i, e)}
                             className="hover:text-red-700 focus:text-red-700"
                           >
                             {cate}
                           </button>
                         </>
-                      )
-                    )}
+                      ))}
+                    </div>
+                    <div className="flex flex-col gap-y-4">
+                      {["음란/선정", "사기/불법", "사재기", "기타"].map(
+                        (cate, i) => (
+                          <>
+                            <button
+                              onClick={(e) => handleSetReportNum(i + 4, e)}
+                              className="hover:text-red-700 focus:text-red-700"
+                            >
+                              {cate}
+                            </button>
+                          </>
+                        )
+                      )}
+                    </div>
+                  </div>
+                  <div className="w-full items-center flex">
+                    <button className="w-full p-3 m-2 bg-red-500 text-white hover:bg-red-600">
+                      신고하기
+                    </button>
                   </div>
                 </div>
-                <div className="w-full items-center flex">
-                  <button className="w-full p-3 m-2 bg-red-500 text-white hover:bg-red-600">
-                    신고하기
-                  </button>
-                </div>
-              </div>
-            </form>
+              </form>
+            </div>
           </div>
-        </div>
+        </>
       ) : (
         ""
       )}
