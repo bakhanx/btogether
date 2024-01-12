@@ -165,8 +165,8 @@ const Modify: NextPage = () => {
   return (
     <Layout
       canGoBack
-      title="상품 수정하기"
-      seoTitle="상품 수정하기"
+      title="내 글 수정하기"
+      seoTitle="내 글 수정하기"
       pathName="Product"
     >
       {!productIsLoading ? (
@@ -237,27 +237,7 @@ const Modify: NextPage = () => {
               value={ele.category as any}
             />
           ))}
-            {/* <CategoryButton
-              text="상품"
-              onClick={handleCategory}
-              value="Product"
-              category={cate}
-              color="blue"
-            />
-            <CategoryButton
-              text="나눔"
-              onClick={handleCategory}
-              value="Free"
-              category={cate}
-              color="orange"
-            />
-            <CategoryButton
-              text="모임"
-              onClick={handleCategory}
-              value="Gather"
-              category={cate}
-              color="green"
-            /> */}
+        
           </div>
 
           {/* 가격 */}
@@ -266,7 +246,7 @@ const Modify: NextPage = () => {
               required: { value: true, message: "가격 필수입력" },
               maxLength: {
                 value: PRODUCT.MAX_PRICE_NUMBER,
-                message: "고가 물품은 판매할 수 없습니다.",
+                message: "금액이 일정 한도를 초과하였습니다.",
               },
               pattern: {
                 value: /^[0-9,]+$/,
@@ -306,7 +286,7 @@ const Modify: NextPage = () => {
           </span>
 
           <Button
-            text={isLoading ? "수정중..." : "상품 수정하기"}
+            text={isLoading ? "수정중..." : "수정하기"}
             large
             color="blue"
           />

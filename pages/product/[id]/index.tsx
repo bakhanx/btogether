@@ -409,7 +409,7 @@ const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
                   <Button
                     onClick={handleChatClick}
                     large
-                    text="거래하기 (채팅)"
+                    text="채팅하기 (거래)"
                     color="blue"
                   />
                 ))}
@@ -417,9 +417,9 @@ const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
                 <Button large text="예약중입니다" />
               )}
               {productData?.product?.sellState === "sold" && (
-                <Button large text="거래완료된 상품입니다" />
+                <Button large text="완료된 상품입니다" />
               )}
-              {isLoading && <Button large text="거래 준비중..." />}
+              {isLoading && <Button large text="상태 준비중..." />}
               {/* 거래하기 PopUp */}
               <div
                 className={cls("relative z-10", isShow ? "show" : "hidden")}
@@ -455,11 +455,11 @@ const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
                               className="text-base font-semibold leading-6 text-gray-900"
                               id="modal-title"
                             >
-                              거래 진행하기
+                              채팅방 생성
                             </h3>
                             <div className="mt-2">
                               <p className="text-sm text-gray-500">
-                                판매자와의 채팅방으로 이동합니다.
+                                작성자와 채팅을 시작합니다.
                               </p>
                             </div>
                           </div>

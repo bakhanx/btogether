@@ -98,8 +98,8 @@ const Upload: NextPage = () => {
   return (
     <Layout
       canGoBack
-      title="Upload Product"
-      seoTitle="상품 올리기"
+      title="상품 / 나눔 / 모임 등록하기"
+      seoTitle="상품/나눔/모임 등록하기"
       pathName="Product"
     >
       <form className="space-y-4 p-4" onSubmit={handleSubmit(onValid)}>
@@ -164,27 +164,6 @@ const Upload: NextPage = () => {
               value={ele.category as any}
             />
           ))}
-          {/* <CategoryButton
-            text="상품"
-            color="blue"
-            onClick={handleCategory}
-            value="Product"
-            category={category}
-          />
-          <CategoryButton
-            text="나눔"
-            color="orange"
-            onClick={handleCategory}
-            value="Free"
-            category={category}
-          />
-          <CategoryButton
-            text="모임"
-            color="green"
-            onClick={handleCategory}
-            value="Gather"
-            category={category}
-          /> */}
         </div>
 
         {/* 가격 */}
@@ -193,7 +172,7 @@ const Upload: NextPage = () => {
             required: true,
             maxLength: {
               value: PRODUCT.MAX_PRICE_NUMBER,
-              message: "고가 물품은 판매할 수 없습니다.",
+              message: "금액이 일정 한도를 초과하였습니다.",
             },
             pattern: {
               value: /^[0-9,]+$/,
@@ -223,7 +202,7 @@ const Upload: NextPage = () => {
         />
 
         <Button
-          text={isLoading ? "등록중..." : "상품 등록하기"}
+          text={isLoading ? "등록중..." : "등록하기"}
           large
           color="blue"
         />
