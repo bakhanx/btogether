@@ -138,18 +138,20 @@ const Comments = () => {
           comments.map((comment) => (
             <div
               key={comment?.id}
-              className="my-3 flex space-x-3 bg-gray-50 py-3 px-3"
+              className="flex bg-gray-50 py-3 my-3 px-3 space-x-3"
             >
               {comment?.user?.avatar ? (
-                <div className="relative h-14 w-14">
-                  <Image
-                    src={`https://imagedelivery.net/214BxOnlVKSU2amZRZmdaQ/${comment?.user?.avatar}/avatar`}
-                    alt=""
-                    fill
-                    priority
-                    sizes="1"
-                    className="rounded-full"
-                  />
+                <div>
+                  <div className="relative h-14 w-14">
+                    <Image
+                      src={`https://imagedelivery.net/214BxOnlVKSU2amZRZmdaQ/${comment?.user?.avatar}/avatar`}
+                      alt=""
+                      fill
+                      priority
+                      sizes="1"
+                      className="rounded-full"
+                    />
+                  </div>
                 </div>
               ) : (
                 <div className="h-14 w-14 rounded-full  bg-slate-500" />
