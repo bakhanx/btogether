@@ -9,8 +9,8 @@ type MenuProps = {
   menuProps: {
     type: MenuType;
     writerId: number;
-    seoTitle : string;
-    content : string;
+    seoTitle: string;
+    content: string;
     onDelete: (event: React.MouseEvent<HTMLButtonElement>) => void;
     onModify?: (event: React.MouseEvent<HTMLButtonElement>) => void;
   };
@@ -19,7 +19,7 @@ type MenuProps = {
 export default function TopNav({ menuProps: props }: MenuProps) {
   const router = useRouter();
   const onBack = () => {
-    router.push('/',undefined, {unstable_skipClientCache:true});
+    router.push("/", undefined, { unstable_skipClientCache: true });
   };
   return (
     <div
@@ -34,6 +34,10 @@ export default function TopNav({ menuProps: props }: MenuProps) {
     >
       <Head>
         <title>{`${props.seoTitle} # 비투게더`}</title>
+        <meta
+          name="description"
+          content="이웃과 함께하는 비투게더. 공동구매, 중고거래, 친목도모 등 다양하게 활용해 보세요!"
+        ></meta>
       </Head>
       {/* 뒤로가기 */}
 
