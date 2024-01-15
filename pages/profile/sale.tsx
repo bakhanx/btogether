@@ -18,8 +18,8 @@ const Sale: NextPage = () => {
   };
   return (
     <Layout
-      title="판매내역"
-      seoTitle="내 판매내역"
+      title={kind === "Product" ? "판매 내역" : "나눔 내역"}
+      seoTitle={kind === "Product" ? "내 판매 내역" : "내 나눔 내역"}
       canGoBack
       hasTabBar
       pathName="Profile"

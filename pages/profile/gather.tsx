@@ -7,8 +7,8 @@ import Loading from "@components/loading";
 const Gather: NextPage = () => {
   return (
     <Layout
-      title="구매내역"
-      seoTitle="내 구매내역"
+      title="모집 내역"
+      seoTitle="내 모집 내역"
       canGoBack
       hasTabBar
       pathName="Profile"

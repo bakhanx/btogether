@@ -7,8 +7,8 @@ import Loading from "@components/loading";
 const Participant: NextPage = () => {
   return (
     <Layout
-      title="구매내역"
-      seoTitle="내 구매내역"
+      title="참여 내역"
+      seoTitle="내 참여 내역"
       canGoBack
       hasTabBar
       pathName="Profile"
