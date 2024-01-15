@@ -14,7 +14,7 @@ export default function Loading({ onOverlay = false }) {
         ></Image>
       </div>
       {onOverlay && (
-        <div className="absolute flex w-full h-full bg-black opacity-60 top-0 left-0 z-40" />
+        <div className="fixed flex w-full h-full bg-black opacity-60 top-0 left-0 z-40" />
       )}
     </>
   );
