@@ -380,8 +380,8 @@ const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
               )}
             </div>
 
-            <h1 className="text-3xl font-bold text-gray-900">
-              {product?.name}
+            <h1 className="text-3xl font-bold text-gray-900 break-words">
+              {product?.name}0
             </h1>
             <div className="mt-1 text-slate-500">
               <DateTime date={product?.createdAt} timeAgo />
@@ -389,7 +389,7 @@ const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
             <span className="mt-3 block text-2xl text-gray-900">
               {product?.price.toLocaleString()}원
             </span>
-            <p className=" my-6 text-gray-700 whitespace-pre-line">
+            <p className=" my-6 text-gray-700 whitespace-pre-line break-words">
               {product?.description}
             </p>
             <div className="my-3 flex gap-x-3 text-sm text-slate-500">
@@ -541,7 +541,7 @@ const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
                         src={`https://imagedelivery.net/214BxOnlVKSU2amZRZmdaQ/${product?.image}/public`}
                       />
                     </div>
-                    <h3 className="-mb-1 text-gray-700">{product.name}</h3>
+                    <h3 className="-mb-1 text-gray-700 line-clamp-1">{product.name}</h3>
                     <span className="text-sm font-medium text-gray-900">
                       {product.price}원
                     </span>
