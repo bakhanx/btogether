@@ -30,11 +30,11 @@ const CategoryLabel = ({
           className={cls(
             "mr-1 rounded-sm  text-white ",
             category === "Product"
-              ? "bg-blue-600"
+              ? "bg-blue-700"
               : category === "Free"
-              ? "bg-orange-600"
+              ? "bg-orange-700"
               : category === "Gather"
-              ? "bg-green-600 "
+              ? "bg-green-700 "
               : "",
             large ? "p-3 text-sm" : "p-1 text-xs"
           )}
