@@ -8,7 +8,8 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { StoryUploadForm, StoryUploadResponse } from "types/story";
 import CategoryButton, { StoryCategory } from "@components/categoryButton";
-import {StoryCategoryList} from '../../constants/category'
+import { StoryCategoryList } from "../../constants/category";
+import Loading from "@components/loading";
 
 const Upload: NextPage = () => {
   const router = useRouter();
@@ -50,6 +51,9 @@ const Upload: NextPage = () => {
       seoTitle="스토리 쓰기"
       pathName="Story"
     >
+      {/* 로딩중 */}
+      {isLoading && <Loading onOverlay />}
+      
       {/* 카테고리 */}
 
       <div className="p-4 gap-x-2 flex">

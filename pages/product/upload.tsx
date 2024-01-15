@@ -12,6 +12,7 @@ import { ProductUploadForm, ProductUploadMutation } from "types/product";
 import { PRODUCT } from "constants/product";
 import CategoryButton, { ProductCategory } from "@components/categoryButton";
 import { ProductCategoryList } from "constants/category";
+import Loading from "@components/loading";
 
 const Upload: NextPage = () => {
   const router = useRouter();
@@ -102,6 +103,9 @@ const Upload: NextPage = () => {
       seoTitle="상품/나눔/모임 등록하기"
       pathName="Product"
     >
+      {/* 로딩중 */}
+      {isLoading && <Loading onOverlay />}
+
       <form className="space-y-4 p-4" onSubmit={handleSubmit(onValid)}>
         <div className="flex items-center justify-center">
           <div className="absolute -z-50 h-96 aspect-video w-10/12 max-w-screen-sm">

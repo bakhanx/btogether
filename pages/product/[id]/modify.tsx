@@ -17,6 +17,7 @@ import {
 import { PRODUCT } from "constants/product";
 import CategoryButton, { ProductCategory } from "@components/categoryButton";
 import { ProductCategoryList } from "constants/category";
+import Loading from "@components/loading";
 
 const Modify: NextPage = () => {
   const router = useRouter();
@@ -134,7 +135,7 @@ const Modify: NextPage = () => {
         description,
         photoId: id,
         productId: router.query.id,
-        category : cate,
+        category: cate,
       });
     } else {
       uploadProduct({
@@ -142,7 +143,7 @@ const Modify: NextPage = () => {
         price,
         description,
         productId: router.query.id,
-        category : cate,
+        category: cate,
       });
     }
   };
@@ -169,6 +170,7 @@ const Modify: NextPage = () => {
       seoTitle="내 글 수정하기"
       pathName="Product"
     >
+      {isLoading && <Loading onOverlay/>}
       {!productIsLoading ? (
         <form className="space-y-4 p-4" onSubmit={handleSubmit(onValid)}>
           <div className="flex items-center justify-center">
@@ -227,17 +229,16 @@ const Modify: NextPage = () => {
           {/* 카테고리 */}
 
           <div className="gap-x-2 flex">
-          {ProductCategoryList.map((ele, index) => (
-            <CategoryButton
-              key={index}
-              text={ele.text}
-              onClick={handleCategory}
-              category={cate as any}
-              color={ele.color}
-              value={ele.category as any}
-            />
-          ))}
-        
+            {ProductCategoryList.map((ele, index) => (
+              <CategoryButton
+                key={index}
+                text={ele.text}
+                onClick={handleCategory}
+                category={cate as any}
+                color={ele.color}
+                value={ele.category as any}
+              />
+            ))}
           </div>
 
           {/* 가격 */}

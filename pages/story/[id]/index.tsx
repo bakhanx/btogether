@@ -254,6 +254,9 @@ const StoryDetail: NextPage<StorySSGResponse> = ({ story }) => {
         <title>{`${story?.user?.name}님의 스토리`}</title>
       </Head>
 
+      {/* 로딩중 */}
+      {deleteLoading && <Loading onOverlay />}
+
       {/* Top */}
       <div className="fixed top-0 z-10 flex h-12 w-full max-w-screen-lg items-center justify-between bg-blue-300 bg-gradient-to-r  from-pink-500 via-amber-500 to-yellow-500 px-5 text-lg font-medium text-white ">
         {/* 뒤로가기 */}

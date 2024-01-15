@@ -14,6 +14,7 @@ import { withSsrSession } from "@libs/server/withSession";
 import useSWR from "swr";
 import { ProfileEditForm, ProfileEditResoponse } from "types/profile";
 import { UserResponse } from "types/user";
+import Loading from "@components/loading";
 
 const EditProfile: NextPage = () => {
   const {
@@ -73,7 +74,9 @@ const EditProfile: NextPage = () => {
 
     // 기존아바타o
     else if (profileData?.profile.avatar) {
+      console.log("기존아바타o");
       if (!isExistAvatar) {
+        console.log("변경x 삭제o");
         // 변경x 삭제 o
         editProfile({
           email,
@@ -82,6 +85,7 @@ const EditProfile: NextPage = () => {
           avatarId: "remove",
         });
       } else if (!avatarPreview) {
+        console.log("변경x 삭제x");
         // 변경x 삭제 x
         editProfile({
           email,
@@ -93,7 +97,9 @@ const EditProfile: NextPage = () => {
 
     // 기존아바타x
     else if (!profileData?.profile.avatar) {
+      console.log("기존아바타x");
       if (!avatarPreview) {
+        console.log("변경x 삭제x");
         // 변경x 삭제x
         editProfile({
           email,
@@ -140,7 +146,6 @@ const EditProfile: NextPage = () => {
         const file: any = value.avatar[0];
         setAvatarPreview(URL.createObjectURL(file));
         setIsExistAvatar(true);
-        console.log(file);
       }
     });
     return () => unsubscribe();
@@ -170,6 +175,9 @@ const EditProfile: NextPage = () => {
       seoTitle="내 프로필 편집"
       pathName="Profile"
     >
+      {/* 로딩중 */}
+      {isLoading && <Loading onOverlay />}
+
       {profileData ? (
         <form onSubmit={handleSubmit(onValid)} className="space-y-4 py-10 px-4">
           <div className="flex items-center space-x-3">

@@ -45,7 +45,7 @@ const UserInfo = () => {
           className="hover:opacity-80"
           aria-label="프로필사진"
         >
-          {userData ? (
+          {!isLoading ? (
             userData?.profile?.avatar ? (
               <div className="relative h-16 w-16">
                 <Image

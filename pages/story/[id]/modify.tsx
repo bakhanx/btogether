@@ -11,6 +11,7 @@ import { StoryModifyResponse, StoryUploadForm } from "types/story";
 import CategoryButton, { StoryCategory } from "@components/categoryButton";
 import { Story } from "@prisma/client";
 import { StoryCategoryList } from "constants/category";
+import Loading from "@components/loading";
 
 const Modify: NextPage = () => {
   const router = useRouter();
@@ -60,6 +61,9 @@ const Modify: NextPage = () => {
       seoTitle="스토리 수정하기"
       pathName="Story"
     >
+      {/* 로딩중 */}
+      {isLoading && <Loading onOverlay />}
+      
       {/* 카테고리 */}
 
       <div className="p-4 gap-x-2 flex">
