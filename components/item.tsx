@@ -34,7 +34,7 @@ export default function Item({
 }: ItemProps) {
   return (
     <Link href={`/product/${id}`}>
-      <div className="cursor-pointer justify-between px-4 py-2 hover:bg-slate-50">
+      <div className="cursor-pointer justify-between px-4 py-4 hover:bg-slate-50">
         {/* title,price */}
         <div className="flex space-x-4">
           {image ? (
@@ -66,7 +66,7 @@ export default function Item({
                 <CategoryLabel category={category} routeType="Product"/>
                 <span
                   className={cls(
-                    "truncate text-lg",
+                    "truncate text-[16px]",
                     sellState === "sold" ? "line-through" : ""
                   )}
                 >
