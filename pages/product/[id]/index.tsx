@@ -368,6 +368,7 @@ const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
                   className=" rounded-sm border border-gray-300 bg-cyan-600 p-3 text-sm text-white shadow-md "
                   onChange={handleStateChange}
                   defaultValue={product.sellState}
+                  
                 >
                   {/* <option selected></option> */}
                   <option value="selling">진행중</option>
@@ -527,9 +528,9 @@ const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
                 <div key={product.id}>
                   <Link href={`/product/${product.id}`}>
                     {/* <div className="mb-4 h-56 w-full bg-slate-300" /> */}
-                    <div className="w-full aspect-video mb-4 relative">
+                    <div className="w-full h-auto mb-4 relative">
                       <Image
-                        className="object-cover focus:cursor-pointer"
+                        className="object-cover focus:cursor-pointer aspect-square"
                         quality={90}
                         width={384}
                         height={0}
