@@ -10,6 +10,7 @@ import Logo from "../public/images/logo/logo_01_small.png";
 
 import Image from "next/image";
 import { EnterForm, MutationResult, TokenForm } from "types/enter";
+import Head from "next/head";
 
 interface guestMutationResult extends MutationResult {
   token?: string;
@@ -67,7 +68,9 @@ const Enter: NextPage = () => {
 
   return (
     <div className="max-w-screen-md px-4 flex flex-col justify-between mx-auto">
-      <title>로그인 # B-together</title>
+      <Head>
+        <title>로그인 # B-together</title>
+      </Head>
 
       <div className="flex flex-col mt-28  items-center object-center ">
         <h3 className="text-3xl font-bold">B - Together</h3>
