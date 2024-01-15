@@ -20,7 +20,7 @@ const Review = () => {
           <div className="h-12 w-12 rounded-full bg-slate-500" />
           <div>
             <h4 className="text-sm font-bold text-gray-800">
-              {reviewData?.userName || "이름없음"}
+              {reviewData?.userName || "비투게더"}
             </h4>
             {/* 별점 */}
             <div className="flex">
