@@ -37,6 +37,10 @@ export default function Layout({
   return (
     <div className="flex justify-center">
       <Head>
+        <meta
+          name="description"
+          content="이웃과 함께하는 비투게더. 공동구매, 중고거래, 친목도모 등 다양하게 활용해 보세요!"
+        ></meta>
         <title>{`${seoTitle} # 비투게더`}</title>
       </Head>
 
