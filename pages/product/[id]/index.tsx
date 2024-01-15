@@ -308,7 +308,7 @@ const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
           <div className="w-full h-auto">
             {product?.image ? (
               <Image
-                className="object-cover focus:cursor-pointer rounded-lg"
+                className="object-cover focus:cursor-pointer rounded-lg aspect-square max-h-[552px]"
                 quality={90}
                 priority={true}
                 // blurData를 위한 w,h 명시
