@@ -22,7 +22,7 @@ export default function Message({
         reversed ? "flex-row-reverse space-x-reverse" : ""
       )}
     >
-      <div className="relative h-10 w-10 mx-2 ">
+      <div className="relative h-10 w-10 mx-1">
         {avatar ? (
           <Image
             src={`https://imagedelivery.net/214BxOnlVKSU2amZRZmdaQ/${avatar}/avatar`}
@@ -37,7 +37,7 @@ export default function Message({
         )}
       </div>
 
-      <div className="w-1/3 rounded-md border border-gray-300 p-2 text-sm text-gray-700">
+      <div className="max-w-[50%] rounded-md border border-gray-300 p-2 text-sm text-gray-700">
         <p>{message}</p>
       </div>
       <div className="text-gray-400 text-xs self-end mb-1 text-end mx-1">
