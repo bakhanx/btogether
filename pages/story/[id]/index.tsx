@@ -329,8 +329,8 @@ const StoryDetail: NextPage<StorySSGResponse> = ({ story }) => {
           </Link>
 
           {/* 내용 */}
-          <div className="mt-2 px-4">
-            <div className="py-5 whitespace-pre-line">
+          <div className="mt-2 px-4 w-screen">
+            <div className="py-5 whitespace-pre-line break-words">
               <span>{story?.content}</span>
             </div>
             <div className="text-xs text-gray-500 ">
