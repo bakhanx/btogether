@@ -13,6 +13,7 @@ import { ChatRoomResponse } from "types/chat";
 import { UserResponse } from "types/user";
 import { SellingType } from "types/product";
 import useUser from "@libs/client/useUser";
+import TextArea from "@components/textarea";
 
 const ProductInfo = () => {
   const router = useRouter();
@@ -107,7 +108,7 @@ const ChatContents = () => {
 
   return (
     <>
-      <div className="max-screen-w-xl mx-auto w-full space-y-4 py-10 px-4 pb-24 pt-24">
+      <div className="max-screen-w-xl mx-auto w-full space-y-4 py-10 px-2 pb-24 pt-24">
         {/* 메시지 */}
         {chatData?.chatRoom?.messages?.map((message: Message) => (
           <div key={message.id}>
@@ -143,11 +144,13 @@ const ChatContents = () => {
           className="fixed inset-x-0 bottom-0 bg-white py-5"
         >
           <div className="relative mx-auto flex w-full max-w-screen-lg items-center px-5">
-            <input
-              {...register("message", { required: true })}
-              type="text"
-              className="w-full rounded-md border border-gray-300 p-3  pl-3 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500"
+            <textarea
+              className="w-full rounded-md border border-gray-300 p-3 pl-2 pr-16 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500"
+              rows={1}
+              wrap="on"
+              {...register("message", { required: true, })}
             />
+
             <div className="absolute inset-y-0 right-6 flex py-1.5">
               <button className="flex items-center rounded-md bg-blue-500 px-5 text-white focus:ring-2 focus:ring-blue-50 focus:ring-offset-2 ">
                 <svg
