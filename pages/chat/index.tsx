@@ -32,9 +32,9 @@ const ChatRoomsList = () => {
               className="block hover:bg-gray-50"
             >
               <div className="flex cursor-pointer items-center justify-between">
-                <div className="flex items-center space-x-3 px-4 py-3">
+                <div className="flex items-center space-x-3 px-4 py-4">
                   {/* 유저 아바타 */}
-                  <div className="relative aspect-square w-16 rounded-full shadow-md">
+                  <div className="relative aspect-square w-12 h-12 sm:w-16 sm:h-16 rounded-full shadow-md">
                     {userData?.profile?.id === chatRoom.purchaserId ? (
                       chatRoom.seller.avatar ? (
                         <Image
@@ -63,7 +63,7 @@ const ChatRoomsList = () => {
                   </div>
 
                   {/* 유저 아이디 + 시간 + 메시지 */}
-                  <div className="space-y-2">
+                  <div className="space-y-2 ">
                     <div>
                       {/* 아이디 */}
                       <span className="font-bold text-gray-700">
@@ -81,13 +81,13 @@ const ChatRoomsList = () => {
                     </div>
 
                     {/* 메시지 */}
-                    <p className="text-sm text-gray-500">
+                    <div className="text-sm text-gray-500 line-clamp-1 ">
                       {chatRoom?.messages.at(-1)?.message}
-                    </p>
+                    </div>
                   </div>
                 </div>
 
-                <div className="relative mr-2 aspect-square w-16 shadow-md">
+                <div className="relative mr-2 aspect-square sm:w-20 sm:h-20 w-16 h-16 shadow-md">
                   {chatRoom?.product?.image ? (
                     <Image
                       src={`https://imagedelivery.net/214BxOnlVKSU2amZRZmdaQ/${chatRoom?.product?.image}/thumbnail`}
