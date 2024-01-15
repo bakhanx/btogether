@@ -45,9 +45,16 @@ async function handler(
   }
 
   // 임시 토큰 내 메일로
-  else if (email || phone) {
+  else if (email) {
     await sendMail(email, payload);
   }
+  
+  // else if (phone){
+  //   return res.json({
+  //     ok:true,
+  //     token : payload,
+  //   })
+  // }
 
   // 이메일 인증
   // if (email) {
