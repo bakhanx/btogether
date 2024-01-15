@@ -35,7 +35,7 @@ const Story: NextPage<StoryListResponse> = ({ stories }) => {
   return (
     <Layout hasTabBar title="이웃 스토리" seoTitle="이웃 소식" pathName="Story">
       {storyList && (
-        <div className="divide  divide-y-4 divide-orange-50 ">
+        <div className="divide  divide-y-4 divide-orange-50">
           {storyList.map((story) => (
             <div key={story.id}>
               <Link href={`/story/${story.id}`}>
@@ -44,8 +44,8 @@ const Story: NextPage<StoryListResponse> = ({ stories }) => {
                     category={story.category as StoryCategory}
                     routeType="Story"
                   />
-                  <div className="text-gray-7100 mt-2 h-16 px-4">
-                    <span className="line-clamp-2 whitespace-pre-line">
+                  <div className="mt-2 h-16 px-4 w-full">
+                    <span className="line-clamp-2 whitespace-pre-line break-words ">
                       {story.content}
                     </span>
                   </div>
