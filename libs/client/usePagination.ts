@@ -23,7 +23,6 @@ export const usePagination = () => {
       setTimeout(() => {
         setPage((prev) => prev + 1);
         setIsLoading(false);
-        console.log(page);
       }, 300);
     }
   }, [isLoading, page]);
