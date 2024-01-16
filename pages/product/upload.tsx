@@ -139,7 +139,8 @@ const Upload: NextPage = () => {
             )}
             <input
               {...register("photo")}
-              accept="image/*"
+              // accept="image/*"
+              accept=".png, .jpeg, .jpg"
               className="hidden"
               type="file"
             />

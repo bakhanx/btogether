@@ -211,7 +211,7 @@ const EditProfile: NextPage = () => {
                 id="picture"
                 type="file"
                 className="hidden"
-                accept="image/*"
+                accept=".png, .jpeg, .jpg"
               />
             </label>
 
