@@ -385,6 +385,7 @@ const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
             </h1>
             <div className="mt-1 text-slate-500">
               <DateTime date={product?.createdAt} timeAgo />
+              {product?.isModify ? "(수정됨)" : ""}
             </div>
             <span className="mt-3 block text-2xl text-gray-900">
               {product?.price.toLocaleString()}원
