@@ -17,6 +17,7 @@ type ItemProps = {
   image: string;
   sellState: SellingType;
   category: Category;
+  isModify: boolean;
 };
 
 // const DynamicDateTime: any = dynamic(() => import("./datetime"))
@@ -31,6 +32,7 @@ export default function Item({
   time,
   sellState,
   category,
+  isModify,
 }: ItemProps) {
   return (
     <Link href={`/product/${id}`}>
@@ -75,6 +77,7 @@ export default function Item({
               </div>
               <span className="truncate pt-1 text-sm text-gray-500">
                 <DateTime date={time} timeAgo />
+                {isModify ? "(수정됨)" : ""}
               </span>
 
               <span className="pt-1 text-sm font-medium">
