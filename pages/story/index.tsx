@@ -44,6 +44,7 @@ const Story: NextPage<StoryListResponse> = ({ stories }) => {
                     category={story.category as StoryCategory}
                     routeType="Story"
                   />
+                  {story.isModify ? " 수정됨 " : ""}
                   <div className="mt-2 h-16 px-4 w-full">
                     <span className="line-clamp-2 whitespace-pre-line break-words ">
                       {story.content}
