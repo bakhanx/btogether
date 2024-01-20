@@ -163,6 +163,7 @@ const Comments = () => {
                   </span>
                   <span className="block text-xs text-gray-500 ">
                     <DateTime date={comment?.createdAt} />
+                    {story.isModify ? " 수정됨 " : ""}
                   </span>
                   <p className="mt-2 text-gray-700 whitespace-pre-line">
                     {comment?.comment}
@@ -299,6 +300,7 @@ const StoryDetail: NextPage<StorySSGResponse> = ({ story }) => {
             category={story?.category as StoryCategory}
             routeType="Story"
           />
+          {story.isModify ? " 수정됨 " : ""}
 
           {/* 작성자 프로필 */}
           <Link href={`/users/profile/${storyData?.story?.user?.id}`}>
