@@ -62,9 +62,10 @@ model Product {
   name        String
   price       Int
   description String     @db.MediumText
-  records     Record[]  
+  records     Record[]
   chatRooms   ChatRoom[]
-  category    Category  @default(Gather)
+  category    Category   @default(Gather)
+  isModify    Boolean    @default(false)
 
   @@index([sellerId])
   @@index([purchaserId])
@@ -80,6 +81,7 @@ model Story {
   comments  Comment[]
   likes     Like[]
   category  String    @default("Daily")
+  isModify  Boolean   @default(false)
 
   @@index([userId])
 }
@@ -93,6 +95,7 @@ model Comment {
   story     Story    @relation(fields: [storyId], references: [id], onDelete: Cascade)
   storyId   Int
   comment   String   @db.MediumText
+  isModify  Boolean  @default(false)
 
   @@index([userId])
   @@index([storyId])
@@ -121,7 +124,7 @@ model Review {
   createdFor   User     @relation(name: "receivedReviews", fields: [createdForId], references: [id], onDelete: Cascade)
   createdById  Int
   createdForId Int
-
+  isModify  Boolean  @default(false)
   @@index([createdById])
   @@index([createdForId])
 }
