@@ -64,7 +64,6 @@ const Home: NextPage<ProductsResponse> = ({ products }) => {
               comments={product?._count?.chatRooms || 0}
               sellState={product?.sellState}
               category={product?.category}
-              isModify={product?.isModify}
             />
           ))}
         </div>
