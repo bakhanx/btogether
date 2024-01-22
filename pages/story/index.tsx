@@ -44,7 +44,7 @@ const Story: NextPage<StoryListResponse> = ({ stories }) => {
                     category={story.category as StoryCategory}
                     routeType="Story"
                   />
-                  {story.isModify ? " 수정됨 " : ""}
+
                   <div className="mt-2 h-16 px-4 w-full">
                     <span className="line-clamp-2 whitespace-pre-line break-words ">
                       {story.content}
@@ -52,9 +52,11 @@ const Story: NextPage<StoryListResponse> = ({ stories }) => {
                   </div>
                   <div className=" mt-5 flex w-full items-center justify-between px-4 text-sm font-medium text-gray-500">
                     <span>{story.user?.name}</span>
-                    <span>
-                      <DateTime date={story.createdAt} />
-                    </span>
+                    <div className="flex gap-x-2">
+                    <span>{story.isModify ? "(수정됨) " : ""}</span>
+                      <DateTime date={story.updatedAt} />
+                      
+                    </div>
                   </div>
                   <div className="mt-3 flex w-full justify-start space-x-5 border-t px-4 py-2.5">
                     <span className="flex items-center space-x-2 text-sm">
@@ -125,7 +127,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
       },
     },
     orderBy: {
-      createdAt: "desc",
+      updatedAt: "desc",
     },
     take: 8,
   });
