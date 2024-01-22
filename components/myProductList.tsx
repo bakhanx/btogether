@@ -46,6 +46,7 @@ const MyProductList = ({ kind, category }: KindWithCategory) => {
             comments={record?.product._count.chatRooms}
             sellState={record?.product.sellState as SellingType}
             category={record?.product.category}
+            isModify={record.product.isModify}
           />
         ))}
       </div>
