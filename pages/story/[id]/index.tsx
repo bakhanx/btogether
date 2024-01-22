@@ -161,10 +161,10 @@ const Comments = () => {
                   <span className="block text-sm font-medium text-gray-700">
                     {comment?.user?.name}
                   </span>
-                  <span className="block text-xs text-gray-500 ">
+                  <div className="flex gap-x-2 text-xs text-gray-500">
                     <DateTime date={comment?.createdAt} />
-                    {comment?.isModify ? " 수정됨 " : ""}
-                  </span>
+                    <span>{comment?.isModify ? "(수정됨) " : ""}</span>
+                  </div>
                   <p className="mt-2 text-gray-700 whitespace-pre-line">
                     {comment?.comment}
                   </p>
@@ -300,7 +300,6 @@ const StoryDetail: NextPage<StorySSGResponse> = ({ story }) => {
             category={story?.category as StoryCategory}
             routeType="Story"
           />
-          {story?.isModify ? " 수정됨 " : ""}
 
           {/* 작성자 프로필 */}
           <Link href={`/users/profile/${storyData?.story?.user?.id}`}>
@@ -336,7 +335,10 @@ const StoryDetail: NextPage<StorySSGResponse> = ({ story }) => {
               <span>{story?.content}</span>
             </div>
             <div className="text-xs text-gray-500 ">
-              <DateTime date={story?.createdAt} />
+              <DateTime date={story?.updatedAt} />
+              <span className="text-gray-500">
+                {story?.isModify ? " (수정됨) " : ""}
+              </span>
             </div>
           </div>
         </div>
