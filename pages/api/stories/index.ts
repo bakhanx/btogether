@@ -31,7 +31,7 @@ async function handler(
         },
       },
       orderBy: {
-        createdAt: "desc",
+        updatedAt: "desc",
       },
       take: TAKE,
       skip: SKIP,
