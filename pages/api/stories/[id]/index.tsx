@@ -21,6 +21,7 @@ async function handler(
       data: {
         content,
         category: cate,
+        isModify: true,
       },
     });
 
