@@ -361,14 +361,17 @@ const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
           {/* Content */}
           <div className="mt-5">
             <div className="pb-5">
-              <CategoryLabel routeType="Product" category={product.category} large />
+              <CategoryLabel
+                routeType="Product"
+                category={product.category}
+                large
+              />
               {product.sellerId === user?.id ? (
                 <select
                   id="sellState"
                   className=" rounded-sm border border-gray-300 bg-cyan-600 p-3 text-sm text-white shadow-md "
                   onChange={handleStateChange}
                   defaultValue={product.sellState}
-                  
                 >
                   {/* <option selected></option> */}
                   <option value="selling">진행중</option>
@@ -381,11 +384,11 @@ const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
             </div>
 
             <h1 className="text-3xl font-bold text-gray-900 break-words">
-              {product?.name}0
+              {product?.name}
             </h1>
-            <div className="mt-1 text-slate-500">
+            <div className="mt-1 text-slate-500 gap-x-2 flex">
               <DateTime date={product?.createdAt} timeAgo />
-              {product?.isModify ? "(수정됨)" : ""}
+              <span>{product?.isModify ? "(수정됨)" : ""}</span>
             </div>
             <span className="mt-3 block text-2xl text-gray-900">
               {product?.price.toLocaleString()}원
@@ -542,7 +545,9 @@ const Product: NextPage<ProductResponse> = ({ product, relatedProducts }) => {
                         src={`https://imagedelivery.net/214BxOnlVKSU2amZRZmdaQ/${product?.image}/public`}
                       />
                     </div>
-                    <h3 className="-mb-1 text-gray-700 line-clamp-1">{product.name}</h3>
+                    <h3 className="-mb-1 text-gray-700 line-clamp-1">
+                      {product.name}
+                    </h3>
                     <span className="text-sm font-medium text-gray-900">
                       {product.price}원
                     </span>
