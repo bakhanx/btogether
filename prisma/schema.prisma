@@ -124,7 +124,8 @@ model Review {
   createdFor   User     @relation(name: "receivedReviews", fields: [createdForId], references: [id], onDelete: Cascade)
   createdById  Int
   createdForId Int
-  isModify  Boolean  @default(false)
+  isModify     Boolean  @default(false)
+
   @@index([createdById])
   @@index([createdForId])
 }
@@ -160,10 +161,10 @@ model Message {
   id         Int       @id @default(autoincrement())
   createdAt  DateTime  @default(now())
   updatedAt  DateTime  @updatedAt
-  user       User      @relation(fields: [userId], references: [id])
+  user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId     Int
   message    String
-  ChatRoom   ChatRoom? @relation(fields: [chatRoomId], references: [id])
+  ChatRoom   ChatRoom? @relation(fields: [chatRoomId], references: [id], onDelete: Cascade)
   chatRoomId Int?
 
   @@index([userId])
