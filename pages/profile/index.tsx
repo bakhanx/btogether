@@ -261,6 +261,11 @@ export const getServerSideProps = withSsrSession(async function ({
     where: {
       id: req?.session?.user?.id,
     },
+    select:{
+      name:true,
+      avatar:true,
+      receivedReviews:true, 
+    }
   });
   return {
     props: {
