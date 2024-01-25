@@ -2,35 +2,18 @@ type DateTimeProps = {
   time?: boolean;
   timeAgo?: boolean;
   date?: Date;
-}
+};
 
 export default function DateTime({ date, time, timeAgo }: DateTimeProps) {
+  const dateTime = new Date(date ? date : "");
+  const nowTime = new Date(Date.now());
   
-  const offset = new Date().getTimezoneOffset() * 6000;
-  const today = new Date(Date.now() - offset);
-
-  const dateTime = new Date(date ? date : "")
-  const nowTime = new Date(Date.now()-offset);
-
-
-
-
   const year = dateTime.getFullYear();
-  const month = `${dateTime.getMonth() + 1 < 10 ? 0 : ""}${
-    dateTime.getMonth() + 1
-  }`;
-  const day = `${dateTime.getDate() + 1 < 10 ? 0 : ""}${
-    dateTime.getDate()
-  }`;
-  const hours = `${dateTime.getHours() + 1 < 10 ? 0 : ""}${
-    dateTime.getHours()
-  }`;
-  const minutes = `${dateTime.getMinutes() + 1 < 10 ? 0 : ""}${
-    dateTime.getMinutes()
-  }`;
-  const seconds = `${dateTime.getSeconds() + 1 < 10 ? 0 : ""}${
-    dateTime.getSeconds()
-  }`;
+  const month = String(dateTime.getMonth() + 1).padStart(2,"0");
+  const day = String(dateTime.getDate()).padStart(2,"0");
+  const hours = String(dateTime.getHours()).padStart(2,"0");
+  const minutes = String(dateTime.getMinutes()).padStart(2,"0");
+  const seconds = String(dateTime.getSeconds()).padStart(2,"0");
 
   // 시간:분
   if (time) {
