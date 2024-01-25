@@ -6,8 +6,14 @@ type DateTimeProps = {
 
 export default function DateTime({ date, time, timeAgo }: DateTimeProps) {
   
-  const dateTime = new Date(date ? date : "");
-  const nowTime = new Date(Date.now());
+  const offset = new Date().getTimezoneOffset() * 6000;
+  const today = new Date(Date.now() - offset);
+
+  const dateTime = new Date(date ? date : "")
+  const nowTime = new Date(Date.now()-offset);
+
+
+
 
   const year = dateTime.getFullYear();
   const month = `${dateTime.getMonth() + 1 < 10 ? 0 : ""}${
