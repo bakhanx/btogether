@@ -1,3 +1,3 @@
 # B-Together
 
-https://btogether.site/enter
+https://btogether.site/
