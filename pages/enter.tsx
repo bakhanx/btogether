@@ -149,6 +149,7 @@ const Enter: NextPage = () => {
                   register={register("email", { required: true })}
                   name="email"
                   label="이메일 주소"
+                  defaultValue="guest@bt.com"
                   type="email"
                   kind="text"
                   placeholder="btogether@gmail.com"
