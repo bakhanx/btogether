@@ -9,13 +9,18 @@ async function handler(
 ) {
   const { phone, email } = req.body;
 
+  const username = "guest" + Date.now().toString().slice(-5);
+  let tempMail;
 
+  if (email && email === "guest@bt.com") {
+    tempMail = username + "@bt.com";
+  }
 
-  const user = phone ? { phone } : email ? { email } : null;
+  const user = phone ? { phone } : email ? { email: tempMail || email } : null;
+
   if (!user) {
     return res.status(400).json({ ok: false });
   }
-
   const payload = Math.floor(100000 + Math.random() * 900000) + "";
 
   const token = await client.token.create({
@@ -27,7 +32,7 @@ async function handler(
             ...user,
           },
           create: {
-            name: "Anonymous",
+            name: username,
             ...user,
           },
         },
@@ -36,19 +41,19 @@ async function handler(
   });
   console.log("Token: ", token);
 
-  if(email === "guest@bt.com" && token){
-    console.log('guest hi');
+  if (email === "guest@bt.com" && token) {
+    console.log("guest hi");
     return res.json({
-      ok:true,
-      token : payload,
-    })
+      ok: true,
+      token: payload,
+    });
   }
 
   // 임시 토큰 내 메일로
   else if (email) {
     await sendMail(email, payload);
   }
-  
+
   // else if (phone){
   //   return res.json({
   //     ok:true,
