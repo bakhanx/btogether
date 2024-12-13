@@ -7,7 +7,7 @@ import { useForm } from "react-hook-form";
 import Link from "next/link";
 import useMutation from "@libs/client/useMutation";
 import { cls } from "@libs/client/utils";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import DateTime from "@components/datetime";
 import Menu from "@components/menu";
@@ -38,19 +38,24 @@ interface StorySSGResponse extends StoryResponse {
 // 댓글
 const Comments = () => {
   const router = useRouter();
+  const [pages, setPages] = useState(1);
   const getKey = (
     pageIndex: number,
     previousPageData: StoryCommentListResponse
   ) => {
-    if (pageIndex === 0)
-      return `/api/stories/${router.query.id}/comment?page=1`;
-    if (pageIndex + 1 > previousPageData.pages) return null;
-    return `/api/stories/${73}/comment?page=${pageIndex + 1}`;
+    setPages(previousPageData.pages);
+    if (
+      previousPageData &&
+      (!previousPageData.ok || pageIndex + 1 > previousPageData.pages)
+    )
+      return null;
+    return `/api/stories/${router.query.id}/comment?page=${pageIndex + 1}`;
   };
   const { data, setSize, mutate, isLoading } =
     useSWRInfinite<StoryCommentListResponse>(getKey);
   const comments = data ? data.map((item) => item.story?.comments).flat() : [];
-  const page = usePagination();
+
+  const page = usePagination(pages);
   useEffect(() => {
     setSize(page);
   }, [page, setSize]);
@@ -60,6 +65,7 @@ const Comments = () => {
       `/api/stories/${router.query.id}/comment`
     );
 
+  console.log(commentData);
   // =======================댓글 작성 ====================
   const { register, handleSubmit, reset } = useForm<StoryCommentForm>();
   // ==================댓글 작성======================
@@ -429,6 +435,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
       // },
     },
   });
+
   return {
     props: {
       story: JSON.parse(JSON.stringify(story)),
