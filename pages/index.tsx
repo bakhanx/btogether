@@ -9,7 +9,8 @@ import { SellingType } from "types/product";
 import { GetStaticProps, NextPage } from "next";
 import client from "@libs/server/client";
 import ScrollToTopButton from "@components/scrollToTopButton";
-
+import Image from "next/image";
+import Loader from "../public/Spinner.svg";
 
 export interface ProductWithCount extends Product {
   _count: {
@@ -25,26 +26,30 @@ type ProductsResponse = {
 };
 
 const getKey = (pageIndex: number, previousPageData: ProductsResponse) => {
-  // console.log(pageIndex);
-  if (pageIndex === 0) return `/api/products?page=1`;
-  if (pageIndex + 1 > previousPageData.pages) return null;
+  if (
+    previousPageData &&
+    (!previousPageData.ok || pageIndex + 1 > previousPageData.pages)
+  )
+    return null;
   return `/api/products?page=${pageIndex + 1}`;
 };
 
-const Home: NextPage<ProductsResponse> = ({ products }) => {
+const Home: NextPage<ProductsResponse> = ({ products, pages }) => {
   const [productList, setProductList] = useState(products);
-  const { data, setSize } = useSWRInfinite<ProductsResponse>(getKey);
+  const { data, setSize, isValidating } =
+    useSWRInfinite<ProductsResponse>(getKey);
 
-  const page = usePagination();
+  const page = usePagination(pages);
   useEffect(() => {
     setSize(page);
   }, [page, setSize]);
 
   useEffect(() => {
-    if(page > 1){
-      setProductList(data ? data.map((item) => item.products).flat() : []);
+    if (data) {
+      const newProducts = data.map((item) => item.products).flat();
+      setProductList(newProducts);
     }
-  }, [data,page]);
+  }, [data]);
 
   return (
     <>
@@ -68,8 +73,14 @@ const Home: NextPage<ProductsResponse> = ({ products }) => {
             />
           ))}
         </div>
+        {isValidating && (
+          <div className="flex w-full justify-center">
+            <Image src={Loader} priority={true} alt="" width={80} height={80} />
+          </div>
+        )}
+
         {/* Floating Button */}
-        <ScrollToTopButton hasBottomTab/>
+        <ScrollToTopButton hasBottomTab />
       </Layout>
     </>
   );
@@ -96,9 +107,12 @@ export const getStaticProps: GetStaticProps = async () => {
       updatedAt: "desc",
     },
   });
+  const productsCount = await client.product.count();
+  const totalPages = Math.ceil(productsCount / 8);
   return {
     props: {
       products: JSON.parse(JSON.stringify(products)),
+      pages: totalPages,
     },
   };
 };
