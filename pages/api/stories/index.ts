@@ -3,6 +3,9 @@ import withHandler, { ResponseType } from "@libs/server/withHandler";
 import client from "@libs/server/client";
 import { withApiSession } from "@libs/server/withSession";
 
+
+const TAKE_COUNT = 8;
+
 async function handler(
   req: NextApiRequest,
   res: NextApiResponse<ResponseType>
@@ -12,8 +15,8 @@ async function handler(
       query: { page },
     } = req;
     const PAGE = Number(page) - 1;
-    const TAKE = 8;
-    const SKIP = PAGE * 8;
+    const TAKE = TAKE_COUNT;
+    const SKIP = PAGE * TAKE_COUNT;
 
     const stories = await client.story.findMany({
       include: {
@@ -42,7 +45,7 @@ async function handler(
     res.json({
       ok: true,
       stories,
-      pages: Math.ceil(storiesCount / 10),
+      pages: Math.ceil(storiesCount / TAKE_COUNT),
     });
   }
 
@@ -66,9 +69,12 @@ async function handler(
 
     await res.revalidate("/story");
 
+    const storiesCount = await client.story.count();
+
     res.json({
       ok: true,
       story,
+      pages: Math.ceil(storiesCount / TAKE_COUNT),
     });
   }
 }

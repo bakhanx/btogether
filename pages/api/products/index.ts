@@ -3,6 +3,8 @@ import withHandler, { ResponseType } from "@libs/server/withHandler";
 import client from "@libs/server/client";
 import { withApiSession } from "@libs/server/withSession";
 
+const TAKE_COUNT = 8;
+
 async function handler(
   req: NextApiRequest,
   res: NextApiResponse<ResponseType>
@@ -12,8 +14,8 @@ async function handler(
       query: { page },
     } = req;
     const PAGE = Number(page) - 1;
-    const TAKE = 8;
-    const SKIP = PAGE * 8;
+    const TAKE = TAKE_COUNT;
+    const SKIP = PAGE * TAKE_COUNT;
 
     const products = await client.product.findMany({
       include: {
@@ -42,7 +44,7 @@ async function handler(
     res.json({
       ok: true,
       products,
-      pages: Math.ceil(productsCount / 10),
+      pages: Math.ceil(productsCount / TAKE_COUNT),
     });
   }
   if (req.method === "POST") {
@@ -68,7 +70,7 @@ async function handler(
             },
           },
           category,
-          isModify : true,
+          isModify: true,
         },
       });
 
