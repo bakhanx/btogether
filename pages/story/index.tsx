@@ -10,27 +10,33 @@ import client from "@libs/server/client";
 import ScrollToTopButton from "@components/scrollToTopButton";
 import CategoryLabel from "@components/categoryLabel";
 import { StoryCategory } from "@components/categoryButton";
+import Image from "next/image";
+import Loader from "../../public/Spinner.svg"
 
 const getKey = (pageIndex: number, previousPageData: StoryListResponse) => {
-  if (pageIndex === 0) return `/api/stories?page=1`;
-  if (pageIndex + 1 > previousPageData.pages) return null;
+  if (
+    previousPageData &&
+    (!previousPageData.ok || pageIndex + 1 > previousPageData.pages)
+  )
+    return null;
   return `/api/stories?page=${pageIndex + 1}`;
 };
 
-const Story: NextPage<StoryListResponse> = ({ stories }) => {
-  const { data, setSize } = useSWRInfinite<StoryListResponse>(getKey);
+const Story: NextPage<StoryListResponse> = ({ stories, pages }) => {
+  const { data, setSize, isValidating } = useSWRInfinite<StoryListResponse>(getKey);
   const [storyList, setStoryList] = useState(stories);
 
-  const page = usePagination();
+  const page = usePagination(pages);
   useEffect(() => {
     setSize(page);
   }, [page, setSize]);
 
   useEffect(() => {
-    if (page > 1) {
-      setStoryList(data ? data.map((item) => item.stories).flat() : []);
+    if (data) {
+      const newStories = data.map((item) => item.stories).flat();
+      setStoryList(newStories);
     }
-  }, [page, data]);
+  }, [data]);
 
   return (
     <Layout hasTabBar title="이웃 스토리" seoTitle="이웃 소식" pathName="Story">
@@ -53,9 +59,8 @@ const Story: NextPage<StoryListResponse> = ({ stories }) => {
                   <div className=" mt-5 flex w-full items-center justify-between px-4 text-sm font-medium text-gray-500">
                     <span>{story.user?.name}</span>
                     <div className="flex gap-x-2">
-                    <span>{story.isModify ? "(수정됨) " : ""}</span>
+                      <span>{story.isModify ? "(수정됨) " : ""}</span>
                       <DateTime date={story.updatedAt} />
-                      
                     </div>
                   </div>
                   <div className="mt-3 flex w-full justify-start space-x-5 border-t px-4 py-2.5">
@@ -102,6 +107,11 @@ const Story: NextPage<StoryListResponse> = ({ stories }) => {
           ))}
         </div>
       )}
+        {isValidating && (
+          <div className="flex w-full justify-center">
+            <Image src={Loader} priority={true} alt="" width={80} height={80} />
+          </div>
+        )}
       {/* Floating Button */}
       <ScrollToTopButton hasBottomTab />
     </Layout>
@@ -131,9 +141,14 @@ export const getStaticProps: GetStaticProps = async (context) => {
     },
     take: 8,
   });
+
+  const storiesCount = await client.story.count();
+  const totalPages = Math.ceil(storiesCount / 8);
+
   return {
     props: {
       stories: JSON.parse(JSON.stringify(stories)),
+      pages: totalPages,
     },
   };
 };
