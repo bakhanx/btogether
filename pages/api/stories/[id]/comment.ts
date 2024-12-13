@@ -3,6 +3,8 @@ import withHandler, { ResponseType } from "@libs/server/withHandler";
 import client from "@libs/server/client";
 import { withApiSession } from "@libs/server/withSession";
 
+const TAKE_COUNT = 5;
+
 async function handler(
   req: NextApiRequest,
   res: NextApiResponse<ResponseType>
@@ -80,8 +82,8 @@ async function handler(
     } = req;
 
     const PAGE = Number(page) - 1;
-    const TAKE = 6;
-    const SKIP = PAGE * 6;
+    const TAKE = TAKE_COUNT;
+    const SKIP = PAGE * TAKE_COUNT;
 
     const story = await client.story.findFirst({
       where: {
@@ -107,7 +109,7 @@ async function handler(
     res.json({
       ok: true,
       story,
-      pages: story && Math.ceil(story._count.comments / 10),
+      pages: story ? Math.ceil(story._count.comments / TAKE_COUNT) : 1,
     });
   }
 }
